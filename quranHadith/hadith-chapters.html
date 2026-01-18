@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic App | Hadith Chapters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --quran-blue: #1A5F7A;
+            --mecca-red: #C62828;
+            --medina-green: #2E7D32;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --quran-blue: #3498db;
+            --mecca-red: #e74c3c;
+            --medina-green: #27ae60;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            padding-bottom: 20px; /* Reduced since no bottom nav */
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Fade in animation for page content */
+        .page-content {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 15px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background-color: var(--white);
+            z-index: 90;
+            padding: 16px;
+            border-bottom: 1px solid var(--medium-gray);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 768px) {
+            .search-section {
+                padding: 20px 30px;
+            }
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            padding: 0 16px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .search-container:focus-within {
+            background-color: var(--white);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .search-container:focus-within {
+            box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+        }
+
+        .search-icon {
+            color: var(--dark-gray);
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 0;
+            border: none;
+            background: none;
+            font-size: 15px;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--dark-gray);
+        }
+
+        .clear-search {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px;
+            display: none;
+        }
+
+        .clear-search.active {
+            display: block;
+        }
+
+        /* Book Info Section */
+        .book-info-section {
+            background-color: var(--white);
+            padding: 16px;
+            border-bottom: 1px solid var(--medium-gray);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 768px) {
+            .book-info-section {
+                padding: 20px 30px;
+            }
+        }
+
+        .book-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .book-title .arabic {
+            font-family: 'Amiri', serif;
+            font-size: 22px;
+            color: var(--quran-blue);
+        }
+
+        .book-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .book-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--dark-gray);
+        }
+
+        .book-meta-item i {
+            font-size: 12px;
+            color: var(--primary-green);
+        }
+
+        .book-description {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-dark);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        /* Chapters List */
+        .chapters-list-container {
+            padding: 16px;
+            padding-bottom: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .chapters-list-container {
+                padding: 20px 30px 50px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        .chapters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chapter-item {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            border: 1px solid transparent;
+        }
+
+        .chapter-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: var(--medium-gray);
+        }
+
+        .dark-theme .chapter-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* CHAPTER NUMBER */
+        .chapter-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-green), var(--medina-green));
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .dark-theme .chapter-number {
+            background: linear-gradient(135deg, var(--primary-green), #27ae60);
+        }
+
+        .chapter-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* CHAPTER HEADER */
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 10px;
+        }
+
+        /* ARABIC NAME */
+        .arabic-name {
+            font-family: 'Amiri', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--quran-blue);
+            line-height: 1.2;
+        }
+
+        /* CHAPTER DETAILS */
+        .chapter-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .english-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .chapter-arrow {
+            color: var(--dark-gray);
+            font-size: 14px;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .chapter-item:hover .chapter-arrow {
+            opacity: 1;
+            transform: translateX(3px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--dark-gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--medium-gray);
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            max-width: 300px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Loader */
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-green);
+        }
+
+        .loader i {
+            font-size: 32px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        .loader p {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .chapter-header {
+                flex-wrap: wrap;
+            }
+            
+            .arabic-name {
+                font-size: 18px;
+            }
+            
+            .chapter-details {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .book-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .book-title .arabic {
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .chapter-item {
+                padding: 20px;
+            }
+            
+            .chapter-number {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .arabic-name {
+                font-size: 22px;
+            }
+            
+            .english-name {
+                font-size: 17px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .chapters-list-container {
+                max-width: 1000px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chapter-item {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-book-open"></i>
+                        <span id="pageTitle">Hadith Chapters</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1 id="bookTitle">Loading...</h1>
+                    <p id="bookSubtitle">Prophetic traditions</p>
+                </div>
+            </section>
+
+            <!-- Book Info Section -->
+            <div class="book-info-section" id="bookInfoSection">
+                <div class="book-title">
+                    <span class="arabic" id="bookArabicTitle">...</span>
+                    <span id="bookEnglishTitle">...</span>
+                </div>
+                <div class="book-meta" id="bookMeta">
+                    <!-- Book metadata will be loaded here -->
+                </div>
+                <div class="book-description" id="bookDescription">
+                    Loading book information...
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-section">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search chapter by name...">
+                    <button class="clear-search" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chapters List -->
+            <div class="chapters-list-container">
+                <div class="chapters-list" id="chaptersList">
+                    <div class="loader" id="loader">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading chapters...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+        const pageTransitionOverlay = document.getElementById('pageTransitionOverlay');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to show page transition overlay
+        function showPageTransition() {
+            pageTransitionOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page transition overlay
+        function hidePageTransition() {
+            pageTransitionOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ============================================
+        // HADITH CHAPTERS PAGE IMPLEMENTATION
+        // ============================================
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookFileName = urlParams.get('book') || 'buhari';
+
+        // File name mappings for the mismatched files
+        const fileNameMappings = {
+            // These are the correct JSON file names based on your folder
+            'buhari': 'buhari.json',  // Already correct
+            'muslim': 'muslim.json',  // Already correct
+            'abudawud': 'abudawud.json',  // Already correct
+            'tirmidi': 'tirmidhi.json',  // Fixed: tirmidi -> tirmidhi.json
+            'nasai': 'nasai.json',  // Already correct
+            'ibn_majah': 'ibnmajah.json',  // Fixed: ibn_majah -> ibnmajah.json
+            'malik': 'malik.json',  // Already correct
+            'ahmed': 'ahmed.json',  // Already correct
+            'darimi': 'darimi.json',  // Already correct
+            'riyad_assalihin': 'riyad_assalihin.json',  // Already correct
+            'shamail_muhammadiyah': 'shamail_muhammadiyah.json',  // Already correct
+            'bulugh_almaram': 'bulugh_almaram.json',  // Already correct
+            'aladab-mufrad': 'aladab_almufrad.json',  // Fixed: aladab-mufrad -> aladab_almufrad.json
+            'nawawi40': 'nawawi40.json'  // Already correct
+        };
+
+        // Book information mapping
+        const bookInfoMap = {
+            'abudawud': {
+                arabic: "سنن أبي داود",
+                english: "Sunan Abi Dawud",
+                compiler: "Imam Abu Dawud",
+                hadithCount: 5274,
+                century: "9th",
+                description: "Focuses on legal hadiths (ahkam), with grading of each hadith"
+            },
+            'ahmed': {
+                arabic: "مسند أحمد",
+                english: "Musnad Ahmad",
+                compiler: "Imam Ahmad ibn Hanbal",
+                hadithCount: 28000,
+                century: "9th",
+                description: "Largest hadith collection, arranged by companions of the Prophet"
+            },
+            'aladab-mufrad': {
+                arabic: "الأدب المفرد",
+                english: "Al-Adab Al-Mufrad",
+                compiler: "Imam al-Bukhari",
+                hadithCount: 1322,
+                century: "9th",
+                description: "Hadiths on good manners, etiquette, and social conduct"
+            },
+            'buhari': {
+                arabic: "صحيح البخاري",
+                english: "Sahih al-Bukhari",
+                compiler: "Imam al-Bukhari",
+                hadithCount: 7563,
+                century: "9th",
+                description: "Most authentic book after Quran, compiled by Imam al-Bukhari over 16 years with rigorous authentication"
+            },
+            'bulugh_almaram': {
+                arabic: "بلوغ المرام",
+                english: "Bulugh al-Maram",
+                compiler: "Ibn Hajar al-Asqalani",
+                hadithCount: 1596,
+                century: "15th",
+                description: "Collection of hadiths used for Islamic rulings with source references"
+            },
+            'darimi': {
+                arabic: "سنن الدارمي",
+                english: "Sunan ad-Darimi",
+                compiler: "Imam ad-Darimi",
+                hadithCount: 3500,
+                century: "9th",
+                description: "One of the early sunan collections, includes commentary"
+            },
+            'ibn_majah': {
+                arabic: "سنن ابن ماجه",
+                english: "Sunan Ibn Majah",
+                compiler: "Imam Ibn Majah",
+                hadithCount: 4341,
+                century: "9th",
+                description: "Sixth of the six major hadith collections, includes some weak narrations"
+            },
+            'malik': {
+                arabic: "موطأ مالك",
+                english: "Muwatta Malik",
+                compiler: "Imam Malik",
+                hadithCount: 1720,
+                century: "8th",
+                description: "Earliest hadith collection, includes both hadith and fiqh opinions"
+            },
+            'muslim': {
+                arabic: "صحيح مسلم",
+                english: "Sahih Muslim",
+                compiler: "Imam Muslim",
+                hadithCount: 7563,
+                century: "9th",
+                description: "Second most authentic hadith collection, known for its excellent organization"
+            },
+            'nasai': {
+                arabic: "سنن النسائي",
+                english: "Sunan an-Nasa'i",
+                compiler: "Imam an-Nasa'i",
+                hadithCount: 5761,
+                century: "9th",
+                description: "Focus on weak hadith identification, considered one of the most authentic Sunan"
+            },
+            'nawawi40': {
+                arabic: "الأربعون النووية",
+                english: "Forty Hadith of an-Nawawi",
+                compiler: "Imam an-Nawawi",
+                hadithCount: 42,
+                century: "13th",
+                description: "Forty fundamental hadiths covering principles of Islam"
+            },
+            'riyad_assalihin': {
+                arabic: "رياض الصالحين",
+                english: "Riyad as-Salihin",
+                compiler: "Imam an-Nawawi",
+                hadithCount: 1896,
+                century: "13th",
+                description: "Collection of authentic hadiths on ethics, manners, and worship"
+            },
+            'shamail_muhammadiyah': {
+                arabic: "الشمائل المحمدية",
+                english: "Shamail al-Muhammadiyah",
+                compiler: "Imam at-Tirmidhi",
+                hadithCount: 399,
+                century: "9th",
+                description: "Hadiths about Prophet's character, appearance, and daily life"
+            },
+            'tirmidi': {
+                arabic: "جامع الترمذي",
+                english: "Jami` at-Tirmidhi",
+                compiler: "Imam at-Tirmidhi",
+                hadithCount: 3956,
+                century: "9th",
+                description: "Known for grading of hadiths and inclusion of weak hadiths with explanation"
+            }
+        };
+
+        // Application State
+        const state = {
+            searchQuery: '',
+            chapters: [],
+            filteredChapters: [],
+            bookInfo: {},
+            hadiths: [] // Store all hadiths to extract chapters
+        };
+
+        // DOM Elements
+        const body = document.body;
+        const backBtn = document.getElementById('backBtn');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
+        const chaptersList = document.getElementById('chaptersList');
+        const loader = document.getElementById('loader');
+        const pageTitle = document.getElementById('pageTitle');
+        const bookTitle = document.getElementById('bookTitle');
+        const bookSubtitle = document.getElementById('bookSubtitle');
+        const bookArabicTitle = document.getElementById('bookArabicTitle');
+        const bookEnglishTitle = document.getElementById('bookEnglishTitle');
+        const bookMeta = document.getElementById('bookMeta');
+        const bookDescription = document.getElementById('bookDescription');
+        const bookInfoSection = document.getElementById('bookInfoSection');
+
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('isDarkMode');
+        if (savedTheme === 'true') {
+            state.isDarkMode = true;
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        }
+
+        // Back button
+        backBtn.addEventListener('click', function() {
+            // Show loader for navigation
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate back to hadith collections page
+            setTimeout(() => {
+                window.location.href = 'hadith.html';
+            }, 300);
+        });
+
+        // Load book information
+        function loadBookInfo() {
+            state.bookInfo = bookInfoMap[bookFileName] || bookInfoMap['buhari'];
+            
+            // Update page titles
+            pageTitle.textContent = `${state.bookInfo.english} - Chapters`;
+            bookTitle.textContent = state.bookInfo.english;
+            bookSubtitle.textContent = "Prophetic traditions";
+            bookArabicTitle.textContent = state.bookInfo.arabic;
+            bookEnglishTitle.textContent = state.bookInfo.english;
+            
+            // Update book meta
+            updateBookMeta();
+            
+            // Update book description
+            bookDescription.textContent = state.bookInfo.description;
+        }
+
+        // Get the correct JSON file name based on mapping
+        function getJsonFileName() {
+            // Use the mapping, or fall back to the original name
+            return fileNameMappings[bookFileName] || `${bookFileName}.json`;
+        }
+
+        // Load hadiths from JSON file and extract chapters
+        async function loadHadithsAndExtractChapters() {
+            try {
+                // Show loading state
+                loader.innerHTML = '<i class="fas fa-spinner fa-spin"></i><p>Loading chapters...</p>';
+                
+                // Get the correct JSON file name
+                const jsonFileName = getJsonFileName();
+                console.log('Loading JSON file:', jsonFileName);
+                
+                // Try to load the JSON file - CORRECT PATH: data/hadith/processed/
+                const response = await fetch(`data/hadith/processed/${jsonFileName}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}. File not found: data/hadith/processed/${jsonFileName}`);
+                }
+                
+                const hadiths = await response.json();
+                console.log(`Loaded ${hadiths.length} hadiths from ${jsonFileName}`);
+                
+                state.hadiths = hadiths;
+                
+                // Process the data to extract unique chapters
+                processChapters(hadiths);
+                
+            } catch (error) {
+                console.error('Error loading hadiths:', error);
+                
+                // Show specific error message
+                const jsonFileName = getJsonFileName();
+                loader.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Data</h3>
+                        <p>${error.message}</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Expected file: data/hadith/processed/${jsonFileName}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Process hadiths to extract chapters
+        function processChapters(hadiths) {
+            if (!hadiths || !Array.isArray(hadiths)) {
+                showError('Invalid data format: Expected an array of hadiths');
+                return;
+            }
+
+            if (hadiths.length === 0) {
+                showError('No hadiths found in the data file');
+                return;
+            }
+
+            console.log('Processing chapters from hadith data...');
+            
+            // SPECIAL HANDLING FOR NAWAWI40 - Show only ONE entry for all hadiths
+            if (bookFileName === 'nawawi40') {
+                // Create just ONE chapter entry that represents all 40 hadiths
+                state.chapters = [{
+                    id: 1,
+                    arabic: "الأربعون النووية",
+                    english: "Forty Hadith Collection",
+                    hadithCount: hadiths.length,
+                    isHadith: true
+                }];
+                
+                console.log(`Created 1 entry for Forty Hadith with ${hadiths.length} hadiths`);
+                
+                // Hide search bar for Forty Hadith since there's only one entry
+                document.querySelector('.search-section').style.display = 'none';
+                
+            } else {
+                // Regular books: Create a map to group hadiths by chapter
+                const chapterMap = new Map();
+
+                hadiths.forEach(hadith => {
+                    let chapterNumber, arabicName, englishName;
+                    
+                    // Handle different JSON structures
+                    if (hadith.chapter_number && hadith.chapter_name) {
+                        // Structure: chapter_number and chapter_name object
+                        chapterNumber = hadith.chapter_number;
+                        
+                        if (typeof hadith.chapter_name === 'object') {
+                            arabicName = hadith.chapter_name.arabic || hadith.chapter_name.name || `Chapter ${chapterNumber}`;
+                            englishName = hadith.chapter_name.english || `Chapter ${chapterNumber}`;
+                        } else {
+                            arabicName = hadith.chapter_name;
+                            englishName = `Chapter ${chapterNumber}`;
+                        }
+                    } else if (hadith.book || hadith.book_number) {
+                        // Alternative structure: book or book_number
+                        chapterNumber = hadith.book_number || hadith.book || 1;
+                        arabicName = hadith.book_name || `كتاب ${chapterNumber}`;
+                        englishName = hadith.book_english || `Book ${chapterNumber}`;
+                    } else {
+                        // No chapter info found
+                        console.warn('Hadith missing chapter info:', hadith);
+                        return;
+                    }
+
+                    const key = `${chapterNumber}-${arabicName}`;
+                    
+                    if (!chapterMap.has(key)) {
+                        // Initialize chapter
+                        chapterMap.set(key, {
+                            id: chapterNumber,
+                            arabic: arabicName,
+                            english: englishName,
+                            hadithCount: 1,
+                            isHadith: false
+                        });
+                    } else {
+                        // Increment hadith count for existing chapter
+                        const chapter = chapterMap.get(key);
+                        chapter.hadithCount++;
+                    }
+                });
+                
+                // Convert map to array and sort by chapter number
+                state.chapters = Array.from(chapterMap.values())
+                    .sort((a, b) => a.id - b.id);
+                
+                console.log(`Extracted ${state.chapters.length} unique chapters`);
+            }
+            
+            // Update book hadith count with actual count
+            if (hadiths.length > 0) {
+                state.bookInfo.hadithCount = hadiths.length;
+                updateBookMeta();
+            }
+            
+            // Initialize filtered chapters
+            state.filteredChapters = [...state.chapters];
+            
+            // Render chapters
+            renderChapters();
+        }
+
+        // Update book metadata - REMOVED hadith count, only show compiler, century, and chapters count
+        function updateBookMeta() {
+            // For Forty Hadith, show hadith count instead of chapter count
+            if (bookFileName === 'nawawi40') {
+                bookMeta.innerHTML = `
+                    <div class="book-meta-item">
+                        <i class="fas fa-user"></i>
+                        <span>${state.bookInfo.compiler}</span>
+                    </div>
+                    <div class="book-meta-item">
+                        <i class="fas fa-history"></i>
+                        <span>${state.bookInfo.century} Century</span>
+                    </div>
+                    <div class="book-meta-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>1 collection</span>
+                    </div>
+                `;
+            } else {
+                bookMeta.innerHTML = `
+                    <div class="book-meta-item">
+                        <i class="fas fa-user"></i>
+                        <span>${state.bookInfo.compiler}</span>
+                    </div>
+                    <div class="book-meta-item">
+                        <i class="fas fa-history"></i>
+                        <span>${state.bookInfo.century} Century</span>
+                    </div>
+                    <div class="book-meta-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>${state.chapters.length} chapters</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            chaptersList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Error Loading Chapters</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Render chapters list - REMOVED hadith count from chapter items
+        function renderChapters() {
+            loader.style.display = 'none';
+            
+            // Clear current list
+            chaptersList.innerHTML = '';
+
+            if (state.filteredChapters.length === 0) {
+                // Show empty state
+                chaptersList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No Chapters Found</h3>
+                        <p>${state.searchQuery ? `No results for "${state.searchQuery}"` : 'No chapters available'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render chapter items WITHOUT hadith count
+            state.filteredChapters.forEach(chapter => {
+                const chapterElement = document.createElement('div');
+                chapterElement.className = 'chapter-item';
+                chapterElement.setAttribute('data-chapter', chapter.id);
+                
+                chapterElement.innerHTML = `
+                    <div class="chapter-number">${chapter.id}</div>
+                    <div class="chapter-content">
+                        <div class="chapter-header">
+                            <div class="arabic-name">${chapter.arabic}</div>
+                        </div>
+                        <div class="chapter-details">
+                            <div class="english-name">${chapter.english}</div>
+                        </div>
+                    </div>
+                    <div class="chapter-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                `;
+                
+                chaptersList.appendChild(chapterElement);
+            });
+
+            // Attach event listeners
+            attachChapterEventListeners();
+        }
+
+        // Attach event listeners to chapter items
+        function attachChapterEventListeners() {
+            // Chapter item click (open hadiths in chapter)
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const chapterId = parseInt(this.getAttribute('data-chapter'));
+                    openChapterWithLoader(chapterId);
+                });
+            });
+        }
+
+        // Open chapter with loader animation - FIXED VERSION
+        function openChapterWithLoader(chapterId) {
+            // Show transition overlay
+            showPageTransition();
+            
+            // Find the chapter
+            const chapter = state.filteredChapters.find(c => c.id === chapterId);
+            
+            if (!chapter) {
+                hidePageTransition();
+                return;
+            }
+            
+            // Store the book name and chapter ID only
+            sessionStorage.setItem('currentBook', bookFileName);
+            sessionStorage.setItem('currentChapterId', chapterId);
+            
+            // For Forty Hadith, we don't need a chapter parameter since it goes directly to reader
+            if (bookFileName === 'nawawi40') {
+                // Navigate to hadith-reader.html without chapter parameter
+                setTimeout(() => {
+                    window.location.href = `hadith-reader.html?book=${bookFileName}`;
+                }, 300);
+            } else {
+                // Navigate to hadith-reader.html with book and chapter parameters
+                setTimeout(() => {
+                    window.location.href = `hadith-reader.html?book=${bookFileName}&chapter=${chapterId}`;
+                }, 300);
+            }
+        }
+
+        // Search functionality (disabled for Forty Hadith)
+        searchInput.addEventListener('input', function() {
+            // Skip search for Forty Hadith
+            if (bookFileName === 'nawawi40') return;
+            
+            state.searchQuery = this.value.trim();
+            clearSearch.classList.toggle('active', state.searchQuery.length > 0);
+            
+            // Filter chapters
+            if (state.searchQuery) {
+                const query = state.searchQuery.toLowerCase();
+                state.filteredChapters = state.chapters.filter(chapter => 
+                    chapter.english.toLowerCase().includes(query) ||
+                    chapter.arabic.toLowerCase().includes(query) ||
+                    chapter.id.toString().includes(query)
+                );
+            } else {
+                state.filteredChapters = [...state.chapters];
+            }
+            
+            // Debounce search
+            clearTimeout(searchInput.debounce);
+            searchInput.debounce = setTimeout(() => {
+                renderChapters();
+            }, 300);
+        });
+
+        // Clear search
+        clearSearch.addEventListener('click', function() {
+            searchInput.value = '';
+            state.searchQuery = '';
+            this.classList.remove('active');
+            state.filteredChapters = [...state.chapters];
+            renderChapters();
+            searchInput.focus();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Clear search with Escape
+            if (e.key === 'Escape' && state.searchQuery) {
+                searchInput.value = '';
+                state.searchQuery = '';
+                clearSearch.classList.remove('active');
+                state.filteredChapters = [...state.chapters];
+                renderChapters();
+            }
+            
+            // Focus search with Ctrl+K or Cmd+K (disabled for Forty Hadith)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k' && bookFileName !== 'nawawi40') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                hidePageTransition();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBookInfo();
+            loadHadithsAndExtractChapters();
+        });
+    </script>
+</body>
+</html>

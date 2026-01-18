@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support DeenLink | Islamic App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --secondary-green: #2E8B57;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --deenlink-green: #2E8B57;
+            --deenlink-light-green: #F0FFF0;
+            --step-inactive: #E0E0E0;
+            --step-active: #1D6F42;
+            --step-completed: #4CAF50;
+            --paystack-blue: #0055FF;
+            --nowpayments-purple: #7B1FA2;
+            --error-red: #dc3545;
+            --success-green: #28a745;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --secondary-green: #27ae60;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --deenlink-green: #27ae60;
+            --deenlink-light-green: #1a2526;
+            --step-inactive: #4a6572;
+            --step-active: #2ecc71;
+            --step-completed: #27ae60;
+            --paystack-blue: #3498db;
+            --nowpayments-purple: #9b59b6;
+            --error-red: #e74c3c;
+            --success-green: #2ecc71;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Soft Transparent Loader */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .dark-theme #pageLoader {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Soft Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9), rgba(212, 175, 55, 0.8));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+        }
+
+        .dark-theme .crescent::before {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(212, 175, 55, 0.8);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .dark-theme .loader-star {
+            color: rgba(243, 156, 18, 0.8);
+        }
+
+        .loader-text {
+            color: var(--primary-green);
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        .dark-theme .loader-text {
+            color: #ecf0f1;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - DeenLink Theme */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(46, 139, 87, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(39, 174, 96, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.95;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+            font-family: 'Amiri', serif;
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px 10px;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .step-indicator {
+                padding: 25px 30px 15px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--step-inactive);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-circle {
+            background-color: var(--step-active);
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-circle {
+            background-color: var(--step-completed);
+        }
+
+        .step.completed .step-circle i {
+            display: block;
+        }
+
+        .step.completed .step-circle span {
+            display: none;
+        }
+
+        .step-circle i {
+            display: none;
+            font-size: 16px;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--step-inactive);
+            z-index: 1;
+        }
+
+        .step:first-child .step-line {
+            left: 50%;
+            width: 50%;
+        }
+
+        .step:last-child .step-line {
+            left: 0;
+            width: 50%;
+        }
+
+        .step.active ~ .step .step-line {
+            background-color: var(--step-inactive);
+        }
+
+        .step.active .step-line,
+        .step.completed .step-line {
+            background-color: var(--step-active);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--dark-gray);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-label {
+            color: var(--step-active);
+            font-weight: 600;
+        }
+
+        .step.completed .step-label {
+            color: var(--step-completed);
+        }
+
+        /* Step Content Container */
+        .step-content-container {
+            padding: 0 16px;
+        }
+
+        @media (min-width: 768px) {
+            .step-content-container {
+                padding: 0 30px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .step-title i {
+            color: var(--deenlink-green);
+        }
+
+        /* Step 1 Styles */
+        .deenlink-info {
+            background-color: var(--deenlink-light-green);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--deenlink-green);
+        }
+
+        .dark-theme .deenlink-info {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .deenlink-info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--deenlink-green);
+            margin-bottom: 8px;
+        }
+
+        .deenlink-info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Currency Selector */
+        .currency-selector {
+            margin-bottom: 25px;
+        }
+
+        .currency-selector-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .currency-selector-label i {
+            color: var(--deenlink-green);
+        }
+
+        .currency-input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .currency-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .currency-dropdown {
+            flex: 0 0 120px;
+            position: relative;
+        }
+
+        .currency-dropdown-toggle {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            background-color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .dark-theme .currency-dropdown-toggle {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .currency-dropdown-toggle:hover {
+            border-color: var(--deenlink-green);
+        }
+
+        .currency-dropdown-toggle i {
+            font-size: 14px;
+            transition: transform 0.3s;
+        }
+
+        .currency-dropdown-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .currency-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .currency-dropdown-menu.active {
+            display: block;
+        }
+
+        .currency-search-container {
+            padding: 12px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .currency-search-input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--light-gray);
+        }
+
+        .currency-search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+
+        .currency-options {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .currency-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .currency-option:hover {
+            background-color: var(--light-gray);
+        }
+
+        .currency-option.selected {
+            background-color: rgba(46, 139, 87, 0.1);
+        }
+
+        .currency-option-code {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .currency-option-name {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-left: 8px;
+        }
+
+        .currency-option-symbol {
+            font-size: 14px;
+            color: var(--deenlink-green);
+            font-weight: 600;
+        }
+
+        .currency-amount-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            background-color: var(--white);
+            transition: all 0.3s;
+            text-align: right;
+        }
+
+        .dark-theme .currency-amount-input {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .currency-amount-input:focus {
+            outline: none;
+            border-color: var(--deenlink-green);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+
+        .minimum-amount {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 8px;
+        }
+
+        /* Note Field */
+        .note-field {
+            margin-top: 20px;
+        }
+
+        .note-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .note-label i {
+            color: var(--deenlink-green);
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-dark);
+            background-color: var(--white);
+            transition: all 0.3s;
+            resize: vertical;
+            min-height: 100px;
+            max-height: 200px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .dark-theme .note-input {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .note-input:focus {
+            outline: none;
+            border-color: var(--deenlink-green);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+
+        .note-input::placeholder {
+            color: var(--dark-gray);
+            font-style: italic;
+        }
+
+        .char-count {
+            font-size: 12px;
+            color: var(--dark-gray);
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        /* Step 2 Styles - Payment Methods */
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .payment-method {
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .payment-method:last-child {
+            margin-bottom: 0;
+        }
+
+        .payment-method:hover {
+            border-color: var(--deenlink-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-method.selected {
+            border-color: var(--deenlink-green);
+            background-color: rgba(46, 139, 87, 0.05);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.15);
+        }
+
+        .dark-theme .payment-method.selected {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .payment-icon.paystack {
+            background: linear-gradient(135deg, var(--paystack-blue), #2979FF);
+        }
+
+        .payment-icon.nowpayments {
+            background: linear-gradient(135deg, var(--nowpayments-purple), #9C27B0);
+        }
+
+        .payment-content {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .payment-description {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .payment-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .payment-feature {
+            font-size: 11px;
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .paystack .payment-feature {
+            background-color: var(--paystack-blue);
+        }
+
+        .nowpayments .payment-feature {
+            background-color: var(--nowpayments-purple);
+        }
+
+        .payment-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .payment-method.selected .payment-radio {
+            border-color: var(--deenlink-green);
+            background-color: var(--deenlink-green);
+        }
+
+        .payment-radio-inner {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .payment-method.selected .payment-radio-inner {
+            opacity: 1;
+        }
+
+        /* What We Do Section */
+        .what-we-do {
+            background-color: rgba(46, 139, 87, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            border-left: 4px solid var(--deenlink-green);
+        }
+
+        .dark-theme .what-we-do {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .what-we-do-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--deenlink-green);
+            margin-bottom: 8px;
+        }
+
+        .what-we-do-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .what-we-do-list {
+            list-style-type: none;
+            margin-top: 10px;
+        }
+
+        .what-we-do-list li {
+            font-size: 12px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .what-we-do-list li i {
+            color: var(--deenlink-green);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* Step 3 Styles - Receipt */
+        .receipt-container {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .receipt-header {
+            background: linear-gradient(135deg, var(--deenlink-green), #4CAF50);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .receipt-header i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .receipt-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .receipt-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .receipt-body {
+            padding: 20px;
+        }
+
+        .receipt-info {
+            margin-bottom: 25px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .receipt-row:last-child {
+            border-bottom: none;
+        }
+
+        .receipt-label {
+            font-size: 14px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .receipt-value {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .receipt-amount {
+            font-size: 24px;
+            color: var(--deenlink-green);
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            font-family: 'Amiri', serif;
+        }
+
+        .receipt-purpose {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: rgba(46, 139, 87, 0.05);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .dark-theme .receipt-purpose {
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+
+        .receipt-purpose-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--deenlink-green);
+            margin-bottom: 5px;
+        }
+
+        .receipt-purpose-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .receipt-note {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: rgba(46, 139, 87, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--deenlink-green);
+        }
+
+        .dark-theme .receipt-note {
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+
+        .receipt-note-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--deenlink-green);
+            margin-bottom: 5px;
+        }
+
+        .receipt-note-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        .receipt-footer {
+            background-color: var(--light-gray);
+            padding: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--dark-gray);
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--light-green);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .success-message {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        .success-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .success-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* Download Receipt Button */
+        .download-receipt-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .download-receipt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.2);
+        }
+
+        .download-receipt-btn:hover {
+            background-color: #155c33;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(29, 111, 66, 0.3);
+        }
+
+        .download-receipt-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-receipt-btn i {
+            font-size: 18px;
+        }
+
+        /* Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 16px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .step-navigation {
+                padding: 0 30px;
+                max-width: 600px;
+                margin: 20px auto 0;
+            }
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-back {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-back:hover:not(:disabled) {
+            background-color: var(--medium-gray);
+        }
+
+        .btn-next {
+            background-color: var(--deenlink-green);
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background-color: #1D6F42;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+        }
+
+        .btn-complete {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-complete:hover:not(:disabled) {
+            background-color: #155c33;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .btn-hidden {
+            visibility: hidden;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .step-circle {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .step-line {
+                top: 16px;
+            }
+            
+            .step-content {
+                padding: 16px;
+            }
+            
+            .step-title {
+                font-size: 16px;
+            }
+            
+            .payment-method {
+                padding: 16px;
+            }
+            
+            .payment-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            
+            .nav-btn {
+                padding: 10px 20px;
+                min-width: 100px;
+                font-size: 13px;
+            }
+            
+            .currency-dropdown {
+                flex: 0 0 100px;
+            }
+            
+            .currency-dropdown-toggle {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+            
+            .download-receipt-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Soft Transparent Loader -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Supporting DeenLink...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-heart"></i>
+                        <span>Support DeenLink</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Support Our Mission</h1>
+                    <p>"Charity does not decrease wealth" Sahih-Muslim (2588)</p>
+                </div>
+            </section>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1Indicator">
+                    <div class="step-circle">
+                        <span>1</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Donation Details</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step2Indicator">
+                    <div class="step-circle">
+                        <span>2</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Payment Method</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step3Indicator">
+                    <div class="step-circle">
+                        <span>3</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Confirmation</div>
+                    <div class="step-line"></div>
+                </div>
+            </div>
+
+            <!-- Step Content Container -->
+            <div class="step-content-container">
+                <!-- Step 1: Donation Details -->
+                <div class="step-content active" id="step1Content">
+                    <div class="step-title">
+                        <i class="fas fa-edit"></i>
+                        <span>Support DeenLink</span>
+                    </div>
+                    
+                    <div class="deenlink-info">
+                        <div class="deenlink-info-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About DeenLink</span>
+                        </div>
+                        <div class="deenlink-info-text">
+                            DeenLink is a non-profit Islamic platform dedicated to serving the Muslim community worldwide. Your support helps us maintain and improve our services, develop new features, and reach more believers.
+                        </div>
+                    </div>
+                    
+                    <div class="currency-selector">
+                        <div class="currency-selector-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Select Currency & Enter Donation Amount</span>
+                        </div>
+                        <div class="currency-input-container">
+                            <div class="currency-input-wrapper">
+                                <div class="currency-dropdown" id="currencyDropdown">
+                                    <div class="currency-dropdown-toggle" id="currencyToggle">
+                                        <span id="selectedCurrencyCode">USD</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="currency-dropdown-menu" id="currencyMenu">
+                                        <div class="currency-search-container">
+                                            <div style="position: relative;">
+                                                <i class="fas fa-search currency-search-icon"></i>
+                                                <input type="text" class="currency-search-input" id="currencySearch" placeholder="Search currency...">
+                                            </div>
+                                        </div>
+                                        <div class="currency-options" id="currencyOptions">
+                                            <!-- Currency options will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" class="currency-amount-input" id="donationAmount" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                            <div class="minimum-amount" id="minimumAmount">
+                                Any amount helps our mission. Thank you for your support!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Note Field -->
+                    <div class="note-field">
+                        <div class="note-label">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Add a Note (Optional)</span>
+                        </div>
+                        <textarea class="note-input" id="donationNote" placeholder="Add a message or special intention for your support..."></textarea>
+                        <div class="char-count" id="charCount">0/500 characters</div>
+                    </div>
+                    
+                    <div class="what-we-do">
+                        <div class="what-we-do-title">
+                            <i class="fas fa-hands-helping"></i>
+                            <span>How Your Support Helps</span>
+                        </div>
+                        <div class="what-we-do-text">
+                            Your donation enables us to:
+                        </div>
+                        <ul class="what-we-do-list">
+                            <li><i class="fas fa-check-circle"></i> Maintain and improve the DeenLink platform</li>
+                            <li><i class="fas fa-check-circle"></i> Develop new Islamic apps and features</li>
+                            <li><i class="fas fa-check-circle"></i> Provide free Islamic resources to the community</li>
+                            <li><i class="fas fa-check-circle"></i> Support Islamic education initiatives</li>
+                            <li><i class="fas fa-check-circle"></i> Reach more Muslims worldwide</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 2: Payment Method -->
+                <div class="step-content" id="step2Content">
+                    <div class="step-title">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Choose Payment Method</span>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method paystack" data-method="paystack">
+                            <div class="payment-icon paystack">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="payment-content">
+                                <div class="payment-name">Paystack</div>
+                                <div class="payment-description">
+                                    Secure payment with cards, bank transfer, Apple Pay, Google Pay
+                                </div>
+                                <div class="payment-features">
+                                    <span class="payment-feature">Cards</span>
+                                    <span class="payment-feature">Bank Transfer</span>
+                                    <span class="payment-feature">Apple Pay</span>
+                                    <span class="payment-feature">Google Pay</span>
+                                </div>
+                            </div>
+                            <div class="payment-radio">
+                                <div class="payment-radio-inner"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method nowpayments" data-method="nowpayments">
+                            <div class="payment-icon nowpayments">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="payment-content">
+                                <div class="payment-name">NowPayments</div>
+                                <div class="payment-description">
+                                    Pay with cryptocurrency (BTC, USDT, ETH, and 100+ others)
+                                </div>
+                                <div class="payment-features">
+                                    <span class="payment-feature">Bitcoin</span>
+                                    <span class="payment-feature">USDT</span>
+                                    <span class="payment-feature">Ethereum</span>
+                                    <span class="payment-feature">100+ coins</span>
+                                </div>
+                            </div>
+                            <div class="payment-radio">
+                                <div class="payment-radio-inner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="what-we-do">
+                        <div class="what-we-do-title">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Transparency & Accountability</span>
+                        </div>
+                        <div class="what-we-do-text">
+                            DeenLink is committed to complete transparency. We publish annual reports detailing how donations are used to support our mission. Every contribution directly supports Islamic services and community development.
+                        </div>
+                        <ul class="what-we-do-list">
+                            <li><i class="fas fa-check-circle"></i> 100% of donations go to platform development</li>
+                            <li><i class="fas fa-check-circle"></i> Regular financial reports published</li>
+                            <li><i class="fas fa-check-circle"></i> Sharia-compliant financial management</li>
+                            <li><i class="fas fa-check-circle"></i> Independent financial oversight</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 3: Confirmation & Receipt -->
+                <div class="step-content" id="step3Content">
+                    <div class="step-title">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Support Successful!</span>
+                    </div>
+                    
+                    <div class="success-message">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="success-title">Thank You for Supporting DeenLink!</div>
+                        <div class="success-text">
+                            Your support has been received successfully. May Allah reward you abundantly for helping to sustain and grow this Islamic platform. A receipt has been generated for your records.
+                        </div>
+                    </div>
+                    
+                    <div class="receipt-container" id="receiptForPDF">
+                        <div class="receipt-header">
+                            <i class="fas fa-heart"></i>
+                            <div class="receipt-title">DeenLink Support Receipt</div>
+                            <div class="receipt-subtitle">Supporting Islamic Digital Services</div>
+                        </div>
+                        
+                        <div class="receipt-body">
+                            <div class="receipt-info">
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Transaction ID</div>
+                                    <div class="receipt-value" id="receiptTransactionId">DL-2023-001234</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Date & Time</div>
+                                    <div class="receipt-value" id="receiptDateTime">Loading...</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Supporter Name</div>
+                                    <div class="receipt-value" id="receiptDonorName">Loading...</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Payment Method</div>
+                                    <div class="receipt-value" id="receiptPaymentMethod">Loading...</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Currency</div>
+                                    <div class="receipt-value" id="receiptCurrency">Loading...</div>
+                                </div>
+                                
+                                <div class="receipt-purpose">
+                                    <div class="receipt-purpose-label">Purpose of Donation</div>
+                                    <div class="receipt-purpose-text">Support DeenLink Platform Development</div>
+                                </div>
+                                
+                                <!-- Note in receipt -->
+                                <div class="receipt-note" id="receiptNoteContainer" style="display: none;">
+                                    <div class="receipt-note-label">Supporter's Note:</div>
+                                    <div class="receipt-note-text" id="receiptNoteText"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="receipt-amount" id="receiptAmount">$0.00</div>
+                        </div>
+                        
+                        <div class="receipt-footer">
+                            <p>Thank you for supporting DeenLink. Your contribution helps sustain and grow our Islamic services.</p>
+                            <p>"Who is it that would loan Allah a goodly loan so He may multiply it for him many times over?" (Quran 2:245)</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Download Receipt Button -->
+                    <div class="download-receipt-container">
+                        <button class="download-receipt-btn" id="downloadReceiptBtn">
+                            <i class="fas fa-file-download"></i>
+                            Download Receipt (PDF)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="step-navigation">
+                <button class="nav-btn btn-back btn-hidden" id="backBtnNav">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+                <button class="nav-btn btn-next" id="nextBtnNav">
+                    Proceed to Payment
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // THEME DETECTION FROM HOME PAGE
+        // ============================================
+
+        // Check for saved theme preference from home page
+        const savedTheme = localStorage.getItem('isDarkMode');
+        const body = document.body;
+
+        if (savedTheme === 'true') {
+            // Apply dark theme if saved preference is true
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        } else {
+            // Apply light theme (default)
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+        }
+
+        // Also listen for storage changes in case theme is changed in another tab
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'isDarkMode') {
+                if (e.newValue === 'true') {
+                    body.classList.remove('light-theme');
+                    body.classList.add('dark-theme');
+                } else {
+                    body.classList.remove('dark-theme');
+                    body.classList.add('light-theme');
+                }
+            }
+        });
+
+        // Periodically check for theme updates (every 2 seconds)
+        // This ensures theme sync even if storage event doesn't fire
+        setInterval(() => {
+            const currentTheme = localStorage.getItem('isDarkMode');
+            const isCurrentlyDark = body.classList.contains('dark-theme');
+            
+            if (currentTheme === 'true' && !isCurrentlyDark) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else if (currentTheme !== 'true' && isCurrentlyDark) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }, 2000);
+
+        // ============================================
+        // PAGE TRANSITION LOADER
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show soft transparent loader
+        function showPageLoader(message = 'Processing Support...') {
+            pageLoader.querySelector('.loader-text').textContent = message;
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(hidePageLoader, 100);
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Initial hide of loader
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader('Redirecting...');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+        });
+
+        // ============================================
+        // DEENLINK SUPPORT APPLICATION LOGIC
+        // ============================================
+
+        // Application State
+        const deenlinkState = {
+            currentStep: 1,
+            donationAmount: 0,
+            paymentMethod: null,
+            donorName: "DeenLink Supporter",
+            transactionId: generateTransactionId(),
+            currency: 'USD',
+            currencySymbol: '$',
+            note: '',
+            exchangeRates: {
+                'USD': { rate: 1, symbol: '$' },
+                'EUR': { rate: 0.92, symbol: '€' },
+                'GBP': { rate: 0.79, symbol: '£' },
+                'NGN': { rate: 1300, symbol: '₦' },
+                'SAR': { rate: 3.75, symbol: 'ر.س' },
+                'AED': { rate: 3.67, symbol: 'د.إ' },
+                'PKR': { rate: 280, symbol: '₨' },
+                'INR': { rate: 83, symbol: '₹' },
+                'MYR': { rate: 4.75, symbol: 'RM' }
+            }
+        };
+
+        // Available Currencies with Symbols
+        const currencies = [
+            { code: 'USD', name: 'US Dollar', symbol: '$' },
+            { code: 'EUR', name: 'Euro', symbol: '€' },
+            { code: 'GBP', name: 'British Pound', symbol: '£' },
+            { code: 'NGN', name: 'Nigerian Naira', symbol: '₦' },
+            { code: 'SAR', name: 'Saudi Riyal', symbol: 'ر.س' },
+            { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ' },
+            { code: 'PKR', name: 'Pakistani Rupee', symbol: '₨' },
+            { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
+            { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM' },
+            { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
+            { code: 'CAD', name: 'Canadian Dollar', symbol: 'CA$' },
+            { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
+            { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF' },
+            { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
+            { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'Rp' },
+            { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
+            { code: 'ZAR', name: 'South African Rand', symbol: 'R' },
+            { code: 'TRY', name: 'Turkish Lira', symbol: '₺' },
+            { code: 'RUB', name: 'Russian Ruble', symbol: '₽' }
+        ];
+
+        // DOM Elements
+        const step1Content = document.getElementById('step1Content');
+        const step2Content = document.getElementById('step2Content');
+        const step3Content = document.getElementById('step3Content');
+        const step1Indicator = document.getElementById('step1Indicator');
+        const step2Indicator = document.getElementById('step2Indicator');
+        const step3Indicator = document.getElementById('step3Indicator');
+        const backBtnNav = document.getElementById('backBtnNav');
+        const nextBtnNav = document.getElementById('nextBtnNav');
+        const donationAmountInput = document.getElementById('donationAmount');
+        const donationNoteInput = document.getElementById('donationNote');
+        const charCount = document.getElementById('charCount');
+        const receiptTransactionId = document.getElementById('receiptTransactionId');
+        const receiptDateTime = document.getElementById('receiptDateTime');
+        const receiptDonorName = document.getElementById('receiptDonorName');
+        const receiptPaymentMethod = document.getElementById('receiptPaymentMethod');
+        const receiptAmount = document.getElementById('receiptAmount');
+        const receiptCurrency = document.getElementById('receiptCurrency');
+        const receiptNoteContainer = document.getElementById('receiptNoteContainer');
+        const receiptNoteText = document.getElementById('receiptNoteText');
+        const minimumAmount = document.getElementById('minimumAmount');
+        const currencyToggle = document.getElementById('currencyToggle');
+        const currencyMenu = document.getElementById('currencyMenu');
+        const currencySearch = document.getElementById('currencySearch');
+        const currencyOptions = document.getElementById('currencyOptions');
+        const selectedCurrencyCode = document.getElementById('selectedCurrencyCode');
+        const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+        const receiptForPDF = document.getElementById('receiptForPDF');
+
+        // Initialize the page
+        function initDeenlinkPage() {
+            populateCurrencies();
+            setupEventListeners();
+            updateStepDisplay();
+            generateReceiptData();
+            updateCharCount();
+        }
+
+        // Populate currency dropdown
+        function populateCurrencies() {
+            currencyOptions.innerHTML = '';
+            
+            currencies.forEach(currency => {
+                const option = document.createElement('div');
+                option.className = `currency-option ${currency.code === deenlinkState.currency ? 'selected' : ''}`;
+                option.dataset.code = currency.code;
+                option.dataset.symbol = currency.symbol;
+                option.innerHTML = `
+                    <div>
+                        <span class="currency-option-code">${currency.code}</span>
+                        <span class="currency-option-name">${currency.name}</span>
+                    </div>
+                    <span class="currency-option-symbol">${currency.symbol}</span>
+                `;
+                
+                option.addEventListener('click', () => {
+                    selectCurrency(currency.code, currency.symbol);
+                    currencyMenu.classList.remove('active');
+                    currencyToggle.classList.remove('active');
+                });
+                
+                currencyOptions.appendChild(option);
+            });
+        }
+
+        // Select currency
+        function selectCurrency(code, symbol) {
+            deenlinkState.currency = code;
+            deenlinkState.currencySymbol = symbol;
+            
+            // Update UI
+            selectedCurrencyCode.textContent = code;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.currency-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to current option
+            const selectedOption = document.querySelector(`.currency-option[data-code="${code}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // Update donation amount placeholder
+            if (donationAmountInput.value === '' || donationAmountInput.value === '0.00') {
+                donationAmountInput.placeholder = `0.00`;
+            }
+            
+            updateNextButtonState();
+        }
+
+        // Update character count for note
+        function updateCharCount() {
+            const currentLength = donationNoteInput.value.length;
+            charCount.textContent = `${currentLength}/500 characters`;
+            
+            // Change color if approaching limit
+            if (currentLength > 450) {
+                charCount.style.color = 'var(--error-red)';
+            } else if (currentLength > 400) {
+                charCount.style.color = 'var(--deenlink-green)';
+            } else {
+                charCount.style.color = 'var(--dark-gray)';
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Amount input
+            donationAmountInput.addEventListener('input', function() {
+                deenlinkState.donationAmount = parseFloat(this.value) || 0;
+                updateNextButtonState();
+            });
+            
+            // Note input
+            donationNoteInput.addEventListener('input', function() {
+                deenlinkState.note = this.value;
+                updateCharCount();
+                
+                // Limit to 500 characters
+                if (this.value.length > 500) {
+                    this.value = this.value.substring(0, 500);
+                    deenlinkState.note = this.value;
+                    updateCharCount();
+                }
+            });
+            
+            // Currency dropdown toggle
+            currencyToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currencyMenu.classList.toggle('active');
+                this.classList.toggle('active');
+                if (currencyMenu.classList.contains('active')) {
+                    currencySearch.focus();
+                }
+            });
+            
+            // Currency search
+            currencySearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('.currency-option').forEach(option => {
+                    const code = option.dataset.code.toLowerCase();
+                    const name = option.querySelector('.currency-option-name').textContent.toLowerCase();
+                    
+                    if (code.includes(searchTerm) || name.includes(searchTerm)) {
+                        option.style.display = 'flex';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Close currency dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!currencyDropdown.contains(e.target)) {
+                    currencyMenu.classList.remove('active');
+                    currencyToggle.classList.remove('active');
+                }
+            });
+            
+            // Payment method selection
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    const methodId = this.dataset.method;
+                    selectPaymentMethod(methodId);
+                });
+            });
+            
+            // Navigation buttons
+            backBtnNav.addEventListener('click', goToPreviousStep);
+            nextBtnNav.addEventListener('click', goToNextStep);
+            
+            // Download receipt button
+            downloadReceiptBtn.addEventListener('click', downloadReceiptAsPDF);
+        }
+
+        // Select payment method
+        function selectPaymentMethod(methodId) {
+            deenlinkState.paymentMethod = methodId;
+            
+            // Update UI
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.classList.remove('selected');
+            });
+            
+            document.querySelector(`.payment-method[data-method="${methodId}"]`).classList.add('selected');
+            
+            updateNextButtonState();
+        }
+
+        // Update step display
+        function updateStepDisplay() {
+            // Hide all step content
+            step1Content.classList.remove('active');
+            step2Content.classList.remove('active');
+            step3Content.classList.remove('active');
+            
+            // Remove active class from all indicators
+            step1Indicator.classList.remove('active', 'completed');
+            step2Indicator.classList.remove('active', 'completed');
+            step3Indicator.classList.remove('active', 'completed');
+            
+            // Show current step content
+            switch(deenlinkState.currentStep) {
+                case 1:
+                    step1Content.classList.add('active');
+                    step1Indicator.classList.add('active');
+                    backBtnNav.classList.add('btn-hidden');
+                    nextBtnNav.textContent = 'Proceed to Payment';
+                    nextBtnNav.classList.remove('btn-complete');
+                    nextBtnNav.classList.add('btn-next');
+                    break;
+                    
+                case 2:
+                    step2Content.classList.add('active');
+                    step1Indicator.classList.add('completed');
+                    step2Indicator.classList.add('active');
+                    backBtnNav.classList.remove('btn-hidden');
+                    nextBtnNav.textContent = 'Complete Support';
+                    nextBtnNav.classList.remove('btn-complete');
+                    nextBtnNav.classList.add('btn-next');
+                    break;
+                    
+                case 3:
+                    step3Content.classList.add('active');
+                    step1Indicator.classList.add('completed');
+                    step2Indicator.classList.add('completed');
+                    step3Indicator.classList.add('active');
+                    backBtnNav.classList.remove('btn-hidden');
+                    nextBtnNav.textContent = 'Finish';
+                    nextBtnNav.classList.remove('btn-next');
+                    nextBtnNav.classList.add('btn-complete');
+                    
+                    // Generate receipt
+                    generateReceiptData();
+                    break;
+            }
+            
+            updateNextButtonState();
+        }
+
+        // Update next button state
+        function updateNextButtonState() {
+            let isEnabled = false;
+            
+            switch(deenlinkState.currentStep) {
+                case 1:
+                    // Need amount > 0
+                    isEnabled = deenlinkState.donationAmount > 0;
+                    break;
+                    
+                case 2:
+                    // Need payment method selected
+                    isEnabled = deenlinkState.paymentMethod !== null;
+                    break;
+                    
+                case 3:
+                    // Always enabled on final step
+                    isEnabled = true;
+                    break;
+            }
+            
+            nextBtnNav.disabled = !isEnabled;
+        }
+
+        // Go to next step
+        function goToNextStep() {
+            if (deenlinkState.currentStep < 3) {
+                if (deenlinkState.currentStep === 2) {
+                    // If moving from step 2 to 3, simulate payment processing with soft loader
+                    simulatePaymentProcessing();
+                } else {
+                    deenlinkState.currentStep++;
+                    updateStepDisplay();
+                }
+            } else {
+                // Final step - redirect to donations page
+                showPageLoader('Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+        }
+
+        // Simulate payment processing with soft loader
+        function simulatePaymentProcessing() {
+            showPageLoader('Processing your support...');
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                hidePageLoader();
+                deenlinkState.currentStep++;
+                updateStepDisplay();
+                
+                // Show success notification
+                showNotification('Support processed successfully!', 'success');
+            }, 2000);
+        }
+
+        // Go to previous step
+        function goToPreviousStep() {
+            if (deenlinkState.currentStep > 1) {
+                deenlinkState.currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        // Generate receipt data
+        function generateReceiptData() {
+            // Update transaction ID
+            receiptTransactionId.textContent = deenlinkState.transactionId;
+            
+            // Update date and time
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+            const formattedTime = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            receiptDateTime.textContent = `${formattedDate} at ${formattedTime}`;
+            
+            // Update donor name
+            receiptDonorName.textContent = deenlinkState.donorName;
+            
+            // Update payment method
+            if (deenlinkState.paymentMethod) {
+                receiptPaymentMethod.textContent = deenlinkState.paymentMethod === 'paystack' ? 'Paystack' : 'NowPayments';
+            } else {
+                receiptPaymentMethod.textContent = 'Not Selected';
+            }
+            
+            // Update currency
+            receiptCurrency.textContent = deenlinkState.currency;
+            
+            // Update amount
+            receiptAmount.textContent = `${deenlinkState.currencySymbol}${deenlinkState.donationAmount.toFixed(2)}`;
+            
+            // Update note if exists
+            if (deenlinkState.note && deenlinkState.note.trim() !== '') {
+                receiptNoteText.textContent = deenlinkState.note;
+                receiptNoteContainer.style.display = 'block';
+            } else {
+                receiptNoteContainer.style.display = 'none';
+            }
+        }
+
+        // Generate transaction ID
+        function generateTransactionId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 10000);
+            return `DL-${new Date().getFullYear()}-${random.toString().padStart(6, '0')}`;
+        }
+
+        // Download receipt as PDF
+        async function downloadReceiptAsPDF() {
+            try {
+                showPageLoader('Generating PDF receipt...');
+                
+                // Temporarily hide the download button to not include it in the PDF
+                const downloadBtn = document.querySelector('.download-receipt-container');
+                const originalDisplay = downloadBtn.style.display;
+                downloadBtn.style.display = 'none';
+                
+                // Use html2canvas to capture the receipt
+                const canvas = await html2canvas(receiptForPDF, {
+                    scale: 2, // Higher quality
+                    useCORS: true,
+                    backgroundColor: '#FFFFFF'
+                });
+                
+                // Restore the download button
+                downloadBtn.style.display = originalDisplay;
+                
+                // Convert canvas to image
+                const imgData = canvas.toDataURL('image/png');
+                
+                // Create PDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Calculate dimensions
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                // Calculate image dimensions to fit the page
+                const imgWidth = pdfWidth - 20; // 10mm margin on each side
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Add image to PDF
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                
+                // Add footer with timestamp
+                pdf.setFontSize(10);
+                pdf.setTextColor(100, 100, 100);
+                pdf.text(`Generated on ${new Date().toLocaleString()}`, pdfWidth / 2, pdfHeight - 10, { align: 'center' });
+                
+                // Save the PDF
+                const fileName = `DeenLink_Support_${deenlinkState.transactionId}.pdf`;
+                pdf.save(fileName);
+                
+                hidePageLoader();
+                showNotification('Receipt downloaded successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                hidePageLoader();
+                showNotification('Failed to generate PDF. Please try again.', 'error');
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: ${type === 'success' ? 'var(--success-green)' : 'var(--error-red)'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 3000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease, slideOut 0.3s ease 2s forwards;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2500);
+        }
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initDeenlinkPage);
+    </script>
+</body>
+</html>

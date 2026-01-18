@@ -1,0 +1,2899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Questions | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --deenlink-purple: #6A1B9A;
+            --success-green: #27ae60;
+            --error-red: #e74c3c;
+            --warning-yellow: #f39c12;
+            --info-blue: #3498db;
+            --chat-bg: #F0F8FF;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --deenlink-purple: #9b59b6;
+            --success-green: #2ecc71;
+            --error-red: #e74c3c;
+            --warning-yellow: #f39c12;
+            --info-blue: #3498db;
+            --chat-bg: #1a2a3a;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - Green Theme */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(46, 125, 50, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(39, 174, 96, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1516617442634-75371039cb3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* DeenPoints Balance Display */
+        .deenpoints-balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .deenpoints-balance:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .deenpoints-balance img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 16px;
+            position: relative;
+            z-index: 5;
+            margin-top: -20px;
+        }
+
+        @media (min-width: 768px) {
+            .search-container {
+                padding: 20px 30px;
+                max-width: 800px;
+                margin: -20px auto 0;
+            }
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--white);
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            outline: none;
+            color: var(--text-dark);
+            transition: box-shadow 0.3s;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+            font-size: 18px;
+        }
+
+        /* Tabs Navigation */
+        .tabs-navigation {
+            padding: 16px;
+            background-color: var(--white);
+            margin-top: 0;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 5;
+        }
+
+        @media (min-width: 768px) {
+            .tabs-navigation {
+                padding: 20px 30px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .tabs-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding-bottom: 5px;
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            border-radius: 25px;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border: 2px solid transparent;
+        }
+
+        .tab-item:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .tab-item.active {
+            background-color: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        /* Questions Container */
+        .questions-container {
+            padding: 20px 16px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .questions-container {
+                padding: 25px 30px 50px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .questions-count {
+            font-size: 14px;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            padding-left: 5px;
+        }
+
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--medium-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .dark-theme .question-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Status Colors */
+        .question-card.answered {
+            border-left-color: var(--success-green);
+        }
+
+        .question-card.pending {
+            border-left-color: var(--warning-yellow);
+        }
+
+        .question-card.reviewing {
+            border-left-color: var(--info-blue);
+        }
+
+        .question-card.rejected {
+            border-left-color: var(--error-red);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .question-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            flex: 1;
+        }
+
+        .question-status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .status-answered {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success-green);
+        }
+
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning-yellow);
+        }
+
+        .status-reviewing {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--info-blue);
+        }
+
+        .status-rejected {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--error-red);
+        }
+
+        .question-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-size: 13px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .detail-value.scholar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* FIX: Make scholar avatar larger and name bold in question cards */
+        .scholar-avatar {
+            width: 32px; /* Increased from 24px */
+            height: 32px; /* Increased from 24px */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--light-green);
+        }
+
+        /* FIX: Make scholar name bold in question cards */
+        .detail-value.scholar span {
+            font-weight: 600;
+        }
+
+        .question-preview {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-btn {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .view-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .delete-btn:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--dark-gray);
+            font-size: 36px;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .empty-message {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ask-now-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ask-now-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Chat Modal */
+        .chat-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chat-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .chat-modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .chat-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scholar-info {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Increased gap */
+        }
+
+        /* FIX: Scholar avatar in chat modal - Increased size */
+        .scholar-avatar-large {
+            width: 70px; /* Increased from 50px */
+            height: 70px; /* Increased from 50px */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--light-green); /* Thicker border */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* FIX: Scholar name in chat modal - Made bold */
+        .scholar-name {
+            font-size: 18px; /* Slightly larger */
+            font-weight: 700; /* Bold weight */
+            color: var(--text-dark);
+        }
+
+        .close-chat-modal {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .close-chat-modal:hover {
+            background-color: var(--light-gray);
+        }
+
+        /* Chat Body */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            background-color: var(--chat-bg);
+            overflow-y: auto;
+            min-height: 400px;
+            max-height: 500px;
+        }
+
+        .question-section {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--primary-green);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .question-section-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* Answer Section */
+        .answer-section {
+            background-color: var(--light-green);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--success-green);
+        }
+
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--success-green);
+            font-weight: 600;
+        }
+
+        .answer-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* Status Messages */
+        .status-message {
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border-left: 4px solid var(--warning-yellow);
+        }
+
+        .status-message.reviewing {
+            border-left-color: var(--info-blue);
+        }
+
+        .status-message.rejected {
+            border-left-color: var(--error-red);
+        }
+
+        .status-message-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .status-message.reviewing .status-message-icon {
+            color: var(--info-blue);
+        }
+
+        .status-message.pending .status-message-icon {
+            color: var(--warning-yellow);
+        }
+
+        .status-message.rejected .status-message-icon {
+            color: var(--error-red);
+        }
+
+        .status-message-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .status-message-text {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Rejection Section */
+        .rejection-section {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--error-red);
+        }
+
+        .rejection-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--error-red);
+            font-weight: 600;
+        }
+
+        .rejection-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* Thank You Button */
+        .thank-you-btn-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+        }
+
+        .thank-you-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .thank-you-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        .thank-you-btn:disabled {
+            background-color: var(--dark-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Thank You Message Display */
+        .thank-you-message-display {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .thank-you-message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: var(--primary-green);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .thank-you-message-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Thank You Modal */
+        .thank-you-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .thank-you-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .thank-you-modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .thank-you-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .thank-you-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-thank-you-modal {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .close-thank-you-modal:hover {
+            background-color: var(--light-gray);
+        }
+
+        .thank-you-modal-body {
+            padding: 20px;
+        }
+
+        .thank-you-message-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .thank-you-message-option {
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid var(--medium-gray);
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .thank-you-message-option:hover {
+            border-color: var(--primary-green);
+            background-color: var(--light-green);
+        }
+
+        /* Chat Footer */
+        .chat-footer {
+            padding: 20px;
+            border-top: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .chat-footer-text {
+            font-size: 14px;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+        }
+
+        .close-chat-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-chat-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Purchase Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .close-modal:hover {
+            background-color: var(--light-gray);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Purchase Options */
+        .purchase-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 480px) {
+            .purchase-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .purchase-option {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--medium-gray);
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .purchase-option:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+        }
+
+        .purchase-option.selected {
+            border-color: var(--accent-gold);
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        /* FIX: Custom purchase container improvements */
+        .custom-purchase {
+            grid-column: 1 / -1;
+            padding: 20px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            background-color: var(--light-gray);
+        }
+
+        .dark-theme .custom-purchase {
+            background-color: rgba(52, 73, 94, 0.3);
+            border-color: var(--medium-gray);
+        }
+
+        .purchase-amount {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .purchase-amount img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .purchase-cost {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        /* FIX: Make all form inputs consistent */
+        .form-input {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 2px solid var(--medium-gray);
+            background-color: var(--white);
+            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(29, 111, 66, 0.2);
+        }
+
+        .dark-theme .form-input {
+            background-color: var(--light-gray);
+            border-color: var(--dark-gray);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .form-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        /* FIX: Custom DeenPoints input styling */
+        .custom-input-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .currency {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-green);
+            white-space: nowrap;
+            min-width: 90px;
+        }
+
+        /* Important Note Box */
+        .important-note {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .important-note-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .important-note-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Purchase Success Modal */
+        .purchase-success {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .purchase-success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 36px;
+            animation: successPulse 2s ease infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .purchase-success-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--success-green);
+            margin-bottom: 15px;
+        }
+
+        .purchase-success-message {
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .purchase-success-details {
+            background-color: var(--light-green);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .purchase-success-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .purchase-success-amount img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .purchase-success-cost {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .purchase-success-balance {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .close-success-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .close-success-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Navigation */
+        .modal-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background-color: var(--medium-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--dark-gray);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Info Box */
+        .info-box {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .info-box {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .question-card {
+                padding: 16px;
+            }
+            
+            .question-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-actions {
+                flex-direction: column;
+            }
+            
+            .chat-modal-content {
+                max-height: 85vh;
+            }
+            
+            .chat-body {
+                min-height: 300px;
+                max-height: 400px;
+            }
+
+            /* Responsive adjustments for scholar info */
+            .scholar-info {
+                gap: 10px;
+            }
+            
+            .scholar-avatar-large {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .scholar-name {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .questions-container {
+                max-width: 700px;
+            }
+            
+            .question-card {
+                padding: 22px;
+            }
+            
+            .chat-modal-content {
+                max-width: 700px;
+            }
+            
+            .thank-you-modal-content {
+                max-width: 600px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .questions-container {
+                max-width: 800px;
+            }
+            
+            .chat-modal-content {
+                max-width: 800px;
+            }
+            
+            .thank-you-modal-content {
+                max-width: 700px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="chat-modal-overlay" id="chatModal">
+        <div class="chat-modal-content">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-comments"></i>
+                    <div class="scholar-info">
+                        <img id="chatScholarAvatar" src="" alt="Scholar" class="scholar-avatar-large">
+                        <div>
+                            <div class="scholar-name" id="chatScholarName">Dr. Omar Suleiman</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="close-chat-modal" id="closeChatModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <!-- Question and answer will be loaded here -->
+            </div>
+            
+            <div class="chat-footer" id="chatFooter">
+                <!-- Thank you button or status messages will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div class="thank-you-modal-overlay" id="thankYouModal">
+        <div class="thank-you-modal-content">
+            <div class="thank-you-modal-header">
+                <div class="thank-you-modal-title">
+                    <i class="fas fa-heart"></i>
+                    <span>Send a Thank You Message</span>
+                </div>
+                <button class="close-thank-you-modal" id="closeThankYouModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="thank-you-modal-body">
+                <p style="margin-bottom: 20px; color: var(--dark-gray); text-align: center;">Select a message to send to the scholar:</p>
+                <div class="thank-you-message-options" id="thankYouMessageOptions">
+                    <!-- Thank you messages will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-coins"></i>
+                    <span>Purchase DeenPoints</span>
+                </div>
+                <button class="close-modal" id="closePurchaseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Purchase Success Content -->
+                <div class="purchase-success" id="purchaseSuccessContent" style="display: none;">
+                    <div class="purchase-success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 class="purchase-success-title">Purchase Successful!</h2>
+                    <p class="purchase-success-message">Your DeenPoints have been added to your account.</p>
+                    
+                    <div class="purchase-success-details">
+                        <div class="purchase-success-amount" id="purchaseSuccessAmount">
+                            <img src="../img/deenPoints.png" alt="DeenPoints">
+                            <span>0</span>
+                        </div>
+                        <div class="purchase-success-cost" id="purchaseSuccessCost">₦0.00</div>
+                        <div class="purchase-success-balance">
+                            New Balance: <strong id="newBalance">750</strong> DeenPoints
+                        </div>
+                    </div>
+                    
+                    <button class="close-success-btn" id="closeSuccessBtn">
+                        <i class="fas fa-check-circle"></i>
+                        Continue
+                    </button>
+                </div>
+                
+                <!-- Purchase Form Content -->
+                <div id="purchaseFormContent">
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Current Balance</span>
+                        </div>
+                        <div class="info-text">
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600;">
+                                <img src="../img/deenPoints.png" alt="DeenPoints" style="width: 24px; height: 24px;">
+                                <span id="currentBalanceDisplay">750</span>
+                                <span>DeenPoints</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Quick Purchase Options</label>
+                        <div class="purchase-options">
+                            <div class="purchase-option" data-points="500" data-cost="750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>500</span>
+                                </div>
+                                <div class="purchase-cost">₦750</div>
+                            </div>
+                            <div class="purchase-option" data-points="1000" data-cost="1500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>1,000</span>
+                                </div>
+                                <div class="purchase-cost">₦1,500</div>
+                            </div>
+                            <div class="purchase-option" data-points="2500" data-cost="3750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>2,500</span>
+                                </div>
+                                <div class="purchase-cost">₦3,750</div>
+                            </div>
+                            <div class="purchase-option" data-points="5000" data-cost="7500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>5,000</span>
+                                </div>
+                                <div class="purchase-cost">₦7,500</div>
+                            </div>
+                            <!-- FIX: Updated custom purchase section with proper styling -->
+                            <div class="purchase-option custom-purchase">
+                                <label class="form-label">Custom Amount</label>
+                                <div class="custom-input-group">
+                                    <input type="number" class="form-input" id="customDeenPoints" min="100" max="10000" placeholder="Enter amount">
+                                    <span class="currency">DeenPoints</span>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 14px; color: var(--dark-gray);">
+                                    Cost: <span id="customCostDisplay">₦0.00</span> (₦1.5 per DeenPoint)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="important-note">
+                        <div class="important-note-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Important Note</span>
+                        </div>
+                        <div class="important-note-text">
+                            ⚠️ DeenPoints do NOT buy fatwas or opinions. Scholars answer only according to Islamic evidence and knowledge. DeenLink just helps in setting the priority and urgency of your questions.
+                        </div>
+                    </div>
+                    
+                    <div class="modal-navigation">
+                        <button class="modal-btn btn-secondary" id="cancelPurchaseBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button class="modal-btn btn-primary" id="confirmPurchaseBtn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-question-circle"></i>
+                        <span>My Questions</span>
+                    </div>
+                    <div class="deenpoints-balance" id="deenpointsBalanceBtn">
+                        <img src="../img/deenPoints.png" alt="DeenPoints">
+                        <span id="userDeenPoints">750</span>
+                    </div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Track Your Questions</h1>
+                    <p>View the status of your submitted questions and scholar responses</p>
+                </div>
+            </section>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search questions or scholars...">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="tabs-navigation">
+                <div class="tabs-list" id="tabsList">
+                    <div class="tab-item active" data-filter="all">All Questions</div>
+                    <div class="tab-item" data-filter="pending">Pending</div>
+                    <div class="tab-item" data-filter="reviewing">Reviewing</div>
+                    <div class="tab-item" data-filter="answered">Answered</div>
+                    <div class="tab-item" data-filter="rejected">Rejected</div>
+                </div>
+            </div>
+
+            <!-- Questions Container -->
+            <div class="questions-container">
+                <div class="questions-count" id="questionsCount">0 Questions</div>
+                
+                <div class="questions-list" id="questionsList">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+                
+                <!-- Empty State (Initially hidden) -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3 class="empty-title">No Questions Yet</h3>
+                    <p class="empty-message">You haven't asked any questions yet. Start by asking a scholar for Islamic guidance.</p>
+                    <button class="ask-now-btn" id="askNowBtn">
+                        <i class="fas fa-question-circle"></i>
+                        Ask a Question Now
+                    </button>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <div class="info-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Question Status Guide</span>
+                    </div>
+                    <div class="info-text">
+                        <strong>Pending:</strong> Your question is waiting in the scholar's queue.<br>
+                        <strong>Reviewing:</strong> The scholar is currently reviewing your question.<br>
+                        <strong>Answered:</strong> Your question has been answered by the scholar.<br>
+                        <strong>Rejected:</strong> Your question was rejected with a reason provided.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                // Don't show loader for same page
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after 1 second delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+            
+            // Initialize the page
+            initializePage();
+            
+            // Check for dark theme from settings
+            checkDarkTheme();
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+        });
+
+        // ============================================
+        // MY QUESTIONS DATA AND FUNCTIONALITY
+        // ============================================
+        
+        // Sample questions data
+        const questionsData = [
+            {
+                id: 1,
+                title: "Is it permissible to invest in cryptocurrency?",
+                question: "I wanted to know if investing in Bitcoin and other cryptocurrencies is halal according to Islamic principles. I've heard mixed opinions and would like clarification.",
+                status: "answered",
+                scholar: {
+                    id: 1,
+                    name: "Dr. Omar Suleiman",
+                    avatar: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80"
+                },
+                category: "Fiqh",
+                priority: "Priority ⭐",
+                askedDate: "2024-01-15",
+                answeredDate: "2024-01-18",
+                responseTime: "3 days",
+                deenPointsUsed: 350,
+                answer: "The permissibility of cryptocurrency depends on several factors. Generally, if the cryptocurrency is being used for halal transactions and is not associated with haram activities like gambling or interest-based transactions, it may be permissible. However, due to its high volatility and speculative nature, it should be approached with caution. Many scholars recommend treating it like any other high-risk investment in Islam.",
+                userThanks: null
+            },
+            {
+                id: 2,
+                title: "How to handle workplace discrimination as a Muslim?",
+                question: "I'm facing subtle discrimination at work because of my faith. How should I handle this situation according to Islamic teachings while maintaining my professional relationships?",
+                status: "reviewing",
+                scholar: {
+                    id: 2,
+                    name: "Mufti Ismail Menk",
+                    avatar: "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80"
+                },
+                category: "Contemporary Issues",
+                priority: "Normal",
+                askedDate: "2024-01-20",
+                responseTime: "2-3 days",
+                deenPointsUsed: 0,
+                answer: null
+            },
+            {
+                id: 3,
+                title: "Proper method of performing Wudu",
+                question: "I want to ensure I'm performing Wudu correctly. Can you provide the step-by-step method according to the Sunnah?",
+                status: "answered",
+                scholar: {
+                    id: 3,
+                    name: "Shaykh Yasir Qadhi",
+                    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80"
+                },
+                category: "Salah",
+                priority: "Urgent ⭐⭐⭐",
+                askedDate: "2024-01-10",
+                answeredDate: "2024-01-12",
+                responseTime: "2 days",
+                deenPointsUsed: 750,
+                answer: "The proper method of Wudu according to the Sunnah includes: 1) Making intention in the heart, 2) Saying 'Bismillah', 3) Washing hands three times, 4) Rinsing mouth three times, 5) Sniffing water into nostrils three times, 6) Washing face three times, 7) Washing arms up to elbows three times, 8) Wiping head once, 9) Wiping ears once, 10) Washing feet up to ankles three times. It's important to follow this sequence and ensure each part is washed thoroughly.",
+                userThanks: "May Allah reward you for this clear guidance!"
+            },
+            {
+                id: 4,
+                title: "Interfaith marriage rulings",
+                question: "I'm considering marriage with a Christian woman. What are the Islamic rulings regarding marriage with people of the Book?",
+                status: "pending",
+                scholar: {
+                    id: 4,
+                    name: "Ustadha Maryam Amir",
+                    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80"
+                },
+                category: "Marriage & Family",
+                priority: "Priority ⭐",
+                askedDate: "2024-01-22",
+                responseTime: "3-4 days",
+                deenPointsUsed: 350,
+                answer: null
+            },
+            {
+                id: 5,
+                title: "Zakat calculation on stocks",
+                question: "How do I calculate Zakat on my stock portfolio? Do I consider the current market value or the purchase price?",
+                status: "rejected",
+                scholar: {
+                    id: 5,
+                    name: "Dr. Zakir Naik",
+                    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80"
+                },
+                category: "Fiqh",
+                priority: "Normal",
+                askedDate: "2024-01-18",
+                rejectedDate: "2024-01-19",
+                responseTime: "1 day",
+                deenPointsUsed: 0,
+                rejectionReason: "This question requires specialized knowledge in Islamic finance that is outside my expertise. I recommend consulting a scholar who specializes in Islamic finance and economics for accurate guidance on stock portfolio Zakat calculations.",
+                answer: null
+            }
+        ];
+
+        // Reduced to 4 predefined thank you messages
+        const thankYouMessages = [
+            "Thank you for your answer. JazakAllah khair!",
+            "May Allah reward you for your guidance!",
+            "This was very helpful. Thank you!",
+            "I appreciate your detailed response."
+        ];
+
+        // Status display names and colors
+        const statusInfo = {
+            "pending": {
+                display: "Pending",
+                class: "status-pending",
+                color: "var(--warning-yellow)",
+                icon: "fas fa-clock",
+                message: "Your question is currently pending review by the scholar. Please be patient as scholars review questions in the order they are received."
+            },
+            "reviewing": {
+                display: "Reviewing",
+                class: "status-reviewing",
+                color: "var(--info-blue)",
+                icon: "fas fa-search",
+                message: "The scholar is currently reviewing your question. You should receive a response within the estimated timeframe."
+            },
+            "answered": {
+                display: "Answered",
+                class: "status-answered",
+                color: "var(--success-green)",
+                icon: "fas fa-check-circle",
+                message: "Your question has been answered by the scholar."
+            },
+            "rejected": {
+                display: "Rejected",
+                class: "status-rejected",
+                color: "var(--error-red)",
+                icon: "fas fa-times-circle",
+                message: "Your question has been rejected. Please see the reason provided below."
+            }
+        };
+
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
+        
+        let currentFilter = "all";
+        let currentQuestion = null;
+        let userDeenPoints = 750; // Starting balance
+        let searchTerm = "";
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        
+        const tabsList = document.getElementById('tabsList');
+        const questionsList = document.getElementById('questionsList');
+        const questionsCount = document.getElementById('questionsCount');
+        const emptyState = document.getElementById('emptyState');
+        const askNowBtn = document.getElementById('askNowBtn');
+        const deenpointsBalanceBtn = document.getElementById('deenpointsBalanceBtn');
+        const userDeenPointsDisplay = document.getElementById('userDeenPoints');
+        const searchInput = document.getElementById('searchInput');
+        
+        // Chat modal elements
+        const chatModal = document.getElementById('chatModal');
+        const closeChatModal = document.getElementById('closeChatModal');
+        const chatBody = document.getElementById('chatBody');
+        const chatFooter = document.getElementById('chatFooter');
+        const chatScholarAvatar = document.getElementById('chatScholarAvatar');
+        const chatScholarName = document.getElementById('chatScholarName');
+        
+        // Thank you modal elements
+        const thankYouModal = document.getElementById('thankYouModal');
+        const closeThankYouModal = document.getElementById('closeThankYouModal');
+        const thankYouMessageOptions = document.getElementById('thankYouMessageOptions');
+        
+        // Purchase modal elements
+        const purchaseModal = document.getElementById('purchaseModal');
+        const closePurchaseModal = document.getElementById('closePurchaseModal');
+        const cancelPurchaseBtn = document.getElementById('cancelPurchaseBtn');
+        const confirmPurchaseBtn = document.getElementById('confirmPurchaseBtn');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        const purchaseFormContent = document.getElementById('purchaseFormContent');
+        const purchaseSuccessContent = document.getElementById('purchaseSuccessContent');
+        const currentBalanceDisplay = document.getElementById('currentBalanceDisplay');
+        const customDeenPointsInput = document.getElementById('customDeenPoints');
+        const customCostDisplay = document.getElementById('customCostDisplay');
+        const purchaseSuccessAmount = document.getElementById('purchaseSuccessAmount');
+        const purchaseSuccessCost = document.getElementById('purchaseSuccessCost');
+        const newBalance = document.getElementById('newBalance');
+
+        // Initialize the page
+        function initializePage() {
+            renderQuestions(currentFilter);
+            setupTabs();
+            setupEventListeners();
+            setupPurchaseModalEvents();
+            setupPurchaseOptions();
+            setupCustomDeenPointsInput();
+            updateDeenPointsDisplays();
+        }
+        
+        // Update DeenPoints displays
+        function updateDeenPointsDisplays() {
+            userDeenPointsDisplay.textContent = userDeenPoints;
+            currentBalanceDisplay.textContent = userDeenPoints;
+        }
+        
+        // Setup tabs
+        function setupTabs() {
+            const tabItems = document.querySelectorAll('.tab-item');
+            
+            tabItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabItems.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Update current filter
+                    currentFilter = this.dataset.filter;
+                    
+                    // Render questions with new filter
+                    renderQuestions(currentFilter);
+                });
+            });
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Ask Now button
+            askNowBtn.addEventListener('click', function() {
+                showPageLoader();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            });
+            
+            // DeenPoints balance click - opens purchase modal
+            deenpointsBalanceBtn.addEventListener('click', openPurchaseModal);
+            
+            // Close chat modal
+            closeChatModal.addEventListener('click', closeChatModalFunc);
+            
+            // Close thank you modal
+            closeThankYouModal.addEventListener('click', closeThankYouModalFunc);
+            
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                searchTerm = this.value.toLowerCase().trim();
+                renderQuestions(currentFilter);
+            });
+            
+            // Close modals when clicking outside
+            chatModal.addEventListener('click', function(event) {
+                if (event.target === chatModal) {
+                    closeChatModalFunc();
+                }
+            });
+            
+            thankYouModal.addEventListener('click', function(event) {
+                if (event.target === thankYouModal) {
+                    closeThankYouModalFunc();
+                }
+            });
+            
+            purchaseModal.addEventListener('click', function(event) {
+                if (event.target === purchaseModal) {
+                    closePurchaseModalFunc();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && chatModal.classList.contains('active')) {
+                    closeChatModalFunc();
+                }
+                if (event.key === 'Escape' && thankYouModal.classList.contains('active')) {
+                    closeThankYouModalFunc();
+                }
+                if (event.key === 'Escape' && purchaseModal.classList.contains('active')) {
+                    closePurchaseModalFunc();
+                }
+            });
+        }
+        
+        // Setup purchase modal events
+        function setupPurchaseModalEvents() {
+            closePurchaseModal.addEventListener('click', closePurchaseModalFunc);
+            cancelPurchaseBtn.addEventListener('click', closePurchaseModalFunc);
+            confirmPurchaseBtn.addEventListener('click', confirmPurchase);
+            closeSuccessBtn.addEventListener('click', closePurchaseModalFunc);
+        }
+        
+        // Setup purchase options
+        function setupPurchaseOptions() {
+            const purchaseOptions = document.querySelectorAll('.purchase-option:not(.custom-purchase)');
+            
+            purchaseOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    purchaseOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Clear custom input
+                    customDeenPointsInput.value = '';
+                    customCostDisplay.textContent = '₦0.00';
+                });
+            });
+        }
+        
+        // Setup custom DeenPoints input
+        function setupCustomDeenPointsInput() {
+            customDeenPointsInput.addEventListener('input', function() {
+                const points = parseInt(this.value) || 0;
+                const cost = points * 1.5;
+                
+                if (points > 0) {
+                    // Remove selection from other options
+                    document.querySelectorAll('.purchase-option:not(.custom-purchase)').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                }
+                
+                customCostDisplay.textContent = `₦${cost.toFixed(2)}`;
+            });
+        }
+        
+        // Render questions based on filter and search
+        function renderQuestions(filter = "all") {
+            questionsList.innerHTML = '';
+            
+            let filteredQuestions = questionsData;
+            
+            // Apply filter
+            if (filter !== "all") {
+                filteredQuestions = questionsData.filter(question => question.status === filter);
+            }
+            
+            // Apply search
+            if (searchTerm) {
+                filteredQuestions = filteredQuestions.filter(question => {
+                    // Search in title
+                    if (question.title.toLowerCase().includes(searchTerm)) {
+                        return true;
+                    }
+                    
+                    // Search in question text
+                    if (question.question.toLowerCase().includes(searchTerm)) {
+                        return true;
+                    }
+                    
+                    // Search in scholar name
+                    if (question.scholar.name.toLowerCase().includes(searchTerm)) {
+                        return true;
+                    }
+                    
+                    // Search in category
+                    if (question.category.toLowerCase().includes(searchTerm)) {
+                        return true;
+                    }
+                    
+                    return false;
+                });
+            }
+            
+            // Update count
+            const count = filteredQuestions.length;
+            questionsCount.textContent = `${count} Question${count !== 1 ? 's' : ''}`;
+            
+            // Show/hide empty state
+            if (count === 0) {
+                emptyState.style.display = 'block';
+                return;
+            } else {
+                emptyState.style.display = 'none';
+            }
+            
+            // Render questions
+            filteredQuestions.forEach(question => {
+                const questionCard = document.createElement('div');
+                questionCard.className = `question-card ${question.status}`;
+                questionCard.dataset.id = question.id;
+                
+                const status = statusInfo[question.status];
+                
+                questionCard.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-title">${question.title}</div>
+                        <div class="question-status ${status.class}">${status.display}</div>
+                    </div>
+                    
+                    <div class="question-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Scholar</span>
+                            <div class="detail-value scholar">
+                                <img src="${question.scholar.avatar}" alt="${question.scholar.name}" class="scholar-avatar">
+                                <span>${question.scholar.name}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">${question.category}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">Asked</span>
+                            <span class="detail-value">${formatDate(question.askedDate)}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">Priority</span>
+                            <span class="detail-value">${question.priority}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="question-preview">${question.question}</div>
+                    
+                    <div class="question-actions">
+                        <button class="action-btn delete-btn" data-action="delete" data-id="${question.id}">
+                            <i class="fas fa-trash"></i>
+                            Delete
+                        </button>
+                        <button class="action-btn view-btn" data-action="view" data-id="${question.id}">
+                            <i class="fas fa-eye"></i>
+                            View
+                        </button>
+                    </div>
+                `;
+                
+                questionsList.appendChild(questionCard);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.action-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const action = this.dataset.action;
+                    const questionId = parseInt(this.dataset.id);
+                    
+                    if (action === 'view') {
+                        openChatModal(questionId);
+                    } else if (action === 'delete') {
+                        deleteQuestion(questionId);
+                    }
+                });
+            });
+            
+            // Add click event to question cards
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.action-btn')) {
+                        const questionId = parseInt(this.dataset.id);
+                        openChatModal(questionId);
+                    }
+                });
+            });
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        // Open chat modal
+        function openChatModal(questionId) {
+            currentQuestion = questionsData.find(q => q.id === questionId);
+            
+            if (!currentQuestion) return;
+            
+            // Set scholar info
+            chatScholarAvatar.src = currentQuestion.scholar.avatar;
+            chatScholarAvatar.alt = currentQuestion.scholar.name;
+            chatScholarName.textContent = currentQuestion.scholar.name;
+            
+            // Render chat content
+            renderChatContent();
+            
+            // Show modal
+            chatModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Scroll to top of chat
+            setTimeout(() => {
+                chatBody.scrollTop = 0;
+            }, 100);
+        }
+        
+        // Render chat content
+        function renderChatContent() {
+            chatBody.innerHTML = '';
+            chatFooter.innerHTML = '';
+            
+            const status = statusInfo[currentQuestion.status];
+            
+            // Add question section
+            const questionSection = document.createElement('div');
+            questionSection.className = 'question-section';
+            questionSection.innerHTML = `
+                <div class="question-section-title">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Your Question</span>
+                </div>
+                <div class="question-section-content">
+                    <p><strong>${currentQuestion.title}</strong></p>
+                    <p>${currentQuestion.question}</p>
+                    <div style="margin-top: 15px; font-size: 12px; color: var(--dark-gray);">
+                        <div>Asked on: ${formatDate(currentQuestion.askedDate)}</div>
+                        <div>Category: ${currentQuestion.category}</div>
+                        <div>Priority: ${currentQuestion.priority}</div>
+                    </div>
+                </div>
+            `;
+            chatBody.appendChild(questionSection);
+            
+            // Add answer or status message based on question status
+            if (currentQuestion.status === 'answered' && currentQuestion.answer) {
+                const answerSection = document.createElement('div');
+                answerSection.className = 'answer-section';
+                answerSection.innerHTML = `
+                    <div class="answer-header">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Answer from ${currentQuestion.scholar.name}</span>
+                    </div>
+                    <div class="answer-text">${currentQuestion.answer}</div>
+                    <div style="margin-top: 15px; font-size: 12px; color: var(--dark-gray);">
+                        Answered on: ${formatDate(currentQuestion.answeredDate)}
+                    </div>
+                `;
+                chatBody.appendChild(answerSection);
+                
+                // If user already sent thanks, show it
+                if (currentQuestion.userThanks) {
+                    const thanksMessage = document.createElement('div');
+                    thanksMessage.className = 'thank-you-message-display';
+                    thanksMessage.innerHTML = `
+                        <div class="thank-you-message-header">
+                            <i class="fas fa-heart"></i>
+                            <span>Your Thank You Message</span>
+                        </div>
+                        <div class="thank-you-message-text">${currentQuestion.userThanks}</div>
+                    `;
+                    chatBody.appendChild(thanksMessage);
+                } else {
+                    // Show thank you button if not sent yet
+                    const thankYouContainer = document.createElement('div');
+                    thankYouContainer.className = 'thank-you-btn-container';
+                    thankYouContainer.innerHTML = `
+                        <button class="thank-you-btn" id="sendThankYouBtn">
+                            <i class="fas fa-heart"></i>
+                            Send a Thank You Message
+                        </button>
+                    `;
+                    chatFooter.appendChild(thankYouContainer);
+                    
+                    // Add event listener to thank you button
+                    document.getElementById('sendThankYouBtn').addEventListener('click', openThankYouModal);
+                }
+                
+            } else if (currentQuestion.status === 'rejected') {
+                const rejectionSection = document.createElement('div');
+                rejectionSection.className = 'rejection-section';
+                rejectionSection.innerHTML = `
+                    <div class="rejection-header">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Rejection from ${currentQuestion.scholar.name}</span>
+                    </div>
+                    <div class="rejection-text">${currentQuestion.rejectionReason}</div>
+                `;
+                chatBody.appendChild(rejectionSection);
+                
+                // Add status message
+                const statusMessage = document.createElement('div');
+                statusMessage.className = `status-message ${currentQuestion.status}`;
+                statusMessage.innerHTML = `
+                    <div class="status-message-icon">
+                        <i class="${status.icon}"></i>
+                    </div>
+                    <div class="status-message-title">Question ${status.display}</div>
+                    <div class="status-message-text">${status.message}</div>
+                `;
+                chatFooter.appendChild(statusMessage);
+                
+            } else {
+                // For pending or reviewing questions
+                const statusMessage = document.createElement('div');
+                statusMessage.className = `status-message ${currentQuestion.status}`;
+                statusMessage.innerHTML = `
+                    <div class="status-message-icon">
+                        <i class="${status.icon}"></i>
+                    </div>
+                    <div class="status-message-title">Question ${status.display}</div>
+                    <div class="status-message-text">${status.message}</div>
+                    <div style="margin-top: 10px; font-size: 13px; color: var(--dark-gray);">
+                        Estimated response time: ${currentQuestion.responseTime}
+                    </div>
+                `;
+                chatFooter.appendChild(statusMessage);
+            }
+            
+            // Add close button to footer
+            const closeButton = document.createElement('button');
+            closeButton.className = 'close-chat-btn';
+            closeButton.innerHTML = '<i class="fas fa-times"></i> Close';
+            closeButton.addEventListener('click', closeChatModalFunc);
+            chatFooter.appendChild(closeButton);
+        }
+        
+        // Open thank you modal
+        function openThankYouModal() {
+            // Load thank you messages
+            thankYouMessageOptions.innerHTML = '';
+            
+            thankYouMessages.forEach((message, index) => {
+                const messageOption = document.createElement('div');
+                messageOption.className = 'thank-you-message-option';
+                messageOption.textContent = message;
+                messageOption.dataset.message = message;
+                messageOption.dataset.index = index;
+                
+                messageOption.addEventListener('click', function() {
+                    const selectedMessage = this.dataset.message;
+                    sendThankYouMessage(selectedMessage);
+                    closeThankYouModalFunc();
+                });
+                
+                thankYouMessageOptions.appendChild(messageOption);
+            });
+            
+            // Show modal
+            thankYouModal.classList.add('active');
+        }
+        
+        // Send thank you message
+        function sendThankYouMessage(message) {
+            if (!currentQuestion) return;
+            
+            // Mark that user has sent thanks
+            currentQuestion.userThanks = message;
+            
+            // Show success message
+            showNotification("Thank you message sent successfully!", "success");
+            
+            // Update the chat view
+            renderChatContent();
+            
+            // Scroll to bottom to show the new thanks message
+            setTimeout(() => {
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 100);
+        }
+        
+        // Delete question
+        function deleteQuestion(questionId) {
+            if (confirm("Are you sure you want to delete this question? This action cannot be undone.")) {
+                // In a real app, this would make an API call to delete the question
+                // For now, we'll just remove it from the local array
+                const index = questionsData.findIndex(q => q.id === questionId);
+                if (index !== -1) {
+                    questionsData.splice(index, 1);
+                    renderQuestions(currentFilter);
+                    
+                    // Show success message
+                    showNotification("Question deleted successfully", "success");
+                }
+            }
+        }
+        
+        // Open purchase modal
+        function openPurchaseModal() {
+            // Update current balance display
+            currentBalanceDisplay.textContent = userDeenPoints;
+            
+            // Show purchase form (hide success)
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+            
+            // Show modal
+            purchaseModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Show purchase success
+        function showPurchaseSuccess(pointsAdded, cost) {
+            // Update success content
+            purchaseSuccessAmount.innerHTML = `<img src="../img/deenPoints.png" alt="DeenPoints"> <span>${pointsAdded}</span>`;
+            purchaseSuccessCost.textContent = `₦${cost.toFixed(2)}`;
+            newBalance.textContent = userDeenPoints;
+            
+            // Show success, hide form
+            purchaseFormContent.style.display = 'none';
+            purchaseSuccessContent.style.display = 'block';
+        }
+        
+        // Confirm purchase
+        function confirmPurchase() {
+            let pointsToAdd = 0;
+            let cost = 0;
+            
+            // Check if a quick purchase option is selected
+            const selectedOption = document.querySelector('.purchase-option:not(.custom-purchase).selected');
+            if (selectedOption) {
+                pointsToAdd = parseInt(selectedOption.dataset.points);
+                cost = parseInt(selectedOption.dataset.cost);
+            } 
+            // Check custom input
+            else if (customDeenPointsInput.value) {
+                pointsToAdd = parseInt(customDeenPointsInput.value);
+                cost = pointsToAdd * 1.5;
+            }
+            
+            if (pointsToAdd <= 0) {
+                alert("Please select a purchase option or enter a custom amount.");
+                return;
+            }
+            
+            // In a real app, you would process payment here
+            // For now, just add the points
+            userDeenPoints += pointsToAdd;
+            updateDeenPointsDisplays();
+            
+            // Show loading state
+            confirmPurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            confirmPurchaseBtn.disabled = true;
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Reset button
+                confirmPurchaseBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Purchase';
+                confirmPurchaseBtn.disabled = false;
+                
+                // Show success message
+                showPurchaseSuccess(pointsToAdd, cost);
+            }, 1000); // 1 second delay to simulate processing
+        }
+        
+        // Close purchase modal
+        function closePurchaseModalFunc() {
+            purchaseModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset purchase options
+            document.querySelectorAll('.purchase-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            customDeenPointsInput.value = '';
+            customCostDisplay.textContent = '₦0.00';
+            
+            // Reset to purchase form
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+        }
+        
+        // Close thank you modal
+        function closeThankYouModalFunc() {
+            thankYouModal.classList.remove('active');
+        }
+        
+        // Show notification
+        function showNotification(message, type = "info") {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background-color: ${type === 'success' ? 'var(--success-green)' : type === 'error' ? 'var(--error-red)' : 'var(--info-blue)'};
+                color: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+                font-weight: 500;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Close chat modal
+        function closeChatModalFunc() {
+            chatModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentQuestion = null;
+        }
+        
+        // ============================================
+        // DARK THEME CHECK FROM SETTINGS
+        // ============================================
+        
+        function checkDarkTheme() {
+            // Check localStorage for theme preference (like the home page does)
+            const savedTheme = localStorage.getItem('isDarkMode');
+            const body = document.body;
+            
+            if (savedTheme === 'true') {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+        
+        // Add CSS for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

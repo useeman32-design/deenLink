@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Duas & Adhkar | Islamic App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --quran-blue: #1A5F7A;
+            --mecca-red: #C62828;
+            --medina-green: #2E7D32;
+            --prayer-blue: #1976D2;
+            --calendar-purple: #7B1FA2;
+            --dua-teal: #00796B;
+            --zakat-orange: #E65100;
+            --fasting-cyan: #0097A7;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --quran-blue: #3498db;
+            --mecca-red: #e74c3c;
+            --medina-green: #27ae60;
+            --prayer-blue: #3498db;
+            --calendar-purple: #9b59b6;
+            --dua-teal: #1abc9c;
+            --zakat-orange: #e67e22;
+            --fasting-cyan: #1abc9c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Arabic text styling - INCREASED SIZE AND BOLDNESS - CHANGED: removed text-align: right and direction: rtl */
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 22px; /* Increased from previous size */
+            font-weight: 700; /* Made bold */
+            line-height: 1.6;
+            /* REMOVED: text-align: right; */
+            /* REMOVED: direction: rtl; */
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .dark-theme .arabic-text {
+            color: var(--text-dark);
+        }
+
+        /* Dua card specific Arabic text */
+        .dua-card .arabic-text {
+            font-size: 24px; /* Even larger for dua cards */
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Page Loader Overlay - Fixed to cover entire screen */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Fade in animation for page content */
+        .page-content {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Top Section - Consistent with other pages */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Chapters List Container */
+        .chapters-list-container {
+            padding: 20px 16px 40px; /* CHANGED: Reduced bottom padding since we removed bottom nav */
+        }
+
+        @media (min-width: 768px) {
+            .chapters-list-container {
+                padding: 25px 30px 50px; /* CHANGED: Reduced bottom padding */
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        .chapters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chapter-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border-color: var(--medium-gray);
+        }
+
+        .dark-theme .chapter-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            border-radius: 4px 0 0 4px;
+            background-color: var(--dua-teal);
+        }
+
+        .chapter-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, var(--dua-teal), #26A69A);
+        }
+
+        .chapter-card:hover .chapter-icon {
+            transform: scale(1.05);
+        }
+
+        .chapter-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 10px;
+        }
+
+        .chapter-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .chapter-badge {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .dark-theme .chapter-badge {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .chapter-description {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .chapter-count {
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        .chapter-arrow {
+            color: var(--dark-gray);
+            font-size: 14px;
+            opacity: 0.7;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .chapter-card:hover .chapter-arrow {
+            opacity: 1;
+            transform: translateX(3px);
+        }
+
+        /* REMOVED: Bottom Navigation CSS entirely */
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chapter-card {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 0 16px 16px;
+        }
+
+        @media (min-width: 768px) {
+            .search-container {
+                padding: 0 30px 20px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--white);
+            color: var(--text-dark);
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+            font-size: 16px;
+        }
+
+        /* Loading State */
+        .loading-chapters {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            color: var(--dark-gray);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--light-gray);
+            border-top-color: var(--dua-teal);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Search Results */
+        .search-results-count {
+            padding: 10px 16px 0;
+            font-size: 14px;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .search-results-count {
+                padding: 10px 30px 0;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .chapter-card {
+                padding: 16px;
+            }
+            
+            .chapter-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            
+            .chapter-name {
+                font-size: 15px;
+            }
+            
+            .chapter-description {
+                font-size: 12px;
+            }
+
+            .arabic-text {
+                font-size: 20px;
+            }
+
+            .dua-card .arabic-text {
+                font-size: 22px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .chapters-list-container {
+                max-width: 700px;
+            }
+            
+            .chapter-card {
+                padding: 20px;
+            }
+
+            .arabic-text {
+                font-size: 24px;
+            }
+
+            .dua-card .arabic-text {
+                font-size: 26px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .chapters-list-container {
+                max-width: 800px;
+            }
+
+            .arabic-text {
+                font-size: 26px;
+            }
+
+            .dua-card .arabic-text {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-hands-praying"></i>
+                        <span>Duas & Adhkar</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Daily Duas & Adhkar</h1>
+                    <p>Complete collection of supplications and remembrances</p>
+                </div>
+            </section>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search duas and chapters...">
+                </div>
+            </div>
+
+            <!-- Search Results Count -->
+            <div class="search-results-count" id="searchResultsCount"></div>
+
+            <!-- Chapters List -->
+            <div class="chapters-list-container">
+                <div class="chapters-list" id="chaptersList">
+                    <!-- Chapters will be loaded dynamically -->
+                </div>
+                
+                <div class="loading-chapters" id="loadingChapters">
+                    <div class="loading-spinner"></div>
+                    <p>Loading chapters...</p>
+                </div>
+            </div>
+
+            <!-- REMOVED: Bottom Navigation -->
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                // Don't show loader for same page
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after 1 second delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // ============================================
+        // DUAS & ADHKAR FUNCTIONALITY
+        // ============================================
+
+        // DOM Elements
+        const chaptersList = document.getElementById('chaptersList');
+        const loadingChapters = document.getElementById('loadingChapters');
+        const searchInput = document.getElementById('searchInput');
+        const backBtn = document.getElementById('backBtn');
+        const searchResultsCount = document.getElementById('searchResultsCount');
+
+        // Chapters data and state
+        let chaptersData = [];
+
+        // Arabic chapter titles mapping with enhanced styling
+        const arabicTitles = {
+            27: "أذكار الصباح والمساء",
+            28: "أذكار النوم",
+            1: "أذكار الاستيقاظ من النوم",
+            6: "دعاء دخول الخلاء",
+            7: "دعاء الخروج من الخلاء",
+            8: "دعاء قبل الوضوء",
+            9: "أذكار بعد الوضوء",
+            10: "دعاء الخروج من المنزل",
+            11: "دعاء دخول المنزل",
+            12: "دعاء الذهاب إلى المسجد",
+            13: "دعاء دخول المسجد",
+            14: "دعاء الخروج من المسجد",
+            15: "أذكار الأذان",
+            2: "دعاء عند اللباس",
+            3: "دعاء عند لبس الجديد",
+            4: "تهنئة من لبس جديداً",
+            5: "دعاء عند خلع الثياب",
+            16: "دعاء استفتاح الصلاة",
+            17: "دعاء الركوع",
+            18: "دعاء الرفع من الركوع",
+            19: "دعاء السجود",
+            20: "دعاء الجلوس بين السجدتين",
+            21: "دعاء سجود التلاوة",
+            22: "التشهد في الصلاة",
+            23: "الصلاة على النبي بعد التشهد",
+            24: "أذكار بعد التشهد الأخير",
+            25: "أذكار بعد السلام من الصلاة",
+            26: "دعاء الاستخارة",
+            29: "دعاء عند القلق في الليل",
+            30: "دعاء عند الخوف من النوم",
+            31: "دعاء عند رؤية المنام السيئ",
+            32: "دعاء القنوت في الوتر",
+            33: "دعاء بعد صلاة الوتر",
+            34: "دعاء الهم والغم",
+            35: "دعاء الكرب",
+            36: "دعاء عند لقاء العدو",
+            37: "دعاء عند ظلم الحكام",
+            38: "دعاء على العدو",
+            39: "دعاء عند الخوف من الناس",
+            40: "دعاء عند الشك في الإيمان",
+            41: "دعاء قضاء الدين",
+            42: "دعاء عند وسوسة الشيطان في الصلاة",
+            43: "دعاء عند الصعوبة",
+            44: "دعاء عند ارتكاب الذنب",
+            45: "دعاء للتحصن من الشيطان",
+            46: "دعاء عند حدوث ما لا يرضى",
+            47: "تهنئة المولود",
+            48: "دعاء التحصين للأطفال",
+            49: "دعاء زيارة المريض",
+            50: "ثواب زيارة المريض",
+            51: "دعاء المريض الموعود",
+            52: "تلقين المحتضر",
+            53: "دعاء عند المصيبة",
+            54: "دعاء تغميض الميت",
+            55: "دعاء صلاة الجنازة",
+            56: "دعاء صلاة الجنازة على الطفل",
+            57: "دعاء تعزية المصاب",
+            58: "دعاء عند وضع الميت في القبر",
+            59: "دعاء بعد الدفن",
+            60: "دعاء زيارة القبور",
+            61: "دعاء عند هبوب الرياح",
+            62: "دعاء عند سماع الرعد",
+            63: "دعاء الاستسقاء",
+            64: "دعاء عند نزول المطر",
+            65: "دعاء بعد نزول المطر",
+            66: "دعاء صرف المطر",
+            67: "دعاء رؤية الهلال",
+            68: "دعاء الإفطار",
+            69: "دعاء قبل الأكل",
+            70: "دعاء بعد الأكل",
+            71: "دعاء الضيف لصاحب الطعام",
+            72: "دعاء لمن سقاك",
+            73: "دعاء لإفطار الصائمين",
+            74: "دعاء للصائم المدعو",
+            75: "رد الصائم على من شتمه",
+            76: "دعاء عند رؤية الثمار",
+            77: "دعاء العطاس",
+            78: "رد على الكافر إذا عطس",
+            79: "تهنئة العريس",
+            80: "دعاء العريس ليلة الزفاف",
+            81: "دعاء قبل الجماع",
+            82: "دعاء الغضب",
+            83: "دعاء عند رؤية المصاب",
+            84: "دعاء الجلوس في المجلس",
+            85: "كفارة المجلس",
+            86: "رد على من قال: غفر الله لك",
+            87: "دعاء لمن أحسن إليك",
+            88: "التحصن من المسيح الدجال",
+            89: "رد على من قال: أحبك في الله",
+            90: "دعاء لمن أعطاك من ماله",
+            91: "دعاء لمن أقرضك مالاً",
+            92: "دعاء الخوف من الشرك",
+            93: "رد على من قال: بارك الله لك",
+            94: "دعاء رد الطيرة",
+            95: "دعاء الركوب",
+            96: "دعاء السفر",
+            97: "دعاء دخول القرية",
+            98: "دعاء دخول السوق",
+            99: "دعاء عند عطل المركوب",
+            100: "دعاء المسافر لمن يخلفه",
+            101: "دعاء المقيم للمسافر",
+            102: "التكبير والتسبيح في السفر",
+            103: "دعاء المسافر عند الصباح",
+            104: "دعاء النزول في السفر",
+            105: "دعاء العودة من السفر",
+            106: "دعاء عند سرور أو كرب",
+            107: "فضل الصلاة على النبي",
+            108: "إفشاء السلام",
+            109: "رد السلام على الكافر",
+            110: "دعاء عند سماع صياح الديك",
+            111: "دعاء عند سماع نباح الكلب",
+            112: "دعاء لمن سببته",
+            113: "كيف تمدح المسلم",
+            114: "دعاء عند مدحك",
+            115: "التلبية للحج والعمرة",
+            116: "التكبير عند الحجر الأسود",
+            117: "الدعاء بين الركنين",
+            118: "دعاء الصفا والمروة",
+            119: "دعاء يوم عرفة",
+            120: "دعاء المزدلفة",
+            121: "التكبير عند رمي الجمرات",
+            122: "دعاء الدهشة",
+            123: "سجود الشكر",
+            124: "دعاء عند وجع الجسد",
+            125: "دعاء عند إعجابك بشيء",
+            126: "دعاء عند الخوف",
+            127: "دعاء الذبح",
+            128: "دعاء لرد كيد الشيطان",
+            129: "التوبة والاستغفار",
+            130: "فضل الذكر",
+            131: "كيف كان النبي يسبح",
+            132: "آداب المعاشرة"
+        };
+
+        // Icons for different categories of chapters - CHANGED: Replaced cross icons
+        const chapterIcons = {
+            morning: 'fas fa-sun',
+            evening: 'fas fa-moon',
+            sleep: 'fas fa-bed',
+            waking: 'fas fa-eye',
+            prayer: 'fas fa-pray',
+            toilet: 'fas fa-toilet',
+            home: 'fas fa-home',
+            mosque: 'fas fa-mosque',
+            clothing: 'fas fa-tshirt',
+            food: 'fas fa-utensils',
+            travel: 'fas fa-car',
+            // CHANGED: Replaced cross icon for illness
+            illness: 'fas fa-hospital-user', // Changed from fa-cross
+            // CHANGED: Replaced cross icon for death
+            death: 'fas fa-praying-hands', // Changed from fa-cross
+            weather: 'fas fa-cloud-sun',
+            general: 'fas fa-hands-praying',
+            repentance: 'fas fa-hands-wash',
+            remembrance: 'fas fa-dharmachakra',
+            sick: 'fas fa-heartbeat' // Added for sick/illness related
+        };
+
+        // Map chapter IDs to icons based on content - CHANGED: Updated to use non-cross icons
+        function getChapterIcon(chapterId) {
+            if ([27, 28, 1, 29, 30, 31].includes(chapterId)) return chapterIcons.morning;
+            if ([2, 3, 4, 5].includes(chapterId)) return chapterIcons.clothing;
+            if ([6, 7, 8, 9].includes(chapterId)) return chapterIcons.toilet;
+            if ([10, 11, 12, 13, 14, 15].includes(chapterId)) return chapterIcons.mosque;
+            if (chapterId >= 16 && chapterId <= 26) return chapterIcons.prayer;
+            if ([32, 33].includes(chapterId)) return chapterIcons.prayer;
+            if (chapterId >= 34 && chapterId <= 46) return chapterIcons.general;
+            if ([47, 48].includes(chapterId)) return chapterIcons.general;
+            // Chapters 49-60 are about illness and death - CHANGED: Using appropriate non-cross icons
+            if (chapterId >= 49 && chapterId <= 60) return chapterIcons.sick;
+            if (chapterId >= 61 && chapterId <= 67) return chapterIcons.weather;
+            if (chapterId >= 68 && chapterId <= 77) return chapterIcons.food;
+            if (chapterId >= 78 && chapterId <= 93) return chapterIcons.general;
+            if (chapterId >= 94 && chapterId <= 105) return chapterIcons.travel;
+            if (chapterId >= 106 && chapterId <= 114) return chapterIcons.general;
+            if (chapterId >= 115 && chapterId <= 121) return chapterIcons.prayer;
+            if (chapterId >= 122 && chapterId <= 128) return chapterIcons.general;
+            if ([129, 130, 131].includes(chapterId)) return chapterIcons.repentance;
+            return chapterIcons.general;
+        }
+
+        // Load chapters data from JSON file
+        async function loadChapters() {
+            try {
+                // Show loading state
+                chaptersList.innerHTML = '';
+                loadingChapters.style.display = 'flex';
+                
+                // Load the JSON data from file
+                const response = await fetch('data/dua.json');
+                const data = await response.json();
+                
+                // Extract English chapters (assuming the structure from your original code)
+                chaptersData = data.English || [];
+                
+                // Hide loading
+                loadingChapters.style.display = 'none';
+                
+                // Display chapters
+                displayChapters(chaptersData);
+                
+            } catch (error) {
+                console.error('Error loading chapters:', error);
+                loadingChapters.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="font-size: 40px; color: var(--dark-gray); margin-bottom: 16px;"></i>
+                    <p>Failed to load chapters. Please try again.</p>
+                    <button onclick="loadChapters()" style="margin-top: 16px; padding: 8px 16px; background: var(--dua-teal); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        Retry
+                    </button>
+                `;
+            }
+        }
+
+        // Display chapters in the list
+        function displayChapters(chapters) {
+            chaptersList.innerHTML = '';
+            
+            if (chapters.length === 0) {
+                chaptersList.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--dark-gray);">
+                        <i class="fas fa-search" style="font-size: 40px; margin-bottom: 16px;"></i>
+                        <p>No chapters found</p>
+                    </div>
+                `;
+                searchResultsCount.textContent = "No results found";
+                return;
+            }
+            
+            // Update search results count
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            if (searchTerm) {
+                searchResultsCount.textContent = `Found ${chapters.length} chapter${chapters.length !== 1 ? 's' : ''} matching "${searchTerm}"`;
+            } else {
+                searchResultsCount.textContent = `Showing all ${chapters.length} chapters`;
+            }
+            
+            chapters.forEach(chapter => {
+                const chapterElement = createChapterElement(chapter);
+                chaptersList.appendChild(chapterElement);
+            });
+        }
+
+        // Create a chapter element
+        function createChapterElement(chapter) {
+            const chapterDiv = document.createElement('div');
+            chapterDiv.className = 'chapter-card';
+            chapterDiv.dataset.chapterId = chapter.ID;
+            
+            // Get Arabic title with enhanced styling
+            const arabicTitle = arabicTitles[chapter.ID] || "دعاء وأذكار";
+            
+            // Get icon (ensuring no cross icons for Islamic content)
+            const iconClass = getChapterIcon(chapter.ID);
+            
+            // Count number of duas in this chapter
+            const duaCount = chapter.TEXT ? chapter.TEXT.length : 0;
+            
+            chapterDiv.innerHTML = `
+                <div class="chapter-icon">
+                    <i class="${iconClass}"></i>
+                </div>
+                <div class="chapter-content">
+                    <div class="chapter-header">
+                        <div class="chapter-name">${chapter.TITLE}</div>
+                        <div class="chapter-badge">${duaCount} duas</div>
+                    </div>
+                    <div class="chapter-description">
+                        <div class="arabic-text">${arabicTitle}</div>
+                    </div>
+                    <div class="chapter-count">${duaCount} supplications</div>
+                </div>
+                <div class="chapter-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            `;
+            
+            // Add click event to navigate to dua-reader
+            chapterDiv.addEventListener('click', function() {
+                navigateToChapter(chapter.ID);
+            });
+            
+            return chapterDiv;
+        }
+
+        // Navigate to dua-reader page for specific chapter
+        function navigateToChapter(chapterId) {
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = `dua-reader.html?chapter=${chapterId}`;
+            }, 800);
+        }
+
+        // Filter chapters based on search input - FIXED: Made search work properly
+        function filterChapters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                displayChapters(chaptersData);
+                return;
+            }
+            
+            const filtered = chaptersData.filter(chapter => {
+                // Search in English title
+                if (chapter.TITLE && chapter.TITLE.toLowerCase().includes(searchTerm)) {
+                    return true;
+                }
+                
+                // Search in Arabic title
+                const arabicTitle = arabicTitles[chapter.ID] || '';
+                if (arabicTitle.includes(searchTerm)) {
+                    return true;
+                }
+                
+                // Search in duas content if available
+                if (chapter.TEXT && chapter.TEXT.length > 0) {
+                    return chapter.TEXT.some(dua => 
+                        (dua.TRANSLATED_TEXT && dua.TRANSLATED_TEXT.toLowerCase().includes(searchTerm)) ||
+                        (dua.ARABIC_TEXT && dua.ARABIC_TEXT.includes(searchTerm))
+                    );
+                }
+                
+                return false;
+            });
+            
+            displayChapters(filtered);
+        }
+
+        // Back button functionality
+        backBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = '../tools/index.html';
+            }, 300);
+        });
+
+        // Event listeners
+        searchInput.addEventListener('input', filterChapters);
+        
+        // Add keyboard shortcut for search
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            
+            // Clear search with Escape key
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                filterChapters();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load chapters from JSON file
+            loadChapters();
+            
+            // Animate chapter cards on load
+            setTimeout(() => {
+                const chapterCards = document.querySelectorAll('.chapter-card');
+                chapterCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 100));
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>

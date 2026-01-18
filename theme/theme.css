@@ -1,0 +1,371 @@
+/* theme.css - Dark/Light Theme Variables and Transitions */
+
+/* ============================================
+   LIGHT THEME (Default Variables)
+   ============================================ */
+   :root {
+    /* Primary Colors */
+    --primary-green: #1D6F42;
+    --light-green: #E8F5E9;
+    --accent-gold: #D4AF37;
+    
+    /* Background & Surface Colors */
+    --white: #FFFFFF;
+    --light-gray: #F5F5F5;
+    --medium-gray: #E0E0E0;
+    --dark-gray: #757575;
+    
+    /* Text Colors */
+    --text-dark: #333333;
+    
+    /* Zakat Specific Colors */
+    --zakat-green: #1D6F42;
+    --zakat-light-green: #E8F5E9;
+    --step-inactive: #E0E0E0;
+    --step-active: #1D6F42;
+    --step-completed: #2E7D32;
+    
+    /* Payment Colors */
+    --paystack-blue: #0055FF;
+    --nowpayments-purple: #7B1FA2;
+    
+    /* Status Colors */
+    --error-red: #dc3545;
+    --success-green: #28a745;
+    
+    /* Quick Access Card Colors - Light Theme */
+    --dua-light: #E8F5E9;
+    --dua-dark: #C8E6C9;
+    --athkar-light: #F3E5F5;
+    --athkar-dark: #E1BEE7;
+    --donation-light: #FFE5E5;
+    --donation-dark: #FFB3B3;
+    --tasbih-light: #E0F2F1;
+    --tasbih-dark: #B2DFDB;
+    --calendar-light: #FFF3E0;
+    --calendar-dark: #FFCC80;
+    --hadith-light: #FCE4EC;
+    --hadith-dark: #F8BBD0;
+    --names-light: #E8EAF6;
+    --names-dark: #C5CAE9;
+    --quiz-light: #E0F7FA;
+    --quiz-dark: #80DEEA;
+    --deenai-light: #FFF8E1;
+    --deenai-dark: #FFECB3;
+    --nasheed-light: #E1F5FE;
+    --nasheed-dark: #B3E5FC;
+}
+
+/* ============================================
+   DARK THEME Variables
+   ============================================ */
+.dark-theme {
+    /* Primary Colors */
+    --primary-green: #2ecc71;
+    --light-green: #1a2526;
+    --accent-gold: #f39c12;
+    
+    /* Background & Surface Colors */
+    --white: #2c3e50;
+    --light-gray: #34495e;
+    --medium-gray: #4a6572;
+    --dark-gray: #bdc3c7;
+    
+    /* Text Colors */
+    --text-dark: #ecf0f1;
+    
+    /* Zakat Specific Colors */
+    --zakat-green: #2ecc71;
+    --zakat-light-green: #1a2526;
+    --step-inactive: #4a6572;
+    --step-active: #2ecc71;
+    --step-completed: #27ae60;
+    
+    /* Payment Colors */
+    --paystack-blue: #3498db;
+    --nowpayments-purple: #9b59b6;
+    
+    /* Status Colors */
+    --error-red: #e74c3c;
+    --success-green: #2ecc71;
+    
+    /* Quick Access Card Colors - Dark Theme (darker versions) */
+    --dua-light: #1a2526;
+    --dua-dark: #0d1a1a;
+    --athkar-light: #1a1a26;
+    --athkar-dark: #0d0d1a;
+    --donation-light: #261a1a;
+    --donation-dark: #1a0d0d;
+    --tasbih-light: #1a2626;
+    --tasbih-dark: #0d1a1a;
+    --calendar-light: #26261a;
+    --calendar-dark: #1a1a0d;
+    --hadith-light: #261a26;
+    --hadith-dark: #1a0d1a;
+    --names-light: #1a1a26;
+    --names-dark: #0d0d1a;
+    --quiz-light: #1a2626;
+    --quiz-dark: #0d1a1a;
+    --deenai-light: #26261a;
+    --deenai-dark: #1a1a0d;
+    --nasheed-light: #1a2626;
+    --nasheed-dark: #0d1a1a;
+}
+
+/* ============================================
+   GLOBAL THEME TRANSITIONS
+   ============================================ */
+
+/* Smooth transitions for theme switching */
+* {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+/* Ensure all containers transition smoothly */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Common elements that need transitions */
+.container,
+.step-content,
+.card,
+.receipt-container,
+.payment-method,
+.category-option,
+.quick-button,
+.feed-card,
+.video-card,
+.calculator-section,
+.facilitator-info,
+.nisab-info,
+.success-message,
+.results-card,
+.option-card,
+.currency-option-small,
+.currency-dropdown-menu,
+.currency-dropdown-toggle,
+.form-input,
+.search-input,
+.asset-input,
+.note-textarea,
+.currency-amount-input,
+.currency-option,
+.video-modal-content,
+.zakat-calculator-content,
+.bottom-nav,
+.nav-item,
+.top-section,
+.loader-crescent .crescent {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                transform 0.3s ease;
+}
+
+/* ============================================
+   DARK THEME SPECIFIC FIXES
+   ============================================ */
+
+/* Form elements in dark theme */
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+    background-color: var(--light-gray);
+    color: var(--text-dark);
+    border-color: var(--medium-gray);
+}
+
+.dark-theme input:focus,
+.dark-theme textarea:focus,
+.dark-theme select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+}
+
+/* Dropdowns in dark theme */
+.dark-theme .currency-dropdown-menu,
+.dark-theme .currency-option,
+.dark-theme .emoji-picker {
+    background-color: var(--white);
+    border-color: var(--medium-gray);
+}
+
+/* Selected states in dark theme */
+.dark-theme .selected,
+.dark-theme .active {
+    border-color: var(--primary-green) !important;
+}
+
+.dark-theme .category-option.selected,
+.dark-theme .payment-method.selected,
+.dark-theme .option-card.active,
+.dark-theme .currency-option-small.selected {
+    background-color: rgba(46, 204, 113, 0.1) !important;
+}
+
+/* Quick buttons in dark theme */
+.dark-theme .quick-button {
+    color: var(--text-dark) !important;
+}
+
+.dark-theme .quick-button-label {
+    color: var(--text-dark) !important;
+}
+
+/* Video cards in dark theme */
+.dark-theme .video-card {
+    background-color: var(--white);
+}
+
+.dark-theme .video-title {
+    color: var(--text-dark);
+}
+
+/* Feed cards in dark theme */
+.dark-theme .feed-card {
+    background-color: var(--white);
+}
+
+.dark-theme .feed-content {
+    color: var(--text-dark);
+}
+
+/* Calculator elements in dark theme */
+.dark-theme .calculator-section,
+.dark-theme .facilitator-info,
+.dark-theme .nisab-info,
+.dark-theme .success-message,
+.dark-theme .results-card {
+    background-color: var(--light-green);
+}
+
+/* Results breakdown in dark theme */
+.dark-theme .results-breakdown {
+    background-color: var(--white);
+}
+
+.dark-theme .breakdown-row {
+    border-bottom-color: var(--medium-gray);
+}
+
+/* Receipt in dark theme */
+.dark-theme .receipt-container {
+    background-color: var(--white);
+}
+
+.dark-theme .receipt-footer {
+    background-color: var(--light-gray);
+    border-top-color: var(--medium-gray);
+}
+
+/* Bottom navigation in dark theme */
+.dark-theme .bottom-nav {
+    background-color: var(--white);
+}
+
+/* Search input in dark theme */
+.dark-theme .search-input {
+    background-color: var(--light-gray);
+}
+
+/* Comment section in dark theme */
+.dark-theme .comment-input-container {
+    background-color: var(--light-gray);
+}
+
+/* ============================================
+   LOADER THEME ADJUSTMENTS
+   ============================================ */
+.dark-theme .crescent::before {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dark-theme #pageLoader {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================
+   TOP SECTION GRADIENTS FOR DARK THEME
+   ============================================ */
+.dark-theme .top-section::before {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(39, 174, 96, 0.9) 100%);
+}
+
+.dark-theme .receipt-header {
+    background: linear-gradient(135deg, var(--zakat-green), #27ae60);
+}
+
+.dark-theme .zakat-calculator-header {
+    background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+}
+
+/* ============================================
+   BUTTON HOVER EFFECTS FOR DARK THEME
+   ============================================ */
+.dark-theme .btn-next:hover:not(:disabled),
+.dark-theme .btn-complete:hover:not(:disabled),
+.dark-theme .calculator-btn:hover,
+.dark-theme .download-receipt-btn:hover {
+    background-color: #27ae60 !important;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3) !important;
+}
+
+.dark-theme .quick-button:hover {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ============================================
+   TEXT COLOR FIXES FOR DARK THEME
+   ============================================ */
+.dark-theme .step-label,
+.dark-theme .minimum-amount,
+.dark-theme .category-description,
+.dark-theme .payment-description,
+.dark-theme .facilitator-text,
+.dark-theme .calculator-text,
+.dark-theme .zakat-info-text,
+.dark-theme .success-text,
+.dark-theme .nisab-detail,
+.dark-theme .option-desc,
+.dark-theme .currency-option-name,
+.dark-theme .receipt-footer,
+.dark-theme .timestamp,
+.dark-theme .video-uploader,
+.dark-theme .video-stats,
+.dark-theme .user-info p,
+.dark-theme .comment-time {
+    color: var(--dark-gray) !important;
+}
+
+/* ============================================
+   BORDER COLOR FIXES FOR DARK THEME
+   ============================================ */
+.dark-theme .step-title,
+.dark-theme .receipt-row,
+.dark-theme .card-title,
+.dark-theme .feed-actions,
+.dark-theme .add-comment,
+.dark-theme .comment-input-container,
+.dark-theme .currency-search-container {
+    border-color: var(--medium-gray) !important;
+}
+
+/* ============================================
+   SCROLLBAR THEME ADJUSTMENTS
+   ============================================ */
+.dark-theme ::-webkit-scrollbar-track {
+    background: var(--light-gray);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+    background-color: var(--primary-green);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+    background-color: #27ae60;
+}

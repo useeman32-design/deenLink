@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic App | Zakat Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --quran-blue: #1A5F7A;
+            --mecca-red: #C62828;
+            --medina-green: #2E7D32;
+            --prayer-blue: #1976D2;
+            --calendar-purple: #7B1FA2;
+            --dua-teal: #00796B;
+            --zakat-orange: #FF9800;
+            --fasting-cyan: #0097A7;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --quran-blue: #3498db;
+            --mecca-red: #e74c3c;
+            --medina-green: #27ae60;
+            --prayer-blue: #3498db;
+            --calendar-purple: #9b59b6;
+            --dua-teal: #1abc9c;
+            --zakat-orange: #e67e22;
+            --fasting-cyan: #1abc9c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Calculator Container */
+        .calculator-container {
+            padding: 20px 16px 100px;
+            min-height: calc(100vh - 200px);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .calculator-container {
+                padding: 25px 30px 120px;
+                max-width: 700px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background-color: var(--medium-gray);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            background-color: var(--primary-green);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(29, 111, 66, 0.3);
+        }
+
+        .step.completed {
+            background-color: var(--zakat-orange);
+            color: white;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 12px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        /* Step Container */
+        .step-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary-green);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text-dark);
+            background-color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.1);
+        }
+
+        .currency-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .currency-group .form-select {
+            flex: 0 0 100px;
+        }
+
+        .currency-group .form-input {
+            flex: 1;
+        }
+
+        /* Search Container */
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 14px;
+            background-color: var(--white);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+
+        /* Currency Options Grid */
+        .currency-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .currency-option {
+            padding: 12px 8px;
+            text-align: center;
+            background-color: var(--white);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .currency-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .currency-option.active {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-color: var(--primary-green);
+        }
+
+        .currency-code {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .currency-name {
+            font-size: 11px;
+            color: var(--dark-gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .option-card {
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-card.active {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-color: var(--primary-green);
+        }
+
+        .option-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 auto 10px;
+        }
+
+        .option-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 11px;
+            color: var(--dark-gray);
+        }
+
+        /* Asset Input Row */
+        .asset-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+        }
+
+        .asset-label {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .asset-input {
+            flex: 0 0 120px;
+            padding: 10px 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        /* Nisab Info */
+        .nisab-info {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .nisab-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nisab-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .nisab-detail {
+            font-size: 13px;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+
+        /* Price Info */
+        .price-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .price-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 4px;
+        }
+
+        .price-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        /* Results */
+        .results-card {
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(29, 111, 66, 0.3);
+            margin-top: 20px;
+        }
+
+        .results-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .zakat-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .results-breakdown {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(29, 111, 66, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-green);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(29, 111, 66, 0.2);
+            border-top: 4px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-online {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--medina-green);
+        }
+
+        .status-offline {
+            background-color: rgba(198, 40, 40, 0.2);
+            color: var(--mecca-red);
+        }
+
+        /* Data Info */
+        .data-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 10px;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: var(--primary-green);
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .refresh-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            background-color: var(--white);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            z-index: 100;
+            border-radius: 0;
+        }
+
+        @media (min-width: 768px) {
+            .bottom-nav {
+                max-width: 768px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                max-width: 480px;
+            }
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.1;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="container">
+        <!-- Top Section -->
+        <section class="top-section">
+            <div class="top-section-background"></div>
+            
+            <div class="top-bar">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="page-title">
+                    <i class="fas fa-calculator"></i>
+                    <span>Zakat Calculator</span>
+                </div>
+                <div style="width: 40px;"></div>
+            </div>
+            
+            <div class="page-subtitle">
+                <h1>Calculate Your Zakat</h1>
+                <p>Step-by-step calculation with real-time nisab values</p>
+            </div>
+        </section>
+
+        <!-- Calculator Content -->
+        <div class="calculator-container">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <span>1</span>
+                    <div class="step-label">Currency</div>
+                </div>
+                <div class="step" id="step2">
+                    <span>2</span>
+                    <div class="step-label">Assets</div>
+                </div>
+                <div class="step" id="step3">
+                    <span>3</span>
+                    <div class="step-label">Results</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Currency Selection -->
+            <div class="step-container active" id="step1Container">
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-globe"></i>
+                        Select Your Currency
+                        <span class="status-badge status-online" id="apiStatus">
+                            <i class="fas fa-circle" style="font-size: 8px;"></i> Live Data
+                        </span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Base Currency</label>
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" id="currencySearch" placeholder="Search for a currency (e.g., USD, EUR, NGN)">
+                        </div>
+                        
+                        <div class="currency-grid" id="currencyGrid">
+                            <!-- Currencies will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="price-info">
+                        <div class="price-item">
+                            <div class="price-label">Gold (per gram)</div>
+                            <div class="price-value" id="goldPrice">₦ 48,950</div>
+                        </div>
+                        <div class="price-item">
+                            <div class="price-label">Silver (per gram)</div>
+                            <div class="price-value" id="silverPrice">₦ 850</div>
+                        </div>
+                    </div>
+
+                    <div class="nisab-info">
+                        <div class="nisab-title">
+                            <i class="fas fa-scale-balanced"></i>
+                            Current Nisab Values
+                        </div>
+                        <div class="nisab-value" id="goldNisabValue">₦ 4,280,000</div>
+                        <div class="nisab-detail">Based on 87.48g of gold at current market rate</div>
+                        <div class="nisab-value" id="silverNisabValue">₦ 520,000</div>
+                        <div class="nisab-detail">Based on 612.36g of silver at current market rate</div>
+                        
+                        <div class="data-info">
+                            <span id="lastUpdated">Last updated: Just now</span>
+                            <button class="refresh-btn" id="refreshPrices">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="nextStep1">
+                        Continue to Assets
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Asset Selection -->
+            <div class="step-container" id="step2Container">
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-coins"></i>
+                        What Assets Do You Have?
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" data-asset="cash">
+                            <div class="option-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="option-name">Cash & Savings</div>
+                            <div class="option-desc">Bank accounts, cash at hand</div>
+                        </div>
+                        
+                        <div class="option-card" data-asset="gold">
+                            <div class="option-icon">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <div class="option-name">Gold</div>
+                            <div class="option-desc">Jewelry, bullion, coins</div>
+                        </div>
+                        
+                        <div class="option-card" data-asset="silver">
+                            <div class="option-icon">
+                                <i class="fas fa-ring"></i>
+                            </div>
+                            <div class="option-name">Silver</div>
+                            <div class="option-desc">Jewelry, utensils, coins</div>
+                        </div>
+                        
+                        <div class="option-card" data-asset="stocks">
+                            <div class="option-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="option-name">Stocks</div>
+                            <div class="option-desc">Investments, shares</div>
+                        </div>
+                        
+                        <div class="option-card" data-asset="business">
+                            <div class="option-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="option-name">Business</div>
+                            <div class="option-desc">Inventory, assets</div>
+                        </div>
+                        
+                        <div class="option-card" data-asset="property">
+                            <div class="option-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="option-name">Property</div>
+                            <div class="option-desc">Rental, investment</div>
+                        </div>
+                    </div>
+
+                    <div id="assetInputsContainer">
+                        <!-- Asset inputs will be dynamically added here -->
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Liabilities (debts due within one year)</label>
+                        <div class="currency-group">
+                            <input type="number" class="form-input" id="liabilitiesInput" placeholder="0.00" min="0" step="0.01">
+                            <span style="font-weight: 500; color: var(--text-dark);" id="liabilitiesCurrency">NGN</span>
+                        </div>
+                    </div>
+
+                    <div class="btn-container">
+                        <button class="btn btn-secondary" id="prevStep2">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <button class="btn btn-primary" id="nextStep2">
+                            Calculate Zakat
+                            <i class="fas fa-calculator"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Results -->
+            <div class="step-container" id="step3Container">
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-file-invoice"></i>
+                        Your Zakat Calculation
+                    </div>
+                    
+                    <div class="loading" id="loadingResults">
+                        <div class="loading-spinner"></div>
+                        <p>Calculating your Zakat...</p>
+                    </div>
+
+                    <div id="zakatResults" style="display: none;">
+                        <div class="nisab-info">
+                            <div class="nisab-title">
+                                <i class="fas fa-scale-balanced"></i>
+                                Nisab Status
+                            </div>
+                            <div class="nisab-value" id="nisabStatusValue">Above Nisab</div>
+                            <div class="nisab-detail" id="nisabStatusDetail">Your total assets exceed the nisab threshold</div>
+                        </div>
+
+                        <div class="results-card">
+                            <div class="results-title">Your Zakat Payable</div>
+                            <div class="zakat-amount" id="zakatAmount">₦ 0</div>
+                            <div style="opacity: 0.9; margin-bottom: 10px;">2.5% of your zakatable wealth</div>
+                            
+                            <div class="results-breakdown">
+                                <div class="breakdown-row">
+                                    <span>Total Assets Value</span>
+                                    <span id="totalAssetsValue">₦ 0</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span>Liabilities</span>
+                                    <span id="liabilitiesValue">₦ 0</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span>Net Wealth</span>
+                                    <span id="netWealthValue">₦ 0</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span>Nisab Threshold</span>
+                                    <span id="nisabThresholdValue">₦ 0</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span>Zakatable Amount</span>
+                                    <span id="zakatableAmountValue">₦ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <div class="nisab-info">
+                                <div class="nisab-title">
+                                    <i class="fas fa-info-circle"></i>
+                                    Important Notes
+                                </div>
+                                <div style="font-size: 13px; color: var(--dark-gray); line-height: 1.5;">
+                                    <p>• Zakat is payable at 2.5% of wealth exceeding nisab held for one lunar year</p>
+                                    <p>• Most scholars use the silver nisab value as it makes Zakat accessible to more people</p>
+                                    <p>• Consult with a local Islamic scholar for precise rulings</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-container">
+                        <button class="btn btn-secondary" id="prevStep3">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Assets
+                        </button>
+                        <button class="btn btn-primary" id="newCalculation">
+                            <i class="fas fa-redo"></i>
+                            New Calculation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+
+    <script>
+        // =============== DIRECT ISLAMICAPI INTEGRATION ===============
+        // ⚠️ WARNING: API key is visible to users!
+        // Only use for testing/personal projects
+        const CONFIG = {
+            apiKey: '1HmsIFcy3PEAdEWx7Jsk67j5jSxSnP6S0H5mXU2qVKL3Ssdq', // ← REPLACE THIS!
+            cacheDuration: 2 * 60 * 60 * 1000, // 2 hours
+            standard: 'classical', // classical or common
+            debugMode: true
+        };
+    
+        // Available currencies from the API
+        const ALL_CURRENCIES = {
+            "USD": "US Dollar",
+            "AED": "UAE Dirham",
+            "AFN": "Afghan Afghani",
+            "ALL": "Albanian Lek",
+            "AMD": "Armenian Dram",
+            "ANG": "Netherlands Antillean Guilder",
+            "AOA": "Angolan Kwanza",
+            "ARS": "Argentine Peso",
+            "AUD": "Australian Dollar",
+            "AWG": "Aruban Florin",
+            "AZN": "Azerbaijani Manat",
+            "BAM": "Bosnia-Herzegovina Convertible Mark",
+            "BBD": "Barbadian Dollar",
+            "BDT": "Bangladeshi Taka",
+            "BGN": "Bulgarian Lev",
+            "BHD": "Bahraini Dinar",
+            "BIF": "Burundian Franc",
+            "BMD": "Bermudian Dollar",
+            "BND": "Brunei Dollar",
+            "BOB": "Bolivian Boliviano",
+            "BRL": "Brazilian Real",
+            "BSD": "Bahamian Dollar",
+            "BTN": "Bhutanese Ngultrum",
+            "BWP": "Botswanan Pula",
+            "BYN": "Belarusian Ruble",
+            "BZD": "Belize Dollar",
+            "CAD": "Canadian Dollar",
+            "CDF": "Congolese Franc",
+            "CHF": "Swiss Franc",
+            "CLF": "Chilean Unit of Account",
+            "CLP": "Chilean Peso",
+            "CNH": "Chinese Yuan (Offshore)",
+            "CNY": "Chinese Yuan",
+            "COP": "Colombian Peso",
+            "CRC": "Costa Rican Colón",
+            "CUP": "Cuban Peso",
+            "CVE": "Cape Verdean Escudo",
+            "CZK": "Czech Koruna",
+            "DJF": "Djiboutian Franc",
+            "DKK": "Danish Krone",
+            "DOP": "Dominican Peso",
+            "DZD": "Algerian Dinar",
+            "EGP": "Egyptian Pound",
+            "ERN": "Eritrean Nakfa",
+            "ETB": "Ethiopian Birr",
+            "EUR": "Euro",
+            "FJD": "Fijian Dollar",
+            "FKP": "Falkland Islands Pound",
+            "FOK": "Faroese Króna",
+            "GBP": "British Pound",
+            "GEL": "Georgian Lari",
+            "GGP": "Guernsey Pound",
+            "GHS": "Ghanaian Cedi",
+            "GIP": "Gibraltar Pound",
+            "GMD": "Gambian Dalasi",
+            "GNF": "Guinean Franc",
+            "GTQ": "Guatemalan Quetzal",
+            "GYD": "Guyanese Dollar",
+            "HKD": "Hong Kong Dollar",
+            "HNL": "Honduran Lempira",
+            "HRK": "Croatian Kuna",
+            "HTG": "Haitian Gourde",
+            "HUF": "Hungarian Forint",
+            "IDR": "Indonesian Rupiah",
+            "ILS": "Israeli New Shekel",
+            "IMP": "Manx Pound",
+            "INR": "Indian Rupee",
+            "IQD": "Iraqi Dinar",
+            "IRR": "Iranian Rial",
+            "ISK": "Icelandic Króna",
+            "JEP": "Jersey Pound",
+            "JMD": "Jamaican Dollar",
+            "JOD": "Jordanian Dinar",
+            "JPY": "Japanese Yen",
+            "KES": "Kenyan Shilling",
+            "KGS": "Kyrgystani Som",
+            "KHR": "Cambodian Riel",
+            "KID": "Kiribati Dollar",
+            "KMF": "Comorian Franc",
+            "KRW": "South Korean Won",
+            "KWD": "Kuwaiti Dinar",
+            "KYD": "Cayman Islands Dollar",
+            "KZT": "Kazakhstani Tenge",
+            "LAK": "Laotian Kip",
+            "LBP": "Lebanese Pound",
+            "LKR": "Sri Lankan Rupee",
+            "LRD": "Liberian Dollar",
+            "LSL": "Lesotho Loti",
+            "LYD": "Libyan Dinar",
+            "MAD": "Moroccan Dirham",
+            "MDL": "Moldovan Leu",
+            "MGA": "Malagasy Ariary",
+            "MKD": "Macedonian Denar",
+            "MMK": "Myanmar Kyat",
+            "MNT": "Mongolian Tugrik",
+            "MOP": "Macanese Pataca",
+            "MRU": "Mauritanian Ouguiya",
+            "MUR": "Mauritian Rupee",
+            "MVR": "Maldivian Rufiyaa",
+            "MWK": "Malawian Kwacha",
+            "MXN": "Mexican Peso",
+            "MYR": "Malaysian Ringgit",
+            "MZN": "Mozambican Metical",
+            "NAD": "Namibian Dollar",
+            "NGN": "Nigerian Naira",
+            "NIO": "Nicaraguan Córdoba",
+            "NOK": "Norwegian Krone",
+            "NPR": "Nepalese Rupee",
+            "NZD": "New Zealand Dollar",
+            "OMR": "Omani Rial",
+            "PAB": "Panamanian Balboa",
+            "PEN": "Peruvian Sol",
+            "PGK": "Papua New Guinean Kina",
+            "PHP": "Philippine Peso",
+            "PKR": "Pakistani Rupee",
+            "PLN": "Polish Złoty",
+            "PYG": "Paraguayan Guarani",
+            "QAR": "Qatari Riyal",
+            "RON": "Romanian Leu",
+            "RSD": "Serbian Dinar",
+            "RUB": "Russian Ruble",
+            "RWF": "Rwandan Franc",
+            "SAR": "Saudi Riyal",
+            "SBD": "Solomon Islands Dollar",
+            "SCR": "Seychellois Rupee",
+            "SDG": "Sudanese Pound",
+            "SEK": "Swedish Krona",
+            "SGD": "Singapore Dollar",
+            "SHP": "Saint Helena Pound",
+            "SLE": "Sierra Leonean Leone",
+            "SLL": "Sierra Leonean Leone (old)",
+            "SOS": "Somali Shilling",
+            "SRD": "Surinamese Dollar",
+            "SSP": "South Sudanese Pound",
+            "STN": "São Tomé and Príncipe Dobra",
+            "SYP": "Syrian Pound",
+            "SZL": "Swazi Lilangeni",
+            "THB": "Thai Baht",
+            "TJS": "Tajikistani Somoni",
+            "TMT": "Turkmenistani Manat",
+            "TND": "Tunisian Dinar",
+            "TOP": "Tongan Paʻanga",
+            "TRY": "Turkish Lira",
+            "TTD": "Trinidad and Tobago Dollar",
+            "TVD": "Tuvaluan Dollar",
+            "TWD": "New Taiwan Dollar",
+            "TZS": "Tanzanian Shilling",
+            "UAH": "Ukrainian Hryvnia",
+            "UGX": "Ugandan Shilling",
+            "UYU": "Uruguayan Peso",
+            "UZS": "Uzbekistani Som",
+            "VES": "Venezuelan Bolívar",
+            "VND": "Vietnamese Dong",
+            "VUV": "Vanuatu Vatu",
+            "WST": "Samoan Tala",
+            "XAF": "CFA Franc BEAC",
+            "XCD": "East Caribbean Dollar",
+            "XCG": "Central African CFA Franc",
+            "XDR": "Special Drawing Rights",
+            "XOF": "CFA Franc BCEAO",
+            "XPF": "CFP Franc",
+            "YER": "Yemeni Rial",
+            "ZAR": "South African Rand",
+            "ZMW": "Zambian Kwacha",
+            "ZWL": "Zimbabwean Dollar"
+        };
+    
+        // Application State
+        const state = {
+            currentStep: 1,
+            currency: 'NGN',
+            selectedAssets: [],
+            assets: {
+                cash: 0, gold: 0, silver: 0,
+                stocks: 0, business: 0, property: 0
+            },
+            liabilities: 0,
+            nisabData: null,
+            isLoading: false
+        };
+    
+        // DOM Elements
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const step1Container = document.getElementById('step1Container');
+        const step2Container = document.getElementById('step2Container');
+        const step3Container = document.getElementById('step3Container');
+        const currencyGrid = document.getElementById('currencyGrid');
+        const currencySearch = document.getElementById('currencySearch');
+        const goldNisabValueEl = document.getElementById('goldNisabValue');
+        const silverNisabValueEl = document.getElementById('silverNisabValue');
+        const goldPriceEl = document.getElementById('goldPrice');
+        const silverPriceEl = document.getElementById('silverPrice');
+        const apiStatus = document.getElementById('apiStatus');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const refreshPrices = document.getElementById('refreshPrices');
+        const assetInputsContainer = document.getElementById('assetInputsContainer');
+        const loadingResults = document.getElementById('loadingResults');
+        const zakatResults = document.getElementById('zakatResults');
+        const liabilitiesCurrency = document.getElementById('liabilitiesCurrency');
+        const backBtn = document.getElementById('backBtn');
+    
+        // =============== CURRENCY SELECTION WITH SEARCH ===============
+        function populateCurrencyGrid() {
+            const fragment = document.createDocumentFragment();
+            
+            Object.entries(ALL_CURRENCIES).forEach(([code, name]) => {
+                const option = document.createElement('div');
+                option.className = 'currency-option';
+                if (code === state.currency) {
+                    option.classList.add('active');
+                }
+                option.innerHTML = `
+                    <div class="currency-code">${code}</div>
+                    <div class="currency-name" title="${name}">${name}</div>
+                `;
+                option.dataset.code = code;
+                option.dataset.name = name;
+                
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.currency-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    option.classList.add('active');
+                    state.currency = code;
+                    liabilitiesCurrency.textContent = code;
+                    updateNisabDisplay();
+                });
+                
+                fragment.appendChild(option);
+            });
+            
+            currencyGrid.innerHTML = '';
+            currencyGrid.appendChild(fragment);
+        }
+    
+        function filterCurrencies(searchTerm) {
+            const searchLower = searchTerm.toLowerCase();
+            document.querySelectorAll('.currency-option').forEach(option => {
+                const code = option.dataset.code.toLowerCase();
+                const name = option.dataset.name.toLowerCase();
+                
+                if (code.includes(searchLower) || name.includes(searchLower)) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+    
+        // =============== DIRECT API FUNCTIONS ===============
+        async function fetchNisabDirectly(currency = 'NGN') {
+            try {
+                state.isLoading = true;
+                updateUIStatus('loading');
+                
+                // Check cache first
+                const cached = getCachedNisab(currency);
+                if (cached && isCacheValid(cached.timestamp)) {
+                    console.log('Using cached nisab data');
+                    updateUIStatus('cache');
+                    return cached.data;
+                }
+                
+                // Direct API call to IslamicAPI.com
+                const apiUrl = `https://islamicapi.com/api/v1/zakat-nisab/?standard=${CONFIG.standard}&currency=${currency.toLowerCase()}&unit=g&api_key=${CONFIG.apiKey}`;
+                
+                console.log('Fetching from:', apiUrl.replace(CONFIG.apiKey, '***HIDDEN***'));
+                
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.code === 200) {
+                    // Cache the response
+                    cacheNisabData(currency, data);
+                    
+                    updateUIStatus('online');
+                    return data;
+                } else {
+                    throw new Error(data.message || 'API error');
+                }
+                
+            } catch (error) {
+                console.error('Failed to fetch from IslamicAPI:', error);
+                updateUIStatus('offline');
+                
+                // Use fallback calculation
+                return getFallbackNisab(currency);
+            } finally {
+                state.isLoading = false;
+            }
+        }
+    
+        function updateUIWithNisabData(data) {
+            if (!data || data.code !== 200) {
+                showNotification('Failed to load nisab values', 'error');
+                return;
+            }
+            
+            const { nisab_thresholds } = data.data;
+            const { gold, silver } = nisab_thresholds;
+            
+            // Update price displays
+            goldPriceEl.textContent = formatCurrency(gold.unit_price, data.currency.toUpperCase(), false);
+            silverPriceEl.textContent = formatCurrency(silver.unit_price, data.currency.toUpperCase(), false);
+            
+            // Update nisab values
+            goldNisabValueEl.textContent = formatCurrency(gold.nisab_amount, data.currency.toUpperCase());
+            silverNisabValueEl.textContent = formatCurrency(silver.nisab_amount, data.currency.toUpperCase());
+            
+            // Update last updated time
+            const updatedTime = new Date(data.updated_at);
+            lastUpdated.textContent = `Updated: ${updatedTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            
+            // Store in state for calculations
+            state.nisabData = data;
+            state.currentGoldPricePerGram = gold.unit_price;
+            state.currentSilverPricePerGram = silver.unit_price;
+            state.nisabValue = silver.nisab_amount; // Use silver nisab
+            
+            // Update status badge
+            updateStatusBadge(data.source || 'direct');
+        }
+    
+        function updateStatusBadge(source) {
+            const statusMap = {
+                'direct': { text: 'Live Data', color: '#2E7D32', icon: 'fa-circle' },
+                'cache': { text: 'Cached Data', color: '#FF9800', icon: 'fa-circle' },
+                'fallback': { text: 'Offline Mode', color: '#C62828', icon: 'fa-circle' },
+                'online': { text: 'Live Data', color: '#2E7D32', icon: 'fa-circle' }
+            };
+            
+            const status = statusMap[source] || statusMap['direct'];
+            
+            apiStatus.innerHTML = `
+                <i class="fas ${status.icon}" style="font-size: 8px; color: ${status.color};"></i> 
+                ${status.text}
+            `;
+            apiStatus.className = 'status-badge status-online';
+        }
+    
+        // =============== CACHE MANAGEMENT ===============
+        function getCachedNisab(currency) {
+            const key = `islamicapi_direct_${currency}_${CONFIG.standard}`;
+            const cached = localStorage.getItem(key);
+            return cached ? JSON.parse(cached) : null;
+        }
+    
+        function cacheNisabData(currency, data) {
+            const key = `islamicapi_direct_${currency}_${CONFIG.standard}`;
+            const cacheItem = {
+                data: data,
+                timestamp: Date.now(),
+                currency: currency,
+                standard: CONFIG.standard,
+                source: 'cache'
+            };
+            localStorage.setItem(key, JSON.stringify(cacheItem));
+        }
+    
+        function isCacheValid(timestamp) {
+            return Date.now() - timestamp < CONFIG.cacheDuration;
+        }
+    
+        function getFallbackNisab(currency) {
+            // Simple fallback calculation
+            const exchangeRates = {
+                'NGN': 1300, 'USD': 1, 'EUR': 0.92, 'GBP': 0.79,
+                'SAR': 3.75, 'AED': 3.67, 'PKR': 280, 'INR': 83,
+                'MYR': 4.75, 'IDR': 15500
+            };
+            
+            // Get all currencies with approximate rates
+            const rate = exchangeRates[currency] || 
+                (Object.values(exchangeRates).reduce((a, b) => a + b, 0) / Object.keys(exchangeRates).length);
+            
+            const goldPerGram = 62.75 * rate;
+            const silverPerGram = 0.85 * rate;
+            
+            return {
+                code: 200,
+                status: 'success',
+                calculation_standard: CONFIG.standard,
+                currency: currency,
+                weight_unit: 'gram',
+                updated_at: new Date().toISOString(),
+                data: {
+                    nisab_thresholds: {
+                        gold: {
+                            weight: CONFIG.standard === 'classical' ? 87.48 : 85,
+                            unit_price: goldPerGram,
+                            nisab_amount: goldPerGram * (CONFIG.standard === 'classical' ? 87.48 : 85)
+                        },
+                        silver: {
+                            weight: CONFIG.standard === 'classical' ? 612.36 : 595,
+                            unit_price: silverPerGram,
+                            nisab_amount: silverPerGram * (CONFIG.standard === 'classical' ? 612.36 : 595)
+                        }
+                    },
+                    zakat_rate: '2.5%',
+                    notes: 'Fallback calculation - IslamicAPI unavailable'
+                },
+                source: 'fallback'
+            };
+        }
+    
+        // =============== FORMATTING & UI ===============
+        function formatCurrency(amount, currency, showDecimals = true) {
+            const symbols = {
+                'NGN': '₦', 'USD': '$', 'EUR': '€', 'GBP': '£',
+                'SAR': 'ر.س', 'AED': 'د.إ', 'PKR': '₨', 'INR': '₹',
+                'MYR': 'RM', 'IDR': 'Rp', 'JPY': '¥', 'CNY': '¥',
+                'CHF': 'CHF', 'CAD': 'CA$', 'AUD': 'A$', 'NZD': 'NZ$'
+            };
+            
+            const symbol = symbols[currency] || '';
+            
+            // Format based on amount size
+            let formatted;
+            if (amount >= 1000000) {
+                formatted = (amount / 1000000).toFixed(2) + 'M';
+            } else if (amount >= 1000) {
+                formatted = (amount / 1000).toFixed(2) + 'K';
+            } else {
+                formatted = showDecimals 
+                    ? parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+                    : parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+            }
+            
+            return `${symbol} ${formatted}`.trim();
+        }
+    
+        function updateUIStatus(status) {
+            if (status === 'loading') {
+                apiStatus.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Loading...';
+                apiStatus.className = 'status-badge';
+            } else if (status === 'online') {
+                apiStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px; color: #2E7D32;"></i> Live Data';
+                apiStatus.className = 'status-badge status-online';
+            } else if (status === 'cache') {
+                apiStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px; color: #FF9800;"></i> Cached Data';
+                apiStatus.className = 'status-badge status-online';
+            } else {
+                apiStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px; color: #C62828;"></i> Offline Mode';
+                apiStatus.className = 'status-badge status-offline';
+            }
+        }
+    
+        // =============== YOUR EXISTING FUNCTIONS (KEEP THESE) ===============
+        // Step navigation
+        function nextStep1() {
+            updateNisabDisplay();
+            goToStep(2);
+        }
+    
+        function nextStep2() {
+            collectAssetValues();
+            goToStep(3);
+            calculateZakat();
+        }
+    
+        function prevStep2() {
+            goToStep(1);
+        }
+    
+        function prevStep3() {
+            goToStep(2);
+        }
+    
+        function goToStep(step) {
+            [step1, step2, step3].forEach((s, index) => {
+                s.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    s.classList.add('completed');
+                } else if (index + 1 === step) {
+                    s.classList.add('active');
+                }
+            });
+            
+            [step1Container, step2Container, step3Container].forEach((container, index) => {
+                container.classList.remove('active');
+                if (index + 1 === step) {
+                    container.classList.add('active');
+                }
+            });
+            
+            state.currentStep = step;
+        }
+    
+        // Asset management
+        function setupAssetSelection() {
+            const optionCards = document.querySelectorAll('.option-card');
+            
+            optionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const assetType = this.getAttribute('data-asset');
+                    
+                    this.classList.toggle('active');
+                    
+                    if (this.classList.contains('active')) {
+                        if (!state.selectedAssets.includes(assetType)) {
+                            state.selectedAssets.push(assetType);
+                        }
+                    } else {
+                        const index = state.selectedAssets.indexOf(assetType);
+                        if (index > -1) {
+                            state.selectedAssets.splice(index, 1);
+                        }
+                    }
+                    
+                    renderAssetInputs();
+                });
+            });
+        }
+    
+        function renderAssetInputs() {
+            assetInputsContainer.innerHTML = '';
+            
+            if (state.selectedAssets.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'form-group';
+                emptyMessage.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--dark-gray);">
+                        <i class="fas fa-coins" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>Select assets above to add their values</p>
+                    </div>
+                `;
+                assetInputsContainer.appendChild(emptyMessage);
+                return;
+            }
+            
+            state.selectedAssets.forEach(asset => {
+                const assetRow = document.createElement('div');
+                assetRow.className = 'asset-row';
+                
+                // Add description for property
+                let description = '';
+                if (asset === 'property') {
+                    description = ' (Rental, investment, etc.)';
+                }
+                
+                assetRow.innerHTML = `
+                    <div class="asset-label">${getAssetLabel(asset)}${description}</div>
+                    <input type="number" 
+                           class="asset-input" 
+                           id="${asset}Input" 
+                           placeholder="0.00" 
+                           min="0" 
+                           step="0.01"
+                           value="${state.assets[asset] || 0}">
+                    <span>${getAssetUnit(asset)}</span>
+                `;
+                assetInputsContainer.appendChild(assetRow);
+            });
+        }
+    
+        function getAssetLabel(asset) {
+            const labels = {
+                'cash': 'Cash & Savings',
+                'gold': 'Gold (grams)',
+                'silver': 'Silver (grams)',
+                'stocks': 'Stocks Value',
+                'business': 'Business Assets',
+                'property': 'Property Value'
+            };
+            return labels[asset] || asset;
+        }
+    
+        function getAssetUnit(asset) {
+            if (asset === 'gold' || asset === 'silver') {
+                return 'g';
+            }
+            return state.currency;
+        }
+    
+        function collectAssetValues() {
+            Object.keys(state.assets).forEach(key => {
+                state.assets[key] = 0;
+            });
+            
+            state.selectedAssets.forEach(asset => {
+                const input = document.getElementById(`${asset}Input`);
+                if (input) {
+                    state.assets[asset] = parseFloat(input.value) || 0;
+                }
+            });
+            
+            const liabilitiesInput = document.getElementById('liabilitiesInput');
+            if (liabilitiesInput) {
+                state.liabilities = parseFloat(liabilitiesInput.value) || 0;
+            }
+        }
+    
+        // Zakat calculation
+        async function calculateZakat() {
+            loadingResults.style.display = 'block';
+            zakatResults.style.display = 'none';
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            let totalAssetsValue = 0;
+            
+            totalAssetsValue += state.assets.cash;
+            totalAssetsValue += state.assets.stocks;
+            totalAssetsValue += state.assets.business;
+            totalAssetsValue += state.assets.property;
+            
+            if (state.assets.gold > 0 && state.currentGoldPricePerGram) {
+                totalAssetsValue += state.assets.gold * state.currentGoldPricePerGram;
+            }
+            
+            if (state.assets.silver > 0 && state.currentSilverPricePerGram) {
+                totalAssetsValue += state.assets.silver * state.currentSilverPricePerGram;
+            }
+            
+            const netWealth = Math.max(0, totalAssetsValue - state.liabilities);
+            const isAboveNisab = netWealth >= (state.nisabValue || 0);
+            const zakatableAmount = isAboveNisab ? netWealth : 0;
+            const zakatAmount = zakatableAmount * 0.025;
+            
+            updateResultsUI(totalAssetsValue, netWealth, isAboveNisab, zakatableAmount, zakatAmount);
+            
+            loadingResults.style.display = 'none';
+            zakatResults.style.display = 'block';
+        }
+    
+        function updateResultsUI(totalAssets, netWealth, isAboveNisab, zakatableAmount, zakatAmount) {
+            document.getElementById('nisabStatusValue').textContent = 
+                isAboveNisab ? 'Above Nisab' : 'Below Nisab';
+            document.getElementById('nisabStatusDetail').textContent = 
+                isAboveNisab ? 'Zakat is due on your wealth' : 'Your wealth is below the nisab threshold';
+            
+            document.getElementById('zakatAmount').textContent = 
+                formatCurrency(zakatAmount, state.currency);
+            document.getElementById('totalAssetsValue').textContent = 
+                formatCurrency(totalAssets, state.currency);
+            document.getElementById('liabilitiesValue').textContent = 
+                formatCurrency(state.liabilities, state.currency);
+            document.getElementById('netWealthValue').textContent = 
+                formatCurrency(netWealth, state.currency);
+            document.getElementById('nisabThresholdValue').textContent = 
+                formatCurrency(state.nisabValue || 0, state.currency);
+            document.getElementById('zakatableAmountValue').textContent = 
+                formatCurrency(zakatableAmount, state.currency);
+        }
+    
+        // Main functions
+        async function updateNisabDisplay() {
+            const data = await fetchNisabDirectly(state.currency.toLowerCase());
+            updateUIWithNisabData(data);
+        }
+    
+        function resetCalculator() {
+            state.selectedAssets = [];
+            Object.keys(state.assets).forEach(key => {
+                state.assets[key] = 0;
+            });
+            state.liabilities = 0;
+            
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            document.getElementById('liabilitiesInput').value = '';
+            assetInputsContainer.innerHTML = '';
+            
+            goToStep(1);
+        }
+    
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: ${type === 'success' ? 'var(--primary-green)' : 'var(--zakat-orange)'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 3000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease, slideOut 0.3s ease 2s forwards;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2500);
+        }
+    
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    
+        // =============== EVENT LISTENERS ===============
+        document.getElementById('nextStep1').addEventListener('click', nextStep1);
+        document.getElementById('nextStep2').addEventListener('click', nextStep2);
+        document.getElementById('prevStep2').addEventListener('click', prevStep2);
+        document.getElementById('prevStep3').addEventListener('click', prevStep3);
+        document.getElementById('newCalculation').addEventListener('click', resetCalculator);
+        refreshPrices.addEventListener('click', async () => {
+            await updateNisabDisplay();
+            showNotification('Prices refreshed successfully!');
+        });
+        backBtn.addEventListener('click', goBack);
+        
+        // Currency search functionality
+        currencySearch.addEventListener('input', (e) => {
+            filterCurrencies(e.target.value);
+        });
+    
+        // =============== INITIALIZATION ===============
+        document.addEventListener('DOMContentLoaded', async function() {
+            setupAssetSelection();
+            populateCurrencyGrid();
+            await updateNisabDisplay();
+            
+            // Add CSS for animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deen AI | Islamic Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --ai-bg: #f7f7f8;
+            --user-bg: #1D6F42;
+            --user-text: white;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --ai-bg: #2c3e50;
+            --user-bg: #27ae60;
+            --user-text: white;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay - Fixed to cover entire screen */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .container {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Compact Header Section */
+        .header-section {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-shrink: 0;
+            height: 56px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            width: 36px;
+            height: 36px;
+        }
+
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            width: 34px;
+            height: 34px;
+        }
+
+        .header-action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ChatGPT-like Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: var(--white);
+        }
+
+        /* Quick Prompt Buttons - FIXED: Now NOT sticky, just regular content */
+        .quick-prompts {
+            padding: 12px 16px 8px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            background-color: var(--white);
+            border-bottom: 1px solid var(--medium-gray);
+            flex-shrink: 0;
+            /* REMOVED: position: sticky and top properties */
+        }
+
+        .quick-prompts::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .quick-prompts::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .quick-prompts::-webkit-scrollbar-thumb {
+            background-color: var(--medium-gray);
+            border-radius: 10px;
+        }
+
+        .quick-prompt-btn {
+            background-color: var(--light-green);
+            border: 1px solid var(--medium-gray);
+            border-radius: 16px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-dark);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .quick-prompt-btn:hover {
+            background-color: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        /* Messages Area - Contains everything that scrolls */
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--white);
+        }
+
+        /* Chat messages wrapper - includes the quick prompts at the top */
+        .chat-messages {
+            padding: 0 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Message Styles */
+        .message {
+            display: flex;
+            gap: 8px;
+            max-width: 90%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .message.user .message-avatar {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .message.ai .message-avatar {
+            background-color: var(--accent-gold);
+            color: white;
+        }
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            max-width: calc(100% - 38px);
+        }
+
+        .message.user .message-content {
+            align-items: flex-end;
+        }
+
+        .message-text {
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .message.user .message-text {
+            background-color: var(--user-bg);
+            color: var(--user-text);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.ai .message-text {
+            background-color: var(--ai-bg);
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 9px;
+            color: var(--dark-gray);
+            margin-top: 3px;
+            padding: 0 4px;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
+            padding: 0 4px;
+        }
+
+        .message-action {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .message-action:hover {
+            color: var(--primary-green);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 10px 14px;
+            background-color: var(--ai-bg);
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            max-width: 90px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--dark-gray);
+            border-radius: 50%;
+            animation: typingAnimation 1.5s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* Input Area - Sticky at bottom */
+        .input-area {
+            padding: 10px 12px;
+            border-top: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+            padding: 6px 12px;
+            border: 1px solid var(--medium-gray);
+            transition: border-color 0.3s;
+        }
+
+        .input-container:focus-within {
+            border-color: var(--primary-green);
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            outline: none;
+            color: var(--text-dark);
+            resize: none;
+            max-height: 80px;
+            min-height: 20px;
+            padding: 3px 0;
+            line-height: 1.4;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .message-input::placeholder {
+            color: var(--dark-gray);
+        }
+
+        .send-button {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-button:hover {
+            background-color: #155c35;
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .send-button:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+                margin: 0 auto;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+                height: 95vh;
+                margin-top: 2.5vh;
+                border-radius: 20px;
+                overflow: hidden;
+            }
+            
+            .header-section {
+                padding: 12px 20px;
+                height: 60px;
+                border-radius: 20px 20px 0 0;
+            }
+            
+            .back-button {
+                font-size: 20px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .header-title {
+                font-size: 18px;
+            }
+            
+            .header-action-btn {
+                font-size: 16px;
+                width: 38px;
+                height: 38px;
+            }
+            
+            .quick-prompts {
+                padding: 12px 20px 8px;
+            }
+            
+            .quick-prompt-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+            
+            .message {
+                max-width: 80%;
+            }
+            
+            .message-text {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+            
+            .chat-messages {
+                padding: 0 20px 12px;
+            }
+            
+            .input-area {
+                padding: 12px 16px;
+            }
+            
+            .input-container {
+                padding: 8px 14px;
+            }
+            
+            .message-input {
+                font-size: 14px;
+            }
+            
+            .send-button {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 900px;
+            }
+        }
+
+        /* Quran text styling */
+        .quran-text {
+            font-family: 'Traditional Arabic', 'Scheherazade', serif;
+            font-size: 18px;
+            text-align: right;
+            line-height: 1.5;
+            margin: 10px 0;
+            color: var(--primary-green);
+            direction: rtl;
+        }
+
+        .quran-translation {
+            font-style: italic;
+            margin-top: 6px;
+            padding-left: 10px;
+            border-left: 2px solid var(--accent-gold);
+            color: var(--dark-gray);
+            font-size: 13px;
+        }
+
+        .hadith-text {
+            font-style: italic;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: rgba(212, 175, 55, 0.1);
+            border-radius: 6px;
+            border-right: 3px solid var(--accent-gold);
+            font-size: 13px;
+        }
+
+        .reference {
+            font-size: 10px;
+            color: var(--dark-gray);
+            margin-top: 3px;
+            text-align: right;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background-color: var(--primary-green);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 3000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease, slideOut 0.3s ease 2s forwards;
+            font-size: 14px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading Deen AI...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header - Compact and Sticky -->
+        <header class="header-section">
+            <div class="header-left">
+                <button class="back-button" id="backButton">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">
+                    <i class="fas fa-robot"></i> Deen AI
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-action-btn" id="clearChatBtn" title="Clear Chat">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <button class="header-action-btn" id="suggestTopicBtn" title="Suggest Topic">
+                    <i class="fas fa-lightbulb"></i>
+                </button>
+                <button class="header-action-btn" id="themeToggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <!-- Messages Area - Contains everything that scrolls -->
+            <div class="messages-area" id="messagesArea">
+                <!-- Quick Prompt Buttons - NOW part of scrollable content -->
+                <div class="quick-prompts">
+                    <button class="quick-prompt-btn" data-prompt="What is the importance of Salah?">Salah Importance</button>
+                    <button class="quick-prompt-btn" data-prompt="Give me a verse about patience">Patience Verse</button>
+                    <button class="quick-prompt-btn" data-prompt="Explain the Five Pillars of Islam">Five Pillars</button>
+                </div>
+
+                <!-- Chat messages wrapper -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Input Area - Sticky at bottom -->
+            <div class="input-area">
+                <div class="input-container">
+                    <textarea class="message-input" id="messageInput" placeholder="Ask your Islamic question here..." rows="1"></textarea>
+                    <button class="send-button" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.querySelector('.container');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Handle back button navigation
+        document.getElementById('backButton').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(hidePageLoader, 300);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Initial hide of loader
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // ============================================
+        // DEEN AI CHAT APPLICATION
+        // ============================================
+
+        // Application state
+        const state = {
+            isDarkMode: false,
+            messages: [
+                {
+                    id: 1,
+                    sender: 'ai',
+                    text: 'Assalamu Alaikum! I am Deen AI, your Islamic assistant. I\'m here to help answer your questions about Islam, provide Quranic verses, explain Hadith, and offer Islamic guidance. Please feel free to ask me anything.',
+                    time: 'Just now'
+                }
+            ],
+            isTyping: false,
+            conversationHistory: []
+        };
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+        const suggestTopicBtn = document.getElementById('suggestTopicBtn');
+        const quickPromptBtns = document.querySelectorAll('.quick-prompt-btn');
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', function() {
+            state.isDarkMode = !state.isDarkMode;
+            
+            if (state.isDarkMode) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                this.innerHTML = '<i class="fas fa-sun"></i>';
+                this.title = 'Switch to Light Mode';
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                this.innerHTML = '<i class="fas fa-moon"></i>';
+                this.title = 'Switch to Dark Mode';
+            }
+            
+            // Save theme preference to localStorage
+            localStorage.setItem('isDarkMode', state.isDarkMode);
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('isDarkMode');
+        if (savedTheme === 'true') {
+            state.isDarkMode = true;
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            themeToggle.title = 'Switch to Light Mode';
+        } else {
+            state.isDarkMode = false;
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            themeToggle.title = 'Switch to Dark Mode';
+        }
+
+        // Clear chat functionality
+        clearChatBtn.addEventListener('click', function() {
+            if (state.messages.length > 1) { // Keep the first AI message
+                if (confirm("Are you sure you want to clear the chat history?")) {
+                    // Keep only the first AI welcome message
+                    state.messages = [state.messages[0]];
+                    renderMessages();
+                    
+                    // Show confirmation
+                    showNotification("Chat cleared successfully");
+                }
+            } else {
+                showNotification("Chat is already empty");
+            }
+        });
+
+        // Suggest topic functionality
+        suggestTopicBtn.addEventListener('click', function() {
+            const topics = [
+                "What are the conditions of valid wudu?",
+                "Explain the concept of Tawheed in Islam",
+                "What does Islam say about dealing with depression?",
+                "Give me a verse about gratitude",
+                "What are the rights of neighbors in Islam?",
+                "Explain the significance of Friday in Islam"
+            ];
+            
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+            messageInput.value = randomTopic;
+            messageInput.style.height = 'auto';
+            messageInput.style.height = (messageInput.scrollHeight) + 'px';
+            sendButton.disabled = false;
+            messageInput.focus();
+            
+            // Scroll to input
+            messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // Quick prompt buttons functionality
+        quickPromptBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const prompt = this.getAttribute('data-prompt');
+                messageInput.value = prompt;
+                messageInput.style.height = 'auto';
+                messageInput.style.height = (messageInput.scrollHeight) + 'px';
+                sendButton.disabled = false;
+                messageInput.focus();
+                
+                // Scroll to input
+                messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        });
+
+        // Auto-resize textarea
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            
+            // Enable/disable send button
+            sendButton.disabled = this.value.trim() === '';
+        });
+
+        // Send message on Enter key (but allow Shift+Enter for new line)
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Send button functionality
+        sendButton.addEventListener('click', sendMessage);
+
+        // Function to send a message
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+            
+            // Add user message
+            const userMessage = {
+                id: state.messages.length + 1,
+                sender: 'user',
+                text: text,
+                time: getCurrentTime()
+            };
+            
+            state.messages.push(userMessage);
+            renderMessages();
+            
+            // Clear input and reset height
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            sendButton.disabled = true;
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Generate AI response after delay
+            setTimeout(() => {
+                // Remove typing indicator
+                removeTypingIndicator();
+                
+                // Generate AI response
+                const aiResponse = generateAIResponse(text);
+                const aiMessage = {
+                    id: state.messages.length + 1,
+                    sender: 'ai',
+                    text: aiResponse,
+                    time: getCurrentTime()
+                };
+                
+                state.messages.push(aiMessage);
+                renderMessages();
+                
+                // Add to conversation history
+                state.conversationHistory.push({
+                    user: text,
+                    ai: aiResponse
+                });
+                
+                // Save to localStorage
+                saveConversation();
+                
+            }, 1200 + Math.random() * 800); // Random delay between 1.2-2 seconds
+        }
+
+        // Function to generate AI response
+        function generateAIResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Quran verses responses
+            if (lowerMessage.includes('patience') || lowerMessage.includes('sabr')) {
+                return `In the Quran, Allah says about patience:\n\n<div class="quran-text">وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ</div>\n<div class="quran-translation">"And seek help through patience and prayer, and indeed, it is difficult except for the humbly submissive [to Allah]."</div>\n\n<strong>Surah Al-Baqarah (2:45)</strong>\n\nPatience (Sabr) in Islam is not merely waiting; it is active perseverance in the face of difficulty while maintaining faith in Allah's wisdom. The Prophet Muhammad (ﷺ) said: "How wonderful is the affair of the believer, for his affairs are all good, and this applies to no one but the believer. If something good happens to him, he is thankful for it and that is good for him. If something bad happens to him, he bears it with patience and that is good for him." (Sahih Muslim)`;
+            }
+            
+            if (lowerMessage.includes('salah') || lowerMessage.includes('prayer')) {
+                return `Salah (prayer) is the second pillar of Islam and holds immense importance. Allah says in the Quran:\n\n<div class="quran-text">إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا</div>\n<div class="quran-translation">"Indeed, prayer has been decreed upon the believers a decree of specified times."</div>\n\n<strong>Surah An-Nisa (4:103)</strong>\n\nThe Prophet Muhammad (ﷺ) said: <div class="hadith-text">"The first matter that the slave will be brought to account for on the Day of Judgment is the prayer. If it is sound, then the rest of his deeds will be sound. And if it is bad, then the rest of his deeds will be bad."</div>\n\n<strong>Reference:</strong> At-Tabarani\n\nSalah is a direct connection between the believer and Allah. It purifies the heart, prevents from immoral deeds, and serves as constant reminder of our purpose in life.`;
+            }
+            
+            if (lowerMessage.includes('five pillar') || lowerMessage.includes('pillars of islam')) {
+                return `The Five Pillars of Islam are the foundation of a Muslim's faith and practice:\n\n1. <strong>Shahadah</strong> (Declaration of Faith):\n   "Ash-hadu an la ilaha illa Allah, wa ash-hadu anna Muhammadan rasulu Allah."\n   (I bear witness that there is no god but Allah, and I bear witness that Muhammad is the Messenger of Allah.)\n\n2. <strong>Salah</strong> (Prayer):\n   Performing the five daily prayers at their prescribed times.\n\n3. <strong>Zakat</strong> (Charity):\n   Giving 2.5% of one's savings to the poor and needy annually.\n\n4. <strong>Sawm</strong> (Fasting):\n   Fasting during the month of Ramadan from dawn to sunset.\n\n5. <strong>Hajj</strong> (Pilgrimage):\n   Performing pilgrimage to Makkah at least once in a lifetime if physically and financially able.\n\nThese pillars are mentioned in the hadith where the Prophet (ﷺ) said: <div class="hadith-text">"Islam is built upon five: testimony that there is no god but Allah and Muhammad is the Messenger of Allah, establishing prayer, giving Zakat, Hajj, and fasting Ramadan."</div>\n\n<strong>Reference:</strong> Sahih Bukhari and Muslim`;
+            }
+            
+            if (lowerMessage.includes('music') || lowerMessage.includes('song')) {
+                return `The ruling on music in Islam is a matter of scholarly difference, but the majority opinion is that musical instruments are prohibited except for the duff (simple frame drum) in specific circumstances like weddings.\n\nThe evidence often cited is the hadith where the Prophet (ﷺ) said: <div class="hadith-text">"From among my followers there will be some people who will consider illegal sexual intercourse, the wearing of silk, the drinking of alcoholic drinks and the use of musical instruments as lawful."</div>\n\n<strong>Reference:</strong> Sahih Bukhari\n\nHowever, it's important to note:\n1. <strong>Nasheeds without instruments</strong> are generally permissible\n2. <strong>Vocals-only Islamic songs</strong> are encouraged\n3. <strong>Duff (frame drum)</strong> is allowed at weddings and Eid celebrations for women\n\nMany scholars advise avoiding music that contains inappropriate lyrics or leads to neglecting religious duties.`;
+            }
+            
+            if (lowerMessage.includes('gratitude') || lowerMessage.includes('shukr') || lowerMessage.includes('thankful')) {
+                return `Gratitude (Shukr) is a fundamental concept in Islam. Allah says:\n\n<div class="quran-text">وَإِذْ تَأَذَّنَ رَبُّكُمْ لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ ۖ وَلَئِن كَفَرْتُمْ إِنَّ عَذَابِي لَشَدِيدٌ</div>\n<div class="quran-translation">"And [remember] when your Lord proclaimed, 'If you are grateful, I will surely increase you [in favor]; but if you deny, indeed, My punishment is severe.'"</div>\n\n<strong>Surah Ibrahim (14:7)</strong>\n\nThe Prophet Muhammad (ﷺ) said: <div class="hadith-text">"He who does not thank people, does not thank Allah."</div>\n\n<strong>Reference:</strong> Sunan Abu Dawood\n\nGratitude in Islam includes recognizing blessings come from Allah, saying "Alhamdulillah", and using blessings in obedience to Allah.`;
+            }
+            
+            // Default responses for other questions
+            const responses = [
+                `Thank you for your question about "${userMessage}". Based on Islamic teachings:\n\nIslam emphasizes the importance of seeking knowledge and understanding. The Prophet Muhammad (ﷺ) said: <div class="hadith-text">"Seeking knowledge is obligatory upon every Muslim."</div>\n\n<strong>Reference:</strong> Sunan Ibn Majah\n\nWhile I've provided general guidance, for specific rulings on personal matters, it's always best to consult with a qualified Islamic scholar.`,
+                
+                `Regarding "${userMessage}", the Quran provides guidance:\n\n<div class="quran-text">يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ وَقُولُوا قَوْلًا سَدِيدًا</div>\n<div class="quran-translation">"O you who have believed, fear Allah and speak words of appropriate justice."</div>\n\n<strong>Surah Al-Ahzab (33:70)</strong>\n\nIslamic teachings encourage moderation, wisdom, and consideration of context in all matters.`,
+                
+                `Your question about "${userMessage}" touches on important Islamic principles. Remember the words of the Prophet (ﷺ): <div class="hadith-text">"The most perfect believer in faith is the one who is best in character."</div>\n\n<strong>Reference:</strong> Sunan At-Tirmidhi\n\nIn Islam, intentions matter greatly. The Prophet (ﷺ) also said: <div class="hadith-text">"Actions are judged by intentions, and each person will be rewarded according to what they intended."</div>\n\n<strong>Reference:</strong> Sahih Bukhari and Muslim`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Function to render messages
+        function renderMessages() {
+            chatMessages.innerHTML = '';
+            
+            state.messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${message.sender}`;
+                messageElement.id = `message-${message.id}`;
+                
+                const avatarIcon = message.sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
+                const senderName = message.sender === 'user' ? 'You' : 'Deen AI';
+                
+                messageElement.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="${avatarIcon}"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${message.text}</div>
+                        <div class="message-time">${senderName} • ${message.time}</div>
+                        <div class="message-actions">
+                            <button class="message-action copy-btn" data-message="${message.id}">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                            ${message.sender === 'ai' ? `
+                            <button class="message-action like-btn" data-message="${message.id}">
+                                <i class="far fa-thumbs-up"></i> Helpful
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(messageElement);
+            });
+            
+            // Scroll to the bottom
+            setTimeout(() => {
+                const messagesArea = document.getElementById('messagesArea');
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }, 100);
+            
+            // Reattach event listeners for dynamic buttons
+            attachMessageActionListeners();
+        }
+
+        // Function to show typing indicator
+        function showTypingIndicator() {
+            state.isTyping = true;
+            
+            const typingElement = document.createElement('div');
+            typingElement.className = 'message ai';
+            typingElement.id = 'typing-indicator';
+            
+            typingElement.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(typingElement);
+            
+            // Scroll to show typing indicator
+            setTimeout(() => {
+                const messagesArea = document.getElementById('messagesArea');
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }, 100);
+        }
+
+        // Function to remove typing indicator
+        function removeTypingIndicator() {
+            state.isTyping = false;
+            const typingElement = document.getElementById('typing-indicator');
+            if (typingElement) {
+                typingElement.remove();
+            }
+        }
+
+        // Function to attach event listeners to message actions
+        function attachMessageActionListeners() {
+            // Copy button functionality
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const messageId = this.getAttribute('data-message');
+                    const messageElement = document.querySelector(`#message-${messageId} .message-text`);
+                    
+                    // Remove HTML tags for plain text copying
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = messageElement.innerHTML;
+                    const textToCopy = tempDiv.textContent || tempDiv.innerText || '';
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        // Show feedback
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        this.style.color = 'var(--primary-green)';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.style.color = '';
+                        }, 2000);
+                    });
+                });
+            });
+            
+            // Like button functionality
+            document.querySelectorAll('.like-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const messageId = this.getAttribute('data-message');
+                    
+                    // Toggle liked state
+                    if (this.classList.contains('liked')) {
+                        this.classList.remove('liked');
+                        this.innerHTML = '<i class="far fa-thumbs-up"></i> Helpful';
+                        showNotification("Feedback removed");
+                    } else {
+                        this.classList.add('liked');
+                        this.innerHTML = '<i class="fas fa-thumbs-up"></i> Thank you!';
+                        showNotification("Thank you for your feedback!");
+                    }
+                });
+            });
+        }
+
+        // Function to get current time in a nice format
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            return `${formattedHours}:${formattedMinutes} ${ampm}`;
+        }
+
+        // Function to show notification
+        function showNotification(message) {
+            // Remove existing notification
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remove notification after animation
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2500);
+        }
+
+        // Function to save conversation to localStorage
+        function saveConversation() {
+            try {
+                localStorage.setItem('deenAI_conversation', JSON.stringify(state.conversationHistory));
+                localStorage.setItem('deenAI_messages', JSON.stringify(state.messages));
+            } catch (e) {
+                console.log('Could not save conversation:', e);
+            }
+        }
+
+        // Function to load conversation from localStorage
+        function loadConversation() {
+            try {
+                const savedMessages = localStorage.getItem('deenAI_messages');
+                const savedHistory = localStorage.getItem('deenAI_conversation');
+                
+                if (savedMessages) {
+                    state.messages = JSON.parse(savedMessages);
+                    renderMessages();
+                }
+                
+                if (savedHistory) {
+                    state.conversationHistory = JSON.parse(savedHistory);
+                }
+            } catch (e) {
+                console.log('Could not load conversation:', e);
+            }
+        }
+
+        // Load conversation when page loads
+        window.addEventListener('load', function() {
+            loadConversation();
+        });
+
+        // Initial render
+        renderMessages();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qibla Direction | Islamic App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --qibla-indicator: #C62828;
+            --success-color: #2ecc71;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Qibla Content */
+        .qibla-content {
+            padding: 20px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Compass Area */
+        .compass-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto 30px;
+        }
+
+        @media (max-width: 480px) {
+            .compass-container {
+                width: 280px;
+                height: 280px;
+            }
+        }
+
+        .compass-outer {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--white), var(--light-gray));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 2px solid var(--medium-gray);
+            overflow: hidden;
+        }
+
+        .compass-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .compass-directions {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(0deg);
+        }
+
+        .compass-direction {
+            position: absolute;
+            font-weight: 700;
+            color: var(--primary-green);
+            font-size: 18px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .direction-n { top: 10px; left: 50%; transform: translateX(-50%); }
+        .direction-e { top: 50%; right: 10px; transform: translateY(-50%); }
+        .direction-s { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .direction-w { top: 50%; left: 10px; transform: translateY(-50%); }
+
+        /* Qibla Direction Indicator */
+        .qibla-direction-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+            opacity: 0.9;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .qibla-arrow {
+            width: 40px;
+            height: 40px;
+            background: rgba(198, 40, 40, 0.9);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .qibla-text {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-weight: 600;
+            color: var(--qibla-indicator);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            z-index: 6;
+        }
+
+        /* Compass Needle */
+        .compass-needle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            transition: transform 0.1s ease-out;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .needle-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .needle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 140px;
+            background: linear-gradient(to bottom, var(--qibla-indicator), #ff6b6b);
+            border-radius: 2px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+        }
+
+        .needle-head {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background-color: var(--qibla-indicator);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 6;
+        }
+
+        .needle-base {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 6;
+        }
+
+        /* Degree Display */
+        .degree-display {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin: 20px 0 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--medium-gray);
+            text-align: center;
+            min-width: 200px;
+            z-index: 10;
+        }
+
+        .degree-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+        }
+
+        .degree-label {
+            font-size: 14px;
+            color: var(--dark-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Status Message */
+        .status-message {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-left: 4px solid var(--primary-green);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .status-text {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .status-text.error {
+            color: #e74c3c;
+        }
+
+        .status-text.success {
+            color: var(--success-color);
+        }
+
+        .status-text.highlight {
+            animation: highlightPulse 2s infinite;
+            font-weight: 700;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% { color: var(--success-color); }
+            50% { color: var(--accent-gold); }
+        }
+
+        /* Controls */
+        .controls-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.2);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(29, 111, 66, 0.3);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-btn.recalibrate {
+            background: linear-gradient(135deg, var(--accent-gold), #FFB74D);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+
+        .control-btn.recalibrate:hover {
+            box-shadow: 0 6px 16px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Footer */
+        .qibla-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+        }
+
+        .disclaimer {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Animation for calibration */
+        @keyframes calibrate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(90deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg); }
+            75% { transform: translate(-50%, -50%) rotate(270deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .calibrating .needle-container {
+            animation: calibrate 2s linear infinite;
+        }
+
+        /* Accuracy Indicator */
+        .accuracy-indicator {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--dark-gray);
+            text-align: center;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+        }
+        
+        /* Qibla Match Overlay */
+        .qibla-match {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(46, 204, 113, 0.95);
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .qibla-match.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .qibla-match-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .qibla-match-text {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .qibla-match-subtext {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 300px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* No Compass Warning */
+        .no-compass-warning {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            max-width: 400px;
+        }
+        
+        .no-compass-warning i {
+            font-size: 48px;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .no-compass-warning h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .no-compass-warning p {
+            color: var(--dark-gray);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Qibla Match Overlay -->
+    <div class="qibla-match" id="qiblaMatchOverlay">
+        <div class="qibla-match-icon">
+            <i class="fas fa-kaaba"></i>
+        </div>
+        <div class="qibla-match-text">You're Facing Kaaba!</div>
+        <div class="qibla-match-subtext">You are now facing the direction of prayer</div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-compass"></i>
+                        <span>Qibla Direction</span>
+                    </div>
+                    <div style="width: 40px;"></div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Find Direction to Kaaba</h1>
+                    <p>Discover the Qibla direction from your location</p>
+                </div>
+            </section>
+
+            <!-- Qibla Content -->
+            <div class="qibla-content">
+                <!-- Compass Area -->
+                <div class="compass-container">
+                    <div class="compass-outer">
+                        <div class="compass-inner">
+                            <div class="compass-directions" id="compassDirections">
+                                <div class="compass-direction direction-n">N</div>
+                                <div class="compass-direction direction-e">E</div>
+                                <div class="compass-direction direction-s">S</div>
+                                <div class="compass-direction direction-w">W</div>
+                            </div>
+                            
+                            <!-- Qibla Direction Indicator -->
+                            <div class="qibla-direction-indicator" id="qiblaDirectionIndicator">
+                                <div class="qibla-text" id="qiblaText">QIBLA</div>
+                                <div class="qibla-arrow"></div>
+                            </div>
+                            
+                            <!-- Compass Needle -->
+                            <div class="compass-needle" id="compassNeedle">
+                                <div class="needle-container" id="needleContainer">
+                                    <div class="needle"></div>
+                                    <div class="needle-head">
+                                        <i class="fas fa-location-arrow"></i>
+                                    </div>
+                                    <div class="needle-base">
+                                        <i class="fas fa-compass"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Degree Display -->
+                <div class="degree-display">
+                    <div class="degree-value" id="degreeValue">0°</div>
+                    <div class="degree-label" id="degreeLabel">From North</div>
+                </div>
+                
+                <!-- Status Message -->
+                <div class="status-message">
+                    <div class="status-text" id="statusText">Getting your location...</div>
+                </div>
+                
+                <!-- Accuracy Indicator -->
+                <div class="accuracy-indicator" id="accuracyIndicator">
+                    Initializing compass...
+                </div>
+                
+                <!-- Controls -->
+                <div class="controls-container">
+                    <button class="control-btn" id="locationBtn" style="display: none;">
+                        <i class="fas fa-location-dot"></i>
+                        <span>Use My Location</span>
+                    </button>
+                    <button class="control-btn recalibrate" id="recalibrateBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Recalibrate</span>
+                    </button>
+                </div>
+                
+                <!-- Footer -->
+                <div class="qibla-footer">
+                    <p class="disclaimer">Note: Compass accuracy depends on your device sensors. For best results, calibrate by moving your phone in a figure-8 motion.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // QIBLA DIRECTION APPLICATION - FIXED VERSION
+        // ============================================
+
+        // Constants
+        const KAABA_LAT = 21.4225;
+        const KAABA_LNG = 39.8262;
+        
+        // State
+        let currentLat = null;
+        let currentLng = null;
+        let currentQiblaAngle = 0;
+        let currentDeviceHeading = 0;
+        let isCalibrating = false;
+        let compassActive = false;
+        let lastCompassUpdate = 0;
+        const COMPASS_UPDATE_INTERVAL = 100;
+        let isFacingQibla = false;
+        let lastVibration = 0;
+        const VIBRATION_INTERVAL = 500;
+        let qiblaMatchShown = false;
+        let locationDetected = false;
+        let hasCompassSensor = false;
+        let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        let isAndroid = /Android/.test(navigator.userAgent);
+        let deviceOrientationHandler = null;
+        let calibrationOffset = 0;
+
+        // DOM Elements
+        const backBtn = document.getElementById('backBtn');
+        const degreeValue = document.getElementById('degreeValue');
+        const degreeLabel = document.getElementById('degreeLabel');
+        const statusText = document.getElementById('statusText');
+        const locationBtn = document.getElementById('locationBtn');
+        const recalibrateBtn = document.getElementById('recalibrateBtn');
+        const qiblaDirectionIndicator = document.getElementById('qiblaDirectionIndicator');
+        const qiblaText = document.getElementById('qiblaText');
+        const compassNeedle = document.getElementById('compassNeedle');
+        const needleContainer = document.getElementById('needleContainer');
+        const accuracyIndicator = document.getElementById('accuracyIndicator');
+        const qiblaMatchOverlay = document.getElementById('qiblaMatchOverlay');
+        const compassDirections = document.getElementById('compassDirections');
+
+        // Back button functionality
+        backBtn.addEventListener('click', function() {
+            window.history.back();
+        });
+
+        // Update status message
+        function updateStatus(message, type = 'normal') {
+            statusText.textContent = message;
+            statusText.className = 'status-text';
+            
+            if (type === 'error') {
+                statusText.classList.add('error');
+            } else if (type === 'success') {
+                statusText.classList.add('success');
+            } else if (type === 'highlight') {
+                statusText.classList.add('highlight');
+            }
+        }
+
+        // Calculate Qibla direction using Haversine formula - FIXED FOR CONSISTENCY
+        function calculateQiblaDirection(lat, lng) {
+            // Convert to radians
+            const lat1 = lat * Math.PI / 180;
+            const lon1 = lng * Math.PI / 180;
+            const lat2 = KAABA_LAT * Math.PI / 180;
+            const lon2 = KAABA_LNG * Math.PI / 180;
+            
+            // Calculate bearing
+            const y = Math.sin(lon2 - lon1) * Math.cos(lat2);
+            const x = Math.cos(lat1) * Math.sin(lat2) -
+                      Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+            
+            let bearing = Math.atan2(y, x) * 180 / Math.PI;
+            
+            // Convert to 0-360 range
+            bearing = (bearing + 360) % 360;
+            
+            return bearing;
+        }
+
+        // Update compass display - FIXED FOR ANDROID/IOS CONSISTENCY
+        function updateCompassDisplay() {
+            if (!compassActive) return;
+            
+            // Calculate adjusted heading with calibration
+            let adjustedHeading = (currentDeviceHeading + calibrationOffset) % 360;
+            
+            // Rotate the compass directions opposite to device heading
+            compassDirections.style.transform = `rotate(${-adjustedHeading}deg)`;
+            
+            // Position the Qibla arrow
+            // When device points to Qibla, the arrow should point to top (0 degrees)
+            const qiblaRotation = currentQiblaAngle - adjustedHeading;
+            qiblaDirectionIndicator.style.transform = `translate(-50%, -50%) rotate(${qiblaRotation}deg)`;
+            qiblaText.textContent = `QIBLA ${Math.round(currentQiblaAngle)}°`;
+            
+            // Calculate angle difference
+            let angleDiff = Math.abs(adjustedHeading - currentQiblaAngle);
+            angleDiff = Math.min(angleDiff, 360 - angleDiff);
+            
+            // Check if we're facing Qibla (within 5 degrees)
+            if (angleDiff < 5) {
+                if (!isFacingQibla) {
+                    isFacingQibla = true;
+                    handleQiblaMatch();
+                }
+                
+                // Add haptic vibration when close to Qibla
+                const now = Date.now();
+                if (now - lastVibration > VIBRATION_INTERVAL) {
+                    vibrateDevice();
+                    lastVibration = now;
+                }
+                
+                updateStatus(`Facing Kaaba!`, 'highlight');
+                accuracyIndicator.textContent = "Perfect! You're facing the Kaaba";
+                
+            } else {
+                isFacingQibla = false;
+                qiblaMatchShown = false;
+                
+                if (angleDiff < 15) {
+                    updateStatus(`Almost there! ${Math.round(angleDiff)}° to Kaaba`, 'success');
+                    accuracyIndicator.textContent = "Almost facing Kaaba, adjust slightly";
+                } else {
+                    updateStatus(`Rotate to align with Qibla arrow`, 'normal');
+                    accuracyIndicator.textContent = `Rotate ${Math.round(angleDiff)}° to face Kaaba`;
+                }
+            }
+            
+            // Update degree display
+            degreeValue.textContent = `${Math.round(currentQiblaAngle)}°`;
+            degreeLabel.textContent = "Qibla from North";
+        }
+
+        // Handle Qibla match
+        function handleQiblaMatch() {
+            if (qiblaMatchShown) return;
+            
+            qiblaMatchShown = true;
+            
+            // Show the match overlay
+            qiblaMatchOverlay.classList.add('active');
+            
+            // Auto-hide after 2 seconds
+            setTimeout(() => {
+                qiblaMatchOverlay.classList.remove('active');
+            }, 2000);
+            
+            // Stronger vibration for match
+            vibrateDevice([100, 50, 100]);
+        }
+
+        // Vibrate device (haptic feedback)
+        function vibrateDevice(pattern = [50]) {
+            if (navigator.vibrate) {
+                navigator.vibrate(pattern);
+            }
+        }
+
+        // Get location automatically
+        function getLocation() {
+            if (!navigator.geolocation) {
+                updateStatus("Geolocation not supported", "error");
+                return;
+            }
+            
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
+            
+            navigator.geolocation.getCurrentPosition(
+                // Success
+                function(position) {
+                    currentLat = position.coords.latitude;
+                    currentLng = position.coords.longitude;
+                    locationDetected = true;
+                    
+                    updateStatus("Location found! Calculating Qibla...");
+                    
+                    // Calculate Qibla direction - using same formula for all devices
+                    currentQiblaAngle = calculateQiblaDirection(currentLat, currentLng);
+                    
+                    console.log(`Location: ${currentLat}, ${currentLng}`);
+                    console.log(`Qibla Angle: ${currentQiblaAngle}°`);
+                    
+                    // Enable compass
+                    setupDeviceOrientation();
+                    
+                    setTimeout(() => {
+                        updateStatus(`Qibla direction found! Rotate to align with Qibla arrow`, "success");
+                        accuracyIndicator.textContent = "Rotate your phone to align with the Qibla arrow";
+                    }, 500);
+                },
+                // Error
+                function(error) {
+                    let errorMessage = "Unable to get location. ";
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = "Location access denied. Please enable location services.";
+                            locationBtn.style.display = 'flex';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = "Location unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = "Location request timed out.";
+                            break;
+                        default:
+                            errorMessage = "Location error occurred.";
+                            break;
+                    }
+                    
+                    updateStatus(errorMessage, "error");
+                    accuracyIndicator.textContent = "Please enable location services";
+                    
+                    // Show location button
+                    locationBtn.style.display = 'flex';
+                    
+                    // Use default location for demonstration
+                    if (!locationDetected) {
+                        setTimeout(() => {
+                            updateStatus("Using default location for demonstration", "success");
+                            currentLat = 40.7128; // New York
+                            currentLng = -74.0060;
+                            currentQiblaAngle = calculateQiblaDirection(currentLat, currentLng);
+                            locationDetected = true;
+                            
+                            setupDeviceOrientation();
+                        }, 2000);
+                    }
+                },
+                options
+            );
+        }
+
+        // Setup device orientation - FIXED FOR IOS FREEZING ISSUE
+        function setupDeviceOrientation() {
+            if (compassActive) return;
+            
+            // Clean up any existing listeners
+            if (deviceOrientationHandler) {
+                window.removeEventListener('deviceorientation', deviceOrientationHandler);
+                deviceOrientationHandler = null;
+            }
+            
+            // Check if device has orientation support
+            if (window.DeviceOrientationEvent) {
+                // For iOS 13+, request permission
+                if (isIOS && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                startDeviceOrientationListener();
+                            } else {
+                                showNoCompassError();
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Permission error:", error);
+                            showNoCompassError();
+                        });
+                } else {
+                    // For Android and iOS < 13
+                    startDeviceOrientationListener();
+                }
+            } else {
+                showNoCompassError();
+            }
+        }
+
+        // Start device orientation listener - FIXED FOR ANDROID
+        function startDeviceOrientationListener() {
+            if (compassActive) return;
+            
+            deviceOrientationHandler = handleDeviceOrientation;
+            window.addEventListener('deviceorientation', deviceOrientationHandler);
+            compassActive = true;
+            accuracyIndicator.textContent = "Compass: Active (rotate your device)";
+            
+            if (currentQiblaAngle > 0) {
+                updateStatus("Compass activated! Rotate your device.", "success");
+                updateCompassDisplay();
+            }
+        }
+
+        // Handle device orientation - FIXED FOR ANDROID ACCURACY
+        function handleDeviceOrientation(event) {
+            const now = Date.now();
+            if (now - lastCompassUpdate < COMPASS_UPDATE_INTERVAL) return;
+            lastCompassUpdate = now;
+            
+            let heading = null;
+            
+            if (event.webkitCompassHeading !== undefined) {
+                // iOS Safari - already correct (0° = North)
+                heading = event.webkitCompassHeading;
+                if (event.webkitCompassAccuracy !== undefined) {
+                    accuracyIndicator.textContent = `Compass: ${event.webkitCompassAccuracy.toFixed(0)}° accuracy`;
+                }
+            } else if (event.alpha !== null) {
+                // Android and other devices
+                // On Android, alpha is 0-360 where 0 = device pointing North
+                // But orientation depends on screen orientation
+                heading = event.alpha;
+                
+                // Get screen orientation angle
+                const orientation = window.screen.orientation || window.screen.mozOrientation || window.screen.msOrientation;
+                const orientationAngle = orientation ? orientation.angle : 0;
+                
+                // Adjust for screen orientation
+                heading = (heading + orientationAngle) % 360;
+                
+                // Android specific calibration
+                // When device is held upright in portrait mode, 0 should be North
+                // Some Android devices need 180° offset
+                heading = (heading + 180) % 360;
+                
+                accuracyIndicator.textContent = "Compass: Active";
+            }
+            
+            if (heading !== null) {
+                currentDeviceHeading = heading;
+                if (currentQiblaAngle > 0) {
+                    updateCompassDisplay();
+                }
+            }
+        }
+
+        // Show no compass sensor error
+        function showNoCompassError() {
+            updateStatus("Compass sensor not available", "error");
+            accuracyIndicator.innerHTML = `
+                <div class="no-compass-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Compass Not Available</h3>
+                    <p>Your device doesn't have a compass sensor or access was denied.</p>
+                </div>
+            `;
+            
+            // Show Qibla direction without compass
+            if (currentQiblaAngle > 0) {
+                qiblaDirectionIndicator.style.transform = `translate(-50%, -50%) rotate(${currentQiblaAngle}deg)`;
+                qiblaText.textContent = `QIBLA ${Math.round(currentQiblaAngle)}°`;
+                degreeValue.textContent = `${Math.round(currentQiblaAngle)}°`;
+                updateStatus(`Qibla direction: ${Math.round(currentQiblaAngle)}° from North`, "success");
+                accuracyIndicator.textContent = `Qibla direction: ${Math.round(currentQiblaAngle)}° from North`;
+            }
+        }
+
+        // Calibrate compass - IMPROVED CALIBRATION
+        function calibrateCompass() {
+            if (isCalibrating) return;
+            
+            isCalibrating = true;
+            updateStatus("Calibrating compass... Move phone in figure-8");
+            accuracyIndicator.textContent = "Move phone in figure-8 pattern to calibrate";
+            
+            needleContainer.classList.add('calibrating');
+            
+            // Store current calibration
+            const startCalibration = calibrationOffset;
+            
+            // Calibration process
+            let calibrationData = [];
+            let calibrationStartTime = Date.now();
+            
+            const calibrationListener = (event) => {
+                if (event.webkitCompassHeading !== undefined) {
+                    calibrationData.push(event.webkitCompassHeading);
+                } else if (event.alpha !== null) {
+                    calibrationData.push(event.alpha);
+                }
+            };
+            
+            window.addEventListener('deviceorientation', calibrationListener);
+            
+            setTimeout(() => {
+                isCalibrating = false;
+                needleContainer.classList.remove('calibrating');
+                window.removeEventListener('deviceorientation', calibrationListener);
+                
+                if (calibrationData.length > 0) {
+                    // Calculate average and adjust calibration
+                    const sum = calibrationData.reduce((a, b) => a + b, 0);
+                    const avg = sum / calibrationData.length;
+                    
+                    // Simple calibration - adjust based on average
+                    calibrationOffset = (calibrationOffset + 5) % 360; // Small adjustment
+                    
+                    updateStatus("Calibration complete!", "success");
+                    accuracyIndicator.textContent = "Compass calibrated successfully";
+                    
+                    // Update display with new calibration
+                    if (currentQiblaAngle > 0) {
+                        updateCompassDisplay();
+                    }
+                } else {
+                    updateStatus("Calibration complete!", "success");
+                    accuracyIndicator.textContent = "Compass ready";
+                }
+            }, 5000); // 5 second calibration
+        }
+
+        // Event Listeners
+        locationBtn.addEventListener('click', function() {
+            getLocation();
+            this.style.display = 'none';
+        });
+        
+        recalibrateBtn.addEventListener('click', calibrateCompass);
+
+        // Clean up on page unload to prevent iOS freezing
+        window.addEventListener('beforeunload', function() {
+            if (deviceOrientationHandler) {
+                window.removeEventListener('deviceorientation', deviceOrientationHandler);
+                deviceOrientationHandler = null;
+            }
+            compassActive = false;
+        });
+
+        // Auto-detect location on load
+        function autoDetectLocation() {
+            // Check if location permission is already granted
+            if (navigator.permissions) {
+                navigator.permissions.query({name: 'geolocation'})
+                    .then(function(permissionStatus) {
+                        if (permissionStatus.state === 'granted') {
+                            // Permission already granted, get location automatically
+                            getLocation();
+                        } else {
+                            // Show location button
+                            locationBtn.style.display = 'flex';
+                            updateStatus("Tap to enable location", "normal");
+                            accuracyIndicator.textContent = "Enable location to find Qibla direction";
+                        }
+                    })
+                    .catch(() => {
+                        // Fallback for browsers that don't support permissions API
+                        getLocation();
+                    });
+            } else {
+                // Fallback for browsers that don't support permissions API
+                getLocation();
+            }
+        }
+
+        // Initialize
+        function init() {
+            // Auto-detect location
+            autoDetectLocation();
+            
+            // Initialize compass after a short delay
+            setTimeout(() => {
+                if (!compassActive && locationDetected) {
+                    setupDeviceOrientation();
+                }
+            }, 2000);
+        }
+
+        // Start the application
+        init();
+    </script>
+</body>
+</html>

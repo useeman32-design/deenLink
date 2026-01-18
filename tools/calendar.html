@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic App | Hijri Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --quran-blue: #1A5F7A;
+            --mecca-red: #C62828;
+            --medina-green: #2E7D32;
+            --prayer-blue: #1976D2;
+            --calendar-purple: #7B1FA2;
+            --dua-teal: #00796B;
+            --zakat-orange: #E65100;
+            --fasting-cyan: #0097A7;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --quran-blue: #3498db;
+            --mecca-red: #e74c3c;
+            --medina-green: #27ae60;
+            --prayer-blue: #3498db;
+            --calendar-purple: #9b59b6;
+            --dua-teal: #1abc9c;
+            --zakat-orange: #e67e22;
+            --fasting-cyan: #1abc9c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay - Fixed to cover entire screen */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - Consistent with other pages */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Calendar Page Styles */
+        .calendar-container {
+            padding: 20px 16px 100px;
+        }
+
+        @media (min-width: 768px) {
+            .calendar-container {
+                padding: 25px 30px 120px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Current Date Display */
+        .current-date-card {
+            background: linear-gradient(135deg, var(--primary-green), #2E8B57);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 20px rgba(29, 111, 66, 0.2);
+            text-align: center;
+        }
+
+        .hijri-date-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'Amiri', serif;
+        }
+
+        .gregorian-date {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .hijri-year {
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Calendar Navigation */
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--medium-gray);
+            transform: scale(1.05);
+        }
+
+        .calendar-month-year {
+            text-align: center;
+        }
+
+        .hijri-month {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .gregorian-month {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--medium-gray);
+            padding-bottom: 8px;
+        }
+
+        .weekday {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--light-gray);
+        }
+
+        .calendar-day.current {
+            background: linear-gradient(135deg, var(--primary-green), #2E8B57);
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.event {
+            background-color: rgba(29, 111, 66, 0.1);
+            border: 1px solid rgba(29, 111, 66, 0.3);
+        }
+
+        .calendar-day.friday {
+            color: var(--prayer-blue);
+            font-weight: 600;
+        }
+
+        .calendar-day.event::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        .calendar-day.other-month {
+            color: var(--dark-gray);
+            opacity: 0.6;
+        }
+
+        /* Events Section */
+        .events-section {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-green);
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .event-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-item.upcoming {
+            background-color: rgba(29, 111, 66, 0.05);
+            border-left-color: var(--primary-green);
+        }
+
+        .event-item.today {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-left-color: var(--primary-green);
+        }
+
+        .event-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 70px;
+            padding: 8px;
+            background-color: var(--white);
+            border-radius: 8px;
+            margin-right: 16px;
+            text-align: center;
+        }
+
+        .event-day {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-green);
+            line-height: 1;
+        }
+
+        .event-month {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .event-content {
+            flex: 1;
+        }
+
+        .event-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .event-description {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .event-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .event-badge {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .event-badge.holiday {
+            background-color: rgba(198, 40, 40, 0.1);
+            color: var(--mecca-red);
+        }
+
+        .event-badge.fasting {
+            background-color: rgba(0, 151, 167, 0.1);
+            color: var(--fasting-cyan);
+        }
+
+        .event-badge.prayer {
+            background-color: rgba(25, 118, 210, 0.1);
+            color: var(--prayer-blue);
+        }
+
+        .event-badge.important {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+        }
+
+        .event-badge.moon {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--calendar-purple);
+        }
+
+        /* Hijri Months List */
+        .months-section {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .month-box {
+            padding: 16px;
+            border-radius: 12px;
+            background-color: var(--light-gray);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .month-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .month-box.active {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-color: var(--primary-green);
+        }
+
+        .month-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 6px;
+        }
+
+        .month-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .month-days {
+            font-size: 12px;
+            color: var(--dark-gray);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            background-color: var(--white);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            z-index: 100;
+            border-radius: 0;
+        }
+
+        @media (min-width: 768px) {
+            .bottom-nav {
+                max-width: 768px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                max-width: 480px;
+            }
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        /* Nav Loader Animation */
+        .nav-loader {
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item.loading .nav-loader {
+            opacity: 1;
+            animation: pulseLoader 1s infinite;
+        }
+
+        @keyframes pulseLoader {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0.7;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .hijri-date-large {
+                font-size: 28px;
+            }
+            
+            .months-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .calendar-container {
+                max-width: 700px;
+            }
+            
+            .months-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .calendar-container {
+                max-width: 800px;
+            }
+            
+            .months-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        /* Event Modal */
+        .event-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .event-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .event-modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-modal-overlay.active .event-modal-content {
+            transform: translateY(0);
+        }
+
+        .event-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .event-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .event-modal-title i {
+            font-size: 20px;
+            color: var(--primary-green);
+        }
+
+        .event-modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--dark-gray);
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .event-modal-close:hover {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .event-modal-body {
+            padding: 20px;
+        }
+
+        .event-modal-date {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .event-modal-date-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-green), #2E8B57);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .event-modal-date-day {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .event-modal-date-month {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .event-modal-date-text {
+            flex: 1;
+        }
+
+        .event-modal-date-hijri {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            font-family: 'Amiri', serif;
+        }
+
+        .event-modal-date-gregorian {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .event-modal-description {
+            margin-bottom: 25px;
+        }
+
+        .event-modal-description h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .event-modal-description h4 i {
+            color: var(--primary-green);
+        }
+
+        .event-modal-description p {
+            font-size: 15px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .event-modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .event-modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .event-modal-btn.reminder {
+            background: linear-gradient(135deg, var(--primary-green), #2E8B57);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.2);
+        }
+
+        .event-modal-btn.reminder:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(29, 111, 66, 0.3);
+        }
+
+        .event-modal-btn.share {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .event-modal-btn.share:hover {
+            background-color: var(--medium-gray);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--dark-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            color: var(--medium-gray);
+            margin-bottom: 16px;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+        }
+
+        /* Loading Animation */
+        .loading-shimmer {
+            background: linear-gradient(90deg, var(--light-gray) 25%, var(--medium-gray) 50%, var(--light-gray) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Prayer Time Badge */
+        .event-badge.prayer-time {
+            background-color: rgba(25, 118, 210, 0.1);
+            color: var(--prayer-blue);
+        }
+
+        /* Ramadan Badge */
+        .event-badge.ramadan {
+            background-color: rgba(0, 151, 167, 0.1);
+            color: var(--fasting-cyan);
+        }
+
+        /* Network Status Indicator */
+        .network-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+        }
+
+        .network-status.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .network-status.online {
+            background: rgba(46, 204, 113, 0.9);
+        }
+
+        .network-status.offline {
+            background: rgba(231, 76, 60, 0.9);
+        }
+
+        /* Sync Button */
+        .sync-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-green), #2E8B57);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .sync-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sync-button.syncing {
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Moon Sighting Notice */
+        .moon-sighting-notice {
+            background-color: rgba(155, 89, 182, 0.1);
+            border-left: 4px solid var(--calendar-purple);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--dark-gray);
+        }
+
+        .moon-sighting-notice i {
+            color: var(--calendar-purple);
+            margin-right: 8px;
+        }
+
+        /* Moon Visibility Indicator */
+        .moon-visibility {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .moon-visible {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary-green);
+        }
+
+        .moon-not-visible {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--mecca-red);
+        }
+
+        /* Moon Phase Icon */
+        .moon-phase-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f39c12, #f1c40f);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .moon-phase-icon::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background-color: #2c3e50;
+            border-radius: 50%;
+            top: 10%;
+            right: 10%;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading Islamic Calendar...</div>
+        </div>
+    </div>
+
+    <!-- Network Status Indicator -->
+    <div id="networkStatus" class="network-status">
+        <i class="fas fa-wifi"></i>
+        <span>Online</span>
+    </div>
+
+    <!-- Sync Button -->
+    <button id="syncButton" class="sync-button" title="Sync with API">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+
+    <!-- Page Transition Overlay -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="event-modal-overlay" id="eventModalOverlay">
+        <div class="event-modal-content">
+            <div class="event-modal-header">
+                <div class="event-modal-title" id="eventModalTitle">
+                    <i class="fas fa-calendar-star"></i>
+                    <span>Event Details</span>
+                </div>
+                <button class="event-modal-close" id="eventModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="event-modal-body">
+                <div class="event-modal-date">
+                    <div class="event-modal-date-icon">
+                        <div class="event-modal-date-day" id="eventModalDay">10</div>
+                        <div class="event-modal-date-month" id="eventModalMonth">Muharram</div>
+                    </div>
+                    <div class="event-modal-date-text">
+                        <div class="event-modal-date-hijri" id="eventModalHijri">10 Muharram 1446 AH</div>
+                        <div class="event-modal-date-gregorian" id="eventModalGregorian">July 19, 2024</div>
+                    </div>
+                </div>
+                
+                <div class="event-modal-description">
+                    <h4 id="eventModalEventTitle"><i class="fas fa-info-circle"></i> Ashura</h4>
+                    <div id="eventModalEventDesc">
+                        <p>The Day of Ashura is the 10th day of Muharram. It is a significant day for Muslims as it commemorates the day that Allah saved Prophet Musa (Moses) and the Children of Israel from Pharaoh. Many Muslims fast on this day.</p>
+                    </div>
+                    <div id="moonSightingInfo" class="moon-sighting-notice" style="display: none;">
+                        <i class="fas fa-moon"></i>
+                        <span id="moonSightingText"></span>
+                    </div>
+                </div>
+                
+                <div class="event-modal-actions">
+                    <button class="event-modal-btn reminder" id="setReminderBtn">
+                        <i class="fas fa-bell"></i> Set Reminder
+                    </button>
+                    <button class="event-modal-btn share" id="shareEventBtn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Hijri Calendar</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Islamic Calendar & Events</h1>
+                    <p>Track important Islamic dates, holidays, and events</p>
+                </div>
+            </section>
+
+            <!-- Calendar Content -->
+            <div class="calendar-container">
+                <!-- Current Date Display -->
+                <div class="current-date-card">
+                    <div class="hijri-date-large" id="currentHijriDate">Loading...</div>
+                    <div class="gregorian-date" id="currentGregorianDate">Loading...</div>
+                    <div class="hijri-year" id="currentHijriYear">AH</div>
+                    <div id="moonSightingStatus" style="margin-top: 8px; font-size: 12px; opacity: 0.8;">
+                        <i class="fas fa-moon"></i>
+                        <span id="moonStatusText">Moon sighting data loading...</span>
+                    </div>
+                </div>
+
+                <!-- Calendar Navigation -->
+                <div class="calendar-nav">
+                    <button class="nav-btn" id="prevMonthBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="calendar-month-year">
+                        <div class="hijri-month" id="displayHijriMonth">Loading...</div>
+                        <div class="gregorian-month" id="displayGregorianMonth">Loading...</div>
+                    </div>
+                    <button class="nav-btn" id="nextMonthBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div class="calendar-grid">
+                    <div class="calendar-weekdays">
+                        <div class="weekday">Sun</div>
+                        <div class="weekday">Mon</div>
+                        <div class="weekday">Tue</div>
+                        <div class="weekday">Wed</div>
+                        <div class="weekday">Thu</div>
+                        <div class="weekday">Fri</div>
+                        <div class="weekday">Sat</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays">
+                        <!-- Calendar days will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="events-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-star"></i>
+                        <span>Upcoming Events</span>
+                    </div>
+                    <div class="events-list" id="upcomingEvents">
+                        <!-- Events will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Hijri Months -->
+                <div class="months-section">
+                    <div class="section-title">
+                        <i class="fas fa-moon"></i>
+                        <span>Hijri Months</span>
+                    </div>
+                    <div class="months-grid" id="hijriMonthsGrid">
+                        <!-- Months will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // HIJRI CALENDAR ENGINE WITH CORRECT WEEKDAYS
+        // ============================================
+
+        // Hijri Months
+        const HIJRI_MONTHS = [
+            "Muḥarram", "Ṣafar", "Rabīʿ al-Awwal", "Rabīʿ al-Thānī",
+            "Jumādā al-Awwal", "Jumādā al-Thānī", "Rajab", "Shaʿbān",
+            "Ramaḍān", "Shawwāl", "Dhū al-Qaʿdah", "Dhū al-Ḥijjah"
+        ];
+
+        const GREGORIAN_MONTHS = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        class HijriCalendarEngine {
+            constructor() {
+                // Umm al-Qura calendar constants
+                this.HIJRA_JD = 1948440.5; // Julian Day of Hijra (July 16, 622 CE)
+                this.HIJRI_MONTH_LENGTHS = [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29];
+                this.LONG_YEARS = [2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29];
+            }
+
+            // Convert Gregorian to Julian Day
+            gregorianToJulian(year, month, day) {
+                if (month <= 2) {
+                    year -= 1;
+                    month += 12;
+                }
+                const a = Math.floor(year / 100);
+                const b = 2 - a + Math.floor(a / 4);
+                return Math.floor(365.25 * (year + 4716)) + 
+                       Math.floor(30.6001 * (month + 1)) + day + b - 1524.5;
+            }
+
+            // Convert Julian Day to Gregorian
+            julianToGregorian(jd) {
+                const Z = Math.floor(jd + 0.5);
+                const F = jd + 0.5 - Z;
+                const A = Z < 2299161 ? Z : Z + 1 + Math.floor((Z - 1867216.25) / 36524.25);
+                const B = A + 1524;
+                const C = Math.floor((B - 122.1) / 365.25);
+                const D = Math.floor(365.25 * C);
+                const E = Math.floor((B - D) / 30.6001);
+                
+                const day = B - D - Math.floor(30.6001 * E) + F;
+                const month = E < 14 ? E - 1 : E - 13;
+                const year = month > 2 ? C - 4716 : C - 4715;
+                
+                return { year, month, day };
+            }
+
+            // Get Hijri date from Gregorian date
+            gregorianToHijri(gregorianDate) {
+                const year = gregorianDate.getFullYear();
+                const month = gregorianDate.getMonth() + 1;
+                const day = gregorianDate.getDate();
+                
+                const jd = this.gregorianToJulian(year, month, day);
+                return this.julianToHijri(jd);
+            }
+
+            // Get Hijri date from Julian Day
+            julianToHijri(jd) {
+                // Days since Hijra epoch
+                const daysSinceEpoch = jd - this.HIJRA_JD;
+                
+                // Approximate Hijri year
+                let hijriYear = Math.floor(daysSinceEpoch / 354.36607) + 1;
+                
+                // Find exact year start
+                let yearStart = this.hijriYearStartJD(hijriYear);
+                
+                // Adjust if before year start
+                if (jd < yearStart) {
+                    hijriYear--;
+                    yearStart = this.hijriYearStartJD(hijriYear);
+                }
+                
+                // Days into year
+                const daysIntoYear = Math.floor(jd - yearStart);
+                
+                // Find month and day
+                let monthDays = 0;
+                let hijriMonth = 0;
+                let hijriDay = 0;
+                
+                const monthLengths = this.getHijriMonthLengths(hijriYear);
+                
+                for (let i = 0; i < 12; i++) {
+                    monthDays += monthLengths[i];
+                    if (daysIntoYear < monthDays) {
+                        hijriMonth = i;
+                        hijriDay = daysIntoYear - (monthDays - monthLengths[i]) + 1;
+                        break;
+                    }
+                }
+                
+                // Get weekday (0 = Sunday, 6 = Saturday)
+                const weekday = Math.floor(jd + 1.5) % 7;
+                
+                return {
+                    year: hijriYear,
+                    month: hijriMonth,
+                    day: hijriDay,
+                    weekday: weekday,
+                    monthName: HIJRI_MONTHS[hijriMonth],
+                    formatted: `${hijriDay} ${HIJRI_MONTHS[hijriMonth]} ${hijriYear} AH`,
+                    jd: jd
+                };
+            }
+
+            // Get Julian Day for start of Hijri year
+            hijriYearStartJD(hijriYear) {
+                return this.HIJRA_JD + Math.floor((hijriYear - 1) * 354.36607);
+            }
+
+            // Get month lengths for a specific Hijri year
+            getHijriMonthLengths(hijriYear) {
+                const lengths = [...this.HIJRI_MONTH_LENGTHS];
+                
+                // Adjust Dhul-Hijjah for long years
+                const yearInCycle = hijriYear % 30;
+                if (this.LONG_YEARS.includes(yearInCycle)) {
+                    lengths[11] = 30; // Dhul-Hijjah has 30 days
+                }
+                
+                return lengths;
+            }
+
+            // Get month data with correct weekdays
+            getMonthData(hijriYear, hijriMonth) {
+                const monthLengths = this.getHijriMonthLengths(hijriYear);
+                const daysInMonth = monthLengths[hijriMonth];
+                
+                // Calculate start JD of the month
+                let monthStartJD = this.hijriYearStartJD(hijriYear);
+                for (let i = 0; i < hijriMonth; i++) {
+                    monthStartJD += monthLengths[i];
+                }
+                
+                // Get weekday of 1st day (0 = Sunday)
+                const firstWeekday = Math.floor(monthStartJD + 1.5) % 7;
+                
+                // Generate days array with correct weekdays
+                const days = [];
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const currentJD = monthStartJD + day - 1;
+                    const weekday = Math.floor(currentJD + 1.5) % 7;
+                    const isFriday = weekday === 5;
+                    
+                    // Get Gregorian date
+                    const gregorian = this.julianToGregorian(currentJD);
+                    
+                    days.push({
+                        day: day,
+                        weekday: weekday,
+                        weekdayName: this.getWeekdayName(weekday),
+                        isFriday: isFriday,
+                        jd: currentJD,
+                        gregorian: gregorian,
+                        formatted: `${gregorian.day}/${gregorian.month}/${gregorian.year}`
+                    });
+                }
+                
+                return {
+                    year: hijriYear,
+                    month: hijriMonth,
+                    monthName: HIJRI_MONTHS[hijriMonth],
+                    daysInMonth: daysInMonth,
+                    firstWeekday: firstWeekday,
+                    days: days,
+                    startJD: monthStartJD
+                };
+            }
+
+            // Get weekday name
+            getWeekdayName(weekday) {
+                const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                return weekdays[weekday];
+            }
+
+            // Get Gregorian date for Hijri date
+            hijriToGregorian(hijriYear, hijriMonth, hijriDay) {
+                // Start JD of Hijri year
+                let jd = this.hijriYearStartJD(hijriYear);
+                
+                // Add days for months before target month
+                const monthLengths = this.getHijriMonthLengths(hijriYear);
+                for (let i = 0; i < hijriMonth; i++) {
+                    jd += monthLengths[i];
+                }
+                
+                // Add days for target day (minus 1 since JD starts at day 0)
+                jd += hijriDay - 1;
+                
+                return this.julianToGregorian(jd);
+            }
+        }
+
+        // ============================================
+        // MOON SIGHTING SERVICE
+        // ============================================
+
+        class MoonSightingService {
+            constructor() {
+                this.cache = new Map();
+            }
+
+            // Get moon sighting data (simulated for demo)
+            async getMoonSightingData(hijriYear, hijriMonth) {
+                const cacheKey = `moon_${hijriYear}_${hijriMonth}`;
+                
+                // Check cache
+                if (this.cache.has(cacheKey)) {
+                    return this.cache.get(cacheKey);
+                }
+                
+                // For Sha'ban (month before Ramadan)
+                if (hijriMonth === 7) {
+                    // Simulate moon sighting probability
+                    const isMoonSighted = Math.random() > 0.3; // 70% chance
+                    
+                    const result = {
+                        isMoonSighted: isMoonSighted,
+                        note: isMoonSighted ? 
+                            "Moon likely visible - Ramadan starts next day" :
+                            "Moon may not be visible - Sha'ban completes 30 days",
+                        source: 'simulation'
+                    };
+                    
+                    // Cache for 1 hour
+                    this.cache.set(cacheKey, result);
+                    setTimeout(() => this.cache.delete(cacheKey), 3600000);
+                    
+                    return result;
+                }
+                
+                return {
+                    isMoonSighted: null,
+                    note: "Based on Umm al-Qura calculation",
+                    source: 'calculation'
+                };
+            }
+
+            // Get adjusted month data for moon sighting
+            async adjustMonthForMoonSighting(monthData) {
+                // Only adjust Sha'ban (month before Ramadan)
+                if (monthData.month !== 7) return monthData;
+                
+                const moonData = await this.getMoonSightingData(monthData.year, monthData.month);
+                
+                // If moon not sighted, Sha'ban becomes 30 days
+                if (moonData.isMoonSighted === false) {
+                    // Create new month with 30 days
+                    const engine = new HijriCalendarEngine();
+                    const adjustedMonthData = {
+                        ...monthData,
+                        daysInMonth: 30,
+                        moonData: moonData,
+                        note: "Moon not sighted - 30-day month"
+                    };
+                    
+                    // Regenerate days
+                    adjustedMonthData.days = [];
+                    for (let day = 1; day <= 30; day++) {
+                        const currentJD = monthData.startJD + day - 1;
+                        const weekday = Math.floor(currentJD + 1.5) % 7;
+                        const gregorian = engine.julianToGregorian(currentJD);
+                        
+                        adjustedMonthData.days.push({
+                            day: day,
+                            weekday: weekday,
+                            weekdayName: engine.getWeekdayName(weekday),
+                            isFriday: weekday === 5,
+                            jd: currentJD,
+                            gregorian: gregorian,
+                            formatted: `${gregorian.day}/${gregorian.month}/${gregorian.year}`
+                        });
+                    }
+                    
+                    return adjustedMonthData;
+                }
+                
+                return {
+                    ...monthData,
+                    moonData: moonData
+                };
+            }
+        }
+
+        // ============================================
+        // CALENDAR MANAGER
+        // ============================================
+
+        class HijriCalendarManager {
+            constructor() {
+                this.engine = new HijriCalendarEngine();
+                this.moonService = new MoonSightingService();
+                this.currentDate = new Date();
+                this.currentHijri = null;
+                this.currentMonthData = null;
+                this.events = [];
+            }
+
+            async initialize() {
+                // Get today's Hijri date
+                this.currentHijri = this.engine.gregorianToHijri(this.currentDate);
+                
+                // Load current month data
+                await this.loadMonthData(this.currentHijri.year, this.currentHijri.month);
+                
+                return this.currentHijri;
+            }
+
+            async loadMonthData(hijriYear, hijriMonth) {
+                // Get base month data from engine
+                const baseMonthData = this.engine.getMonthData(hijriYear, hijriMonth);
+                
+                // Adjust for moon sighting if needed
+                this.currentMonthData = await this.moonService.adjustMonthForMoonSighting(baseMonthData);
+                
+                // Generate events for this month
+                this.events = await this.generateMonthEvents(hijriYear, hijriMonth);
+                
+                return this.currentMonthData;
+            }
+
+            async nextMonth() {
+                let newMonth = this.currentMonthData.month + 1;
+                let newYear = this.currentMonthData.year;
+                
+                if (newMonth > 11) {
+                    newMonth = 0;
+                    newYear++;
+                }
+                
+                await this.loadMonthData(newYear, newMonth);
+            }
+
+            async prevMonth() {
+                let newMonth = this.currentMonthData.month - 1;
+                let newYear = this.currentMonthData.year;
+                
+                if (newMonth < 0) {
+                    newMonth = 11;
+                    newYear--;
+                }
+                
+                await this.loadMonthData(newYear, newMonth);
+            }
+
+            async goToToday() {
+                this.currentDate = new Date();
+                this.currentHijri = this.engine.gregorianToHijri(this.currentDate);
+                await this.loadMonthData(this.currentHijri.year, this.currentHijri.month);
+            }
+
+            getEventsForDay(day) {
+                return this.events.filter(event => 
+                    event.hijriDate.day === day && 
+                    event.hijriDate.month === this.currentMonthData.month && 
+                    event.hijriDate.year === this.currentMonthData.year
+                );
+            }
+
+            getUpcomingEvents() {
+                const today = new Date();
+                const thirtyDaysFromNow = new Date();
+                thirtyDaysFromNow.setDate(today.getDate() + 30);
+                
+                return this.events
+                    .filter(event => {
+                        try {
+                            const eventDate = new Date(event.gregorianDate);
+                            return eventDate >= today && eventDate <= thirtyDaysFromNow;
+                        } catch {
+                            return false;
+                        }
+                    })
+                    .sort((a, b) => new Date(a.gregorianDate) - new Date(b.gregorianDate));
+            }
+
+            async generateMonthEvents(hijriYear, hijriMonth) {
+                const events = [];
+                const monthName = HIJRI_MONTHS[hijriMonth];
+                
+                // Get moon sighting data for Ramadan
+                let ramadanStartDay = 1;
+                if (hijriMonth === 8) { // Ramadan
+                    const moonData = await this.moonService.getMoonSightingData(hijriYear, 7); // Sha'ban
+                    if (moonData.isMoonSighted === false) {
+                        ramadanStartDay = 2; // If moon not sighted, Ramadan starts on 2nd
+                    }
+                }
+
+                // Add major events
+                switch (hijriMonth) {
+                    case 0: // Muharram
+                        events.push({
+                            id: `ashura_${hijriYear}`,
+                            title: "Day of Ashura",
+                            description: "10th of Muharram - Fasting on this day expiates sins of the previous year.",
+                            type: "fasting",
+                            category: "major",
+                            hijriDate: { year: hijriYear, month: 0, day: 10 },
+                            badge: "fasting"
+                        });
+                        break;
+                    case 2: // Rabi al-Awwal
+                        events.push({
+                            id: `mawlid_${hijriYear}`,
+                            title: "Mawlid al-Nabi",
+                            description: "Birthday of Prophet Muhammad ﷺ - 12th of Rabi al-Awwal.",
+                            type: "holiday",
+                            category: "major",
+                            hijriDate: { year: hijriYear, month: 2, day: 12 },
+                            badge: "holiday"
+                        });
+                        break;
+                    case 8: // Ramadan
+                        events.push({
+                            id: `ramadan_start_${hijriYear}`,
+                            title: "First Day of Ramadan",
+                            description: `Beginning of the blessed month of fasting. Actual start depends on moon sighting.`,
+                            type: "fasting",
+                            category: "major",
+                            hijriDate: { year: hijriYear, month: 8, day: ramadanStartDay },
+                            badge: "ramadan",
+                            isMoonDependent: true
+                        });
+                        
+                        // Laylat al-Qadr
+                        for (let day = 21; day <= 29; day += 2) {
+                            events.push({
+                                id: `qadr_${hijriYear}_${day}`,
+                                title: "Laylat al-Qadr",
+                                description: `Night of Decree - Seek in the odd nights of last 10 days.`,
+                                type: "prayer",
+                                category: "major",
+                                hijriDate: { year: hijriYear, month: 8, day: day },
+                                badge: "important"
+                            });
+                        }
+                        break;
+                    case 9: // Shawwal
+                        events.push({
+                            id: `eid_fitr_${hijriYear}`,
+                            title: "Eid al-Fitr",
+                            description: "Festival of Breaking the Fast - 1st of Shawwal.",
+                            type: "holiday",
+                            category: "major",
+                            hijriDate: { year: hijriYear, month: 9, day: 1 },
+                            badge: "holiday",
+                            isMoonDependent: true
+                        });
+                        break;
+                    case 11: // Dhul-Hijjah
+                        events.push({
+                            id: `arafah_${hijriYear}`,
+                            title: "Day of Arafah",
+                            description: "9th of Dhul-Hijjah - Best day for fasting if not performing Hajj.",
+                            type: "fasting",
+                            category: "major",
+                            hijriDate: { year: hijriYear, month: 11, day: 9 },
+                            badge: "fasting"
+                        });
+                        events.push({
+                            id: `eid_adha_${hijriYear}`,
+                            title: "Eid al-Adha",
+                            description: "Festival of Sacrifice - 10th of Dhul-Hijjah.",
+                            type: "holiday",
+                            category: "major",
+                            hijriDate: { year: hijriYear, month: 11, day: 10 },
+                            badge: "holiday"
+                        });
+                        break;
+                }
+
+                // Add Friday prayers based on ACTUAL weekdays
+                const monthData = this.currentMonthData || this.engine.getMonthData(hijriYear, hijriMonth);
+                monthData.days.forEach(day => {
+                    if (day.isFriday) {
+                        events.push({
+                            id: `jummah_${hijriYear}_${hijriMonth}_${day.day}`,
+                            title: "Jummah (Friday Prayer)",
+                            description: "Friday congregational prayer - The best day of the week.",
+                            type: "prayer",
+                            category: "weekly",
+                            hijriDate: { year: hijriYear, month: hijriMonth, day: day.day },
+                            badge: "prayer"
+                        });
+                    }
+                });
+
+                // Add White Days
+                [13, 14, 15].forEach(day => {
+                    if (day <= monthData.daysInMonth) {
+                        events.push({
+                            id: `white_${hijriYear}_${hijriMonth}_${day}`,
+                            title: "White Days Fasting",
+                            description: "Recommended fasting on 13th, 14th, and 15th of Hijri month.",
+                            type: "fasting",
+                            category: "monthly",
+                            hijriDate: { year: hijriYear, month: hijriMonth, day: day },
+                            badge: "fasting"
+                        });
+                    }
+                });
+
+                // Add Gregorian dates
+                events.forEach(event => {
+                    const gregorian = this.engine.hijriToGregorian(
+                        event.hijriDate.year,
+                        event.hijriDate.month,
+                        event.hijriDate.day
+                    );
+                    event.gregorianDate = `${gregorian.year}-${gregorian.month.toString().padStart(2, '0')}-${gregorian.day.toString().padStart(2, '0')}`;
+                });
+
+                return events;
+            }
+
+            getMonthName(monthIndex) {
+                return HIJRI_MONTHS[monthIndex] || '';
+            }
+
+            // Get approximate Gregorian month/year for display
+            getGregorianMonthYear() {
+                if (!this.currentMonthData || !this.currentMonthData.days.length) {
+                    const today = new Date();
+                    return { month: today.getMonth(), year: today.getFullYear() };
+                }
+                
+                // Use middle of month for approximation
+                const midDay = Math.floor(this.currentMonthData.daysInMonth / 2);
+                const midDate = this.currentMonthData.days[midDay];
+                
+                return {
+                    month: midDate.gregorian.month - 1, // Convert to 0-index
+                    year: midDate.gregorian.year
+                };
+            }
+        }
+
+        // ============================================
+        // UI CONTROLLER
+        // ============================================
+
+        class CalendarUIController {
+            constructor() {
+                this.calendarManager = new HijriCalendarManager();
+                this.setupDOMReferences();
+                this.setupEventListeners();
+                this.initialize();
+            }
+
+            setupDOMReferences() {
+                this.elements = {
+                    pageLoader: document.getElementById('pageLoader'),
+                    backBtn: document.getElementById('backBtn'),
+                    currentHijriDate: document.getElementById('currentHijriDate'),
+                    currentGregorianDate: document.getElementById('currentGregorianDate'),
+                    currentHijriYear: document.getElementById('currentHijriYear'),
+                    moonStatusText: document.getElementById('moonStatusText'),
+                    displayHijriMonth: document.getElementById('displayHijriMonth'),
+                    displayGregorianMonth: document.getElementById('displayGregorianMonth'),
+                    prevMonthBtn: document.getElementById('prevMonthBtn'),
+                    nextMonthBtn: document.getElementById('nextMonthBtn'),
+                    calendarDays: document.getElementById('calendarDays'),
+                    upcomingEvents: document.getElementById('upcomingEvents'),
+                    hijriMonthsGrid: document.getElementById('hijriMonthsGrid'),
+                    syncButton: document.getElementById('syncButton'),
+                    eventModalOverlay: document.getElementById('eventModalOverlay'),
+                    eventModalClose: document.getElementById('eventModalClose'),
+                    eventModalDay: document.getElementById('eventModalDay'),
+                    eventModalMonth: document.getElementById('eventModalMonth'),
+                    eventModalHijri: document.getElementById('eventModalHijri'),
+                    eventModalGregorian: document.getElementById('eventModalGregorian'),
+                    eventModalEventTitle: document.getElementById('eventModalEventTitle'),
+                    eventModalEventDesc: document.getElementById('eventModalEventDesc'),
+                    moonSightingInfo: document.getElementById('moonSightingInfo'),
+                    moonSightingText: document.getElementById('moonSightingText'),
+                    setReminderBtn: document.getElementById('setReminderBtn'),
+                    shareEventBtn: document.getElementById('shareEventBtn')
+                };
+            }
+
+            setupEventListeners() {
+                // Navigation
+                this.elements.prevMonthBtn.addEventListener('click', () => this.prevMonth());
+                this.elements.nextMonthBtn.addEventListener('click', () => this.nextMonth());
+                
+                // Back button
+                this.elements.backBtn.addEventListener('click', () => {
+                    showPageLoader();
+                    setTimeout(() => {
+                        window.location.href = '../tools/index.html';
+                    }, 300);
+                });
+                
+                // Sync button
+                this.elements.syncButton.addEventListener('click', () => this.syncData());
+                
+                // Event modal
+                this.elements.eventModalClose.addEventListener('click', () => this.closeEventModal());
+                this.elements.eventModalOverlay.addEventListener('click', (e) => {
+                    if (e.target === this.elements.eventModalOverlay) {
+                        this.closeEventModal();
+                    }
+                });
+                
+                // Modal buttons
+                this.elements.setReminderBtn.addEventListener('click', () => this.setReminder());
+                this.elements.shareEventBtn.addEventListener('click', () => this.shareEvent());
+                
+                // Double-click to go to today
+                this.elements.displayHijriMonth.addEventListener('dblclick', () => this.goToToday());
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.elements.eventModalOverlay.classList.contains('active')) {
+                        this.closeEventModal();
+                    }
+                    
+                    if (!this.elements.eventModalOverlay.classList.contains('active')) {
+                        if (e.key === 'ArrowLeft') this.prevMonth();
+                        if (e.key === 'ArrowRight') this.nextMonth();
+                        if (e.key === 't') this.goToToday();
+                    }
+                });
+            }
+
+            async initialize() {
+                showPageLoader();
+                
+                try {
+                    await this.calendarManager.initialize();
+                    await this.updateUI();
+                    this.animateElements();
+                } catch (error) {
+                    console.error('Initialization failed:', error);
+                    this.showNotification('Failed to load calendar', 'error');
+                } finally {
+                    hidePageLoader();
+                }
+            }
+
+            async updateUI() {
+                await this.updateCurrentDate();
+                await this.renderCalendar();
+                await this.renderUpcomingEvents();
+                await this.renderHijriMonths();
+                this.updateMoonStatus();
+            }
+
+            async updateCurrentDate() {
+                const today = new Date();
+                const hijriToday = this.calendarManager.engine.gregorianToHijri(today);
+                
+                this.elements.currentHijriDate.textContent = hijriToday.formatted;
+                this.elements.currentGregorianDate.textContent = this.formatGregorianDate(today);
+                this.elements.currentHijriYear.textContent = `${hijriToday.year} AH`;
+            }
+
+            formatGregorianDate(date) {
+                return date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            }
+
+            async renderCalendar() {
+                const container = this.elements.calendarDays;
+                container.innerHTML = '';
+                
+                const monthData = this.calendarManager.currentMonthData;
+                if (!monthData) return;
+                
+                // Update month/year display
+                this.elements.displayHijriMonth.textContent = 
+                    `${monthData.monthName} ${monthData.year}`;
+                
+                const gregorian = this.calendarManager.getGregorianMonthYear();
+                this.elements.displayGregorianMonth.textContent = 
+                    `${GREGORIAN_MONTHS[gregorian.month]} ${gregorian.year}`;
+                
+                // Add empty cells for days before 1st
+                for (let i = 0; i < monthData.firstWeekday; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'calendar-day other-month';
+                    container.appendChild(emptyCell);
+                }
+                
+                // Add actual days
+                monthData.days.forEach(dayData => {
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'calendar-day';
+                    dayCell.textContent = dayData.day;
+                    
+                    // Add Friday class
+                    if (dayData.isFriday) {
+                        dayCell.classList.add('friday');
+                    }
+                    
+                    // Check for events
+                    const events = this.calendarManager.getEventsForDay(dayData.day);
+                    if (events.length > 0) {
+                        dayCell.classList.add('event');
+                    }
+                    
+                    // Check if today
+                    if (this.calendarManager.currentHijri && 
+                        dayData.day === this.calendarManager.currentHijri.day && 
+                        monthData.month === this.calendarManager.currentHijri.month && 
+                        monthData.year === this.calendarManager.currentHijri.year) {
+                        dayCell.classList.add('current');
+                    }
+                    
+                    // Add click event
+                    dayCell.addEventListener('click', () => {
+                        if (events.length > 0) {
+                            this.openEventModal(events[0]);
+                        } else {
+                            this.showNotification(`${dayData.day} ${monthData.monthName}`);
+                        }
+                    });
+                    
+                    container.appendChild(dayCell);
+                });
+                
+                // Fill remaining cells
+                const totalCells = 42;
+                const currentCells = monthData.firstWeekday + monthData.daysInMonth;
+                for (let i = currentCells; i < totalCells; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'calendar-day other-month';
+                    container.appendChild(emptyCell);
+                }
+            }
+
+            async renderUpcomingEvents() {
+                const container = this.elements.upcomingEvents;
+                container.innerHTML = '';
+                
+                const events = this.calendarManager.getUpcomingEvents();
+                
+                if (events.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="empty-state-title">No upcoming events</div>
+                            <div class="empty-state-text">Check back later for upcoming Islamic events</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                events.forEach(event => {
+                    const eventElement = document.createElement('div');
+                    eventElement.className = 'event-item';
+                    
+                    // Check if today
+                    const today = new Date().toISOString().split('T')[0];
+                    if (event.gregorianDate === today) {
+                        eventElement.classList.add('today');
+                    }
+                    
+                    const badgeClass = event.badge || event.type;
+                    const moonIcon = event.isMoonDependent ? ' <i class="fas fa-moon" style="color: var(--calendar-purple);"></i>' : '';
+                    
+                    eventElement.innerHTML = `
+                        <div class="event-date">
+                            <div class="event-day">${event.hijriDate.day}</div>
+                            <div class="event-month">${this.calendarManager.getMonthName(event.hijriDate.month).substring(0, 3)}</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-title">${event.title}${moonIcon}</div>
+                            <div class="event-description">${event.description.substring(0, 80)}...</div>
+                            <div class="event-badges">
+                                <span class="event-badge ${badgeClass}">${event.type}</span>
+                                ${event.isMoonDependent ? '<span class="event-badge moon">Moon Sight</span>' : ''}
+                                <span class="event-badge">${event.hijriDate.year} AH</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    eventElement.addEventListener('click', () => this.openEventModal(event));
+                    container.appendChild(eventElement);
+                });
+            }
+
+            async renderHijriMonths() {
+                const container = this.elements.hijriMonthsGrid;
+                container.innerHTML = '';
+                
+                HIJRI_MONTHS.forEach((month, index) => {
+                    const monthBox = document.createElement('div');
+                    const isActive = this.calendarManager.currentMonthData && 
+                                    index === this.calendarManager.currentMonthData.month;
+                    monthBox.className = `month-box ${isActive ? 'active' : ''}`;
+                    
+                    const daysInMonth = this.calendarManager.engine.getHijriMonthLengths(
+                        this.calendarManager.currentMonthData?.year || 1445
+                    )[index];
+                    
+                    const moonIcon = index === 8 ? ' <i class="fas fa-moon" style="color: var(--calendar-purple); font-size: 12px;"></i>' : '';
+                    
+                    monthBox.innerHTML = `
+                        <div class="month-number">${index + 1}${moonIcon}</div>
+                        <div class="month-name">${month}</div>
+                        <div class="month-days">${daysInMonth} days</div>
+                    `;
+                    
+                    monthBox.addEventListener('click', async () => {
+                        showPageLoader();
+                        try {
+                            await this.calendarManager.loadMonthData(
+                                this.calendarManager.currentMonthData.year, 
+                                index
+                            );
+                            await this.updateUI();
+                        } finally {
+                            hidePageLoader();
+                        }
+                    });
+                    
+                    container.appendChild(monthBox);
+                });
+            }
+
+            updateMoonStatus() {
+                const statusElement = this.elements.moonStatusText;
+                if (!statusElement) return;
+                
+                const currentMonth = this.calendarManager.currentMonthData;
+                
+                if (currentMonth?.moonData) {
+                    statusElement.textContent = currentMonth.moonData.note;
+                } else if (currentMonth?.month === 7 || currentMonth?.month === 8) {
+                    statusElement.textContent = "Follow local moon sighting announcements";
+                } else {
+                    statusElement.textContent = "Based on Umm al-Qura calendar";
+                }
+            }
+
+            async prevMonth() {
+                showPageLoader();
+                try {
+                    await this.calendarManager.prevMonth();
+                    await this.updateUI();
+                } finally {
+                    hidePageLoader();
+                }
+            }
+
+            async nextMonth() {
+                showPageLoader();
+                try {
+                    await this.calendarManager.nextMonth();
+                    await this.updateUI();
+                } finally {
+                    hidePageLoader();
+                }
+            }
+
+            async goToToday() {
+                showPageLoader();
+                try {
+                    await this.calendarManager.goToToday();
+                    await this.updateUI();
+                    this.showNotification('Returned to current month', 'success');
+                } finally {
+                    hidePageLoader();
+                }
+            }
+
+            async syncData() {
+                this.elements.syncButton.classList.add('syncing');
+                try {
+                    // Simulate API sync
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    // Reload current month
+                    await this.calendarManager.loadMonthData(
+                        this.calendarManager.currentMonthData.year,
+                        this.calendarManager.currentMonthData.month
+                    );
+                    
+                    await this.updateUI();
+                    this.showNotification('Calendar data refreshed', 'success');
+                } catch (error) {
+                    this.showNotification('Sync failed: ' + error.message, 'error');
+                } finally {
+                    this.elements.syncButton.classList.remove('syncing');
+                }
+            }
+
+            openEventModal(event) {
+                this.elements.eventModalDay.textContent = event.hijriDate.day;
+                this.elements.eventModalMonth.textContent = this.calendarManager.getMonthName(event.hijriDate.month).substring(0, 3);
+                this.elements.eventModalHijri.textContent = `${event.hijriDate.day} ${this.calendarManager.getMonthName(event.hijriDate.month)} ${event.hijriDate.year} AH`;
+                
+                try {
+                    const eventDate = new Date(event.gregorianDate);
+                    this.elements.eventModalGregorian.textContent = this.formatGregorianDate(eventDate);
+                } catch {
+                    this.elements.eventModalGregorian.textContent = 'Date not available';
+                }
+                
+                this.elements.eventModalEventTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${event.title}`;
+                this.elements.eventModalEventDesc.innerHTML = `<p>${event.description}</p>`;
+                
+                // Show moon sighting info if available
+                if (event.isMoonDependent) {
+                    this.elements.moonSightingText.textContent = 'Date depends on moon sighting in your region. Follow local announcements.';
+                    this.elements.moonSightingInfo.style.display = 'block';
+                } else {
+                    this.elements.moonSightingInfo.style.display = 'none';
+                }
+                
+                // Store event data on buttons
+                this.elements.setReminderBtn.dataset.eventId = event.id;
+                this.elements.shareEventBtn.dataset.eventId = event.id;
+                
+                this.elements.eventModalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeEventModal() {
+                this.elements.eventModalOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            setReminder() {
+                const eventId = this.elements.setReminderBtn.dataset.eventId;
+                const event = this.calendarManager.events.find(e => e.id === eventId);
+                if (event) {
+                    this.showNotification(`Reminder set for ${event.title}`, 'success');
+                    this.closeEventModal();
+                }
+            }
+
+            shareEvent() {
+                const eventId = this.elements.shareEventBtn.dataset.eventId;
+                const event = this.calendarManager.events.find(e => e.id === eventId);
+                if (event) {
+                    const moonNote = event.isMoonDependent ? '\n\nNote: Date depends on moon sighting in your region.' : '';
+                    const shareText = `${event.title}\n${event.description}${moonNote}\n\nShared from Islamic App`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: event.title,
+                            text: shareText,
+                            url: window.location.href
+                        });
+                    } else {
+                        navigator.clipboard.writeText(shareText).then(() => {
+                            this.showNotification('Event details copied to clipboard!', 'success');
+                        });
+                    }
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: ${type === 'success' ? '#2ecc71' : type === 'error' ? '#e74c3c' : '#3498db'};
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    z-index: 3000;
+                    font-weight: 500;
+                    animation: slideIn 0.3s ease, slideOut 0.3s ease 2s forwards;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                `;
+                
+                const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+                notification.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 2500);
+            }
+
+            animateElements() {
+                const dayElements = document.querySelectorAll('.calendar-day');
+                dayElements.forEach((day, index) => {
+                    day.style.opacity = '0';
+                    day.style.transform = 'scale(0.8)';
+                    
+                    setTimeout(() => {
+                        day.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        day.style.opacity = '1';
+                        day.style.transform = 'scale(1)';
+                    }, 50 + (index % 7) * 30);
+                });
+                
+                const eventItems = document.querySelectorAll('.event-item');
+                eventItems.forEach((item, index) => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(10px)';
+                    
+                    setTimeout(() => {
+                        item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, 300 + (index * 100));
+                });
+            }
+        }
+
+        // ============================================
+        // GLOBAL HELPER FUNCTIONS
+        // ============================================
+
+        function showPageLoader() {
+            const loader = document.getElementById('pageLoader');
+            if (loader) loader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hidePageLoader() {
+            const loader = document.getElementById('pageLoader');
+            if (loader) loader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the UI controller
+            new CalendarUIController();
+            
+            // Network status
+            const networkStatus = document.getElementById('networkStatus');
+            if (networkStatus) {
+                window.addEventListener('online', () => {
+                    networkStatus.innerHTML = '<i class="fas fa-wifi"></i> <span>Online</span>';
+                    networkStatus.className = 'network-status online show';
+                    setTimeout(() => networkStatus.classList.remove('show'), 3000);
+                });
+                
+                window.addEventListener('offline', () => {
+                    networkStatus.innerHTML = '<i class="fas fa-wifi-slash"></i> <span>Offline</span>';
+                    networkStatus.className = 'network-status offline show';
+                    setTimeout(() => networkStatus.classList.remove('show'), 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatwa & Rulings | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --prayer-green: #2E7D32;
+            --finance-teal: #00695C;
+            --family-orange: #EF6C00;
+            --modern-blue: #1565C0;
+            --general-purple: #6A1B9A;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --prayer-green: #27ae60;
+            --finance-teal: #1abc9c;
+            --family-orange: #e67e22;
+            --modern-blue: #3498db;
+            --general-purple: #9b59b6;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(46, 125, 50, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(39, 174, 96, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.7;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 20;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .theme-toggle i {
+            font-size: 16px;
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Fatwas Container */
+        .fatwas-container {
+            padding: 20px 16px 100px;
+        }
+
+        @media (min-width: 768px) {
+            .fatwas-container {
+                padding: 25px 30px 120px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .search-filter-section {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            border-radius: 30px;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box i {
+            color: var(--dark-gray);
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: var(--text-dark);
+            outline: none;
+            width: 100%;
+        }
+
+        .search-input::placeholder {
+            color: var(--dark-gray);
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .sort-label {
+            color: var(--dark-gray);
+        }
+
+        .sort-select {
+            background-color: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: var(--text-dark);
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Categories Filter */
+        .categories-filter {
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+            display: flex;
+            gap: 10px;
+            padding: 5px 0 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--medium-gray) transparent;
+        }
+
+        .categories-filter::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .categories-filter::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .categories-filter::-webkit-scrollbar-thumb {
+            background-color: var(--medium-gray);
+            border-radius: 10px;
+        }
+
+        .category-btn {
+            background-color: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .category-btn:hover {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        .category-btn.active {
+            background-color: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .dark-theme .category-btn {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .category-btn.active {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .dark-theme .category-btn:hover {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        /* Fatwas Grid */
+        .fatwas-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .fatwas-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .fatwas-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Fatwa Card - Article Style */
+        .fatwa-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .fatwa-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-theme .fatwa-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .fatwa-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .fatwa-content {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fatwa-category {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .fatwa-category.prayer {
+            background-color: rgba(46, 125, 50, 0.1);
+            color: var(--prayer-green);
+        }
+
+        .fatwa-category.finance {
+            background-color: rgba(0, 105, 92, 0.1);
+            color: var(--finance-teal);
+        }
+
+        .fatwa-category.family {
+            background-color: rgba(239, 108, 0, 0.1);
+            color: var(--family-orange);
+        }
+
+        .fatwa-category.modern {
+            background-color: rgba(21, 101, 192, 0.1);
+            color: var(--modern-blue);
+        }
+
+        .fatwa-category.general {
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--general-purple);
+        }
+
+        .fatwa-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .fatwa-question {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            margin-bottom: 10px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .fatwa-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--dark-gray);
+            border-top: 1px solid var(--medium-gray);
+            padding-top: 12px;
+            margin-top: auto;
+        }
+
+        .fatwa-mufti {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fatwa-mufti i {
+            font-size: 12px;
+            color: var(--primary-green);
+        }
+
+        .fatwa-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-item i {
+            font-size: 12px;
+            color: var(--primary-green);
+        }
+
+        /* Featured Fatwa */
+        .featured-fatwa {
+            grid-column: 1 / -1;
+            margin-bottom: 10px;
+        }
+
+        .featured-fatwa .fatwa-image {
+            height: 200px;
+        }
+
+        .featured-fatwa .fatwa-title {
+            font-size: 18px;
+        }
+
+        @media (min-width: 768px) {
+            .featured-fatwa {
+                display: flex;
+            }
+            
+            .featured-fatwa .fatwa-image {
+                width: 40%;
+                height: auto;
+            }
+            
+            .featured-fatwa .fatwa-content {
+                width: 60%;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--dark-gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            color: var(--medium-gray);
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Info Box */
+        .info-box {
+            margin-top: 25px;
+            padding: 16px;
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .info-box {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            background-color: var(--white);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            z-index: 100;
+            border-radius: 0;
+        }
+
+        @media (min-width: 768px) {
+            .bottom-nav {
+                max-width: 768px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                max-width: 480px;
+            }
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        /* Nav Loader */
+        .nav-loader {
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item.loading .nav-loader {
+            opacity: 1;
+            animation: pulseLoader 1s infinite;
+        }
+
+        @keyframes pulseLoader {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0.7;
+            }
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Fatwa Details Modal */
+        .fatwa-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .fatwa-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .fatwa-modal.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            padding: 20px;
+            color: white;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-green), var(--prayer-green));
+        }
+
+        .modal-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .question-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .section-label i {
+            font-size: 16px;
+        }
+
+        .question-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            padding-left: 10px;
+            border-left: 3px solid var(--medium-gray);
+        }
+
+        .answer-section {
+            margin-bottom: 25px;
+        }
+
+        .answer-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-dark);
+            padding-left: 10px;
+            border-left: 3px solid var(--primary-green);
+        }
+
+        .details-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-box {
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .detail-box:hover {
+            transform: translateY(-3px);
+            background-color: rgba(29, 111, 66, 0.1);
+        }
+
+        .detail-box i {
+            font-size: 20px;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .source-section {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .source-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .source-text strong {
+            color: var(--primary-green);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-actions .action-btn {
+            flex: 1;
+            padding: 14px 0;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .modal-actions .action-btn.primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .modal-actions .action-btn.primary:hover {
+            background-color: rgba(29, 111, 66, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .modal-actions .action-btn.secondary {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .modal-actions .action-btn.secondary:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+
+        /* Loading animation for modal */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            animation: modalFadeIn 0.4s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .fatwa-title {
+                font-size: 15px;
+            }
+            
+            .fatwa-question {
+                font-size: 12px;
+            }
+            
+            .fatwa-image {
+                height: 140px;
+            }
+            
+            .bottom-nav {
+                border-radius: 0;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .fatwas-container {
+                max-width: 700px;
+            }
+            
+            .fatwa-title {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .fatwas-container {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-scale-balanced"></i>
+                        <span>Fatwa & Rulings</span>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                        <span>Dark</span>
+                    </button>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Islamic Legal Rulings</h1>
+                    <p>Authentic fatwas from qualified scholars on contemporary issues and daily matters</p>
+                </div>
+            </section>
+
+            <!-- Fatwas Content -->
+            <div class="fatwas-container">
+                <!-- Search and Filter Section -->
+                <div class="search-filter-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search fatwas...">
+                    </div>
+                    <div class="sort-options">
+                        <span class="sort-label">Sort by:</span>
+                        <select class="sort-select" id="sortSelect">
+                            <option value="recent">Most Recent</option>
+                            <option value="important">Most Important</option>
+                            <option value="category">Category</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Categories Filter -->
+                <div class="categories-filter">
+                    <button class="category-btn active" data-category="all">All Rulings</button>
+                    <button class="category-btn" data-category="prayer">Prayer</button>
+                    <button class="category-btn" data-category="finance">Finance</button>
+                    <button class="category-btn" data-category="family">Family</button>
+                    <button class="category-btn" data-category="modern">Modern Issues</button>
+                    <button class="category-btn" data-category="general">General Fiqh</button>
+                </div>
+
+                <!-- Fatwas Grid -->
+                <div class="fatwas-grid" id="fatwasGrid">
+                    <!-- Featured Fatwa -->
+                    <div class="fatwa-card featured-fatwa" data-id="1">
+                        <img src="https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Islamic Finance" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category finance">Finance</span>
+                            <h3 class="fatwa-title">Using Credit Cards with Interest: A Detailed Ruling</h3>
+                            <div class="fatwa-question">Is it permissible to use credit cards that charge interest for purchases and business transactions in today's economy?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Dr. Yusuf Al-Qaradawi</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>May 15, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>4.2K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regular Fatwas -->
+                    <div class="fatwa-card" data-id="2">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Prayer" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category prayer">Prayer</span>
+                            <h3 class="fatwa-title">Combining Prayers During Travel</h3>
+                            <div class="fatwa-question">Can Dhuhr and Asr prayers be combined while traveling by plane or train? What are the conditions?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Sh. Ibn Baz</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Mar 22, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>3.5K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fatwa-card" data-id="3">
+                        <img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Cryptocurrency" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category finance">Finance</span>
+                            <h3 class="fatwa-title">Cryptocurrency Investment Ruling</h3>
+                            <div class="fatwa-question">Is investing in Bitcoin and other cryptocurrencies halal according to Islamic principles?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Dr. Ali Al-Qaradaghi</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Jul 10, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>5.1K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fatwa-card" data-id="4">
+                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Family" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category family">Family</span>
+                            <h3 class="fatwa-title">Delaying Marriage for Education</h3>
+                            <div class="fatwa-question">Is it permissible to delay marriage for several years to complete higher education and career establishment?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Sh. Muhammad Al-Munajjid</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Feb 14, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>2.8K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fatwa-card" data-id="5">
+                        <img src="https://images.unsplash.com/photo-1544364631-99bbd8e23f08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Women Prayer" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category prayer">Prayer</span>
+                            <h3 class="fatwa-title">Friday Prayer for Women</h3>
+                            <div class="fatwa-question">Is Friday prayer obligatory for women? What if they attend the masjid for Jumu'ah?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Dr. Abdur Rahman Al-Sudais</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Apr 5, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>3.9K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fatwa-card" data-id="6">
+                        <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="AI" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category modern">Modern Issues</span>
+                            <h3 class="fatwa-title">Artificial Intelligence in Islamic Finance</h3>
+                            <div class="fatwa-question">What is the ruling on using AI for Shariah-compliance screening in financial institutions?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Dr. Hussein Hamid Hassan</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Aug 20, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>4.6K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fatwa-card" data-id="7">
+                        <img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Organ Donation" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category modern">Modern Issues</span>
+                            <h3 class="fatwa-title">Organ Donation After Death</h3>
+                            <div class="fatwa-question">Is organ donation permissible in Islam? What are the conditions for both living and deceased donors?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>European Council for Fatwa</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Jun 18, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>3.2K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fatwa-card" data-id="8">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Stock Market" class="fatwa-image">
+                        <div class="fatwa-content">
+                            <span class="fatwa-category finance">Finance</span>
+                            <h3 class="fatwa-title">Stock Market Investment Guidelines</h3>
+                            <div class="fatwa-question">How to invest in the stock market according to Shariah principles? What companies are permissible?</div>
+                            <div class="fatwa-meta">
+                                <div class="fatwa-mufti">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>AAOIFI Standards</span>
+                                </div>
+                                <div class="fatwa-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-calendar"></i>
+                                        <span>Sep 5, 2023</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>4.9K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <div class="info-title">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About Islamic Rulings</span>
+                    </div>
+                    <div class="info-text">
+                        Fatwas are Islamic legal rulings issued by qualified scholars based on Quran, Sunnah, and Islamic jurisprudence. Always verify rulings with local scholars for specific situations. These rulings are for educational purposes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fatwa Details Modal -->
+            <div class="fatwa-modal" id="fatwaModal">
+                <div class="modal-content">
+                    <div class="modal-header" id="modalHeader">
+                        <button class="close-modal" id="closeModal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="modal-category" id="modalCategory"></div>
+                        <div class="modal-title" id="modalTitle"></div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="question-section">
+                            <div class="section-label">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Question</span>
+                            </div>
+                            <div class="question-text" id="modalQuestion"></div>
+                        </div>
+                        
+                        <div class="answer-section">
+                            <div class="section-label">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Ruling</span>
+                            </div>
+                            <div class="answer-text" id="modalAnswer"></div>
+                        </div>
+                        
+                        <div class="details-section">
+                            <div class="detail-box">
+                                <i class="fas fa-user-tie"></i>
+                                <div class="detail-label">Mufti</div>
+                                <div class="detail-value" id="modalMufti"></div>
+                            </div>
+                            <div class="detail-box">
+                                <i class="fas fa-school"></i>
+                                <div class="detail-label">School</div>
+                                <div class="detail-value" id="modalSchool"></div>
+                            </div>
+                            <div class="detail-box">
+                                <i class="fas fa-calendar"></i>
+                                <div class="detail-label">Date</div>
+                                <div class="detail-value" id="modalDate"></div>
+                            </div>
+                            <div class="detail-box">
+                                <i class="fas fa-flag"></i>
+                                <div class="detail-label">Region</div>
+                                <div class="detail-value" id="modalRegion"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-section">
+                            <div class="section-label">
+                                <i class="fas fa-book"></i>
+                                <span>Sources & Evidence</span>
+                            </div>
+                            <div class="source-text" id="modalSources"></div>
+                        </div>
+                        
+                        <div class="modal-actions" id="modalActions">
+                            <!-- Action buttons will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <a href="../index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-home"></i>
+                    <span class="nav-label">Home</span>
+                </a>
+                <a href="../quranHadith/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-quran"></i>
+                    <span class="nav-label">Quran &<br>Hadith</span>
+                </a>
+                <a href="../tools/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-pray"></i>
+                    <span class="nav-label">Worship<br>Tools</span>
+                </a>
+                <a href="../learning/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="nav-label">Learning</span>
+                </a>
+                <a href="../profile/index.html" class="nav-item active">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-user"></i>
+                    <span class="nav-label">Profile</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                // Don't show loader for same page
+                // Just update active state if it's a nav item
+                if (anchor.classList.contains('nav-item')) {
+                    // Update active nav item
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    anchor.classList.add('active');
+                }
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after 1 second delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+            
+            // Set active nav item based on current page
+            const currentPath = window.location.pathname;
+            
+            // Reset all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Check which page we're on and set active nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (isSamePage(href, window.location.href)) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // ============================================
+        // FATWA & RULINGS PAGE FUNCTIONALITY
+        // ============================================
+
+        // Fatwa Data
+        const fatwaData = [
+            { 
+                id: 1,
+                title: "Using Credit Cards with Interest: A Detailed Ruling", 
+                category: "finance", 
+                question: "Is it permissible to use credit cards that charge interest for purchases and business transactions in today's economy?",
+                answer: "Most contemporary scholars prohibit using credit cards with interest charges, as riba (usury) is strictly forbidden in Islam (Quran 2:275-279). However, if one can pay the full balance before the due date to avoid interest, it may be permissible for necessary transactions. The International Islamic Fiqh Academy recommends using Islamic credit cards that comply with Shariah principles.",
+                mufti: "Dr. Yusuf Al-Qaradawi",
+                school: "Modern Ijtihad",
+                date: "May 15, 2023",
+                region: "Global",
+                sources: "Quran 2:275-279, Hadith Sahih Muslim, Contemporary Fiqh Council Resolution No. 108, Majallah al-Buhuth al-Islamiyyah",
+                isImportant: true,
+                views: "4.2K",
+                image: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 2,
+                title: "Combining Prayers During Travel", 
+                category: "prayer", 
+                question: "Can Dhuhr and Asr prayers be combined while traveling by plane or train? What are the conditions?",
+                answer: "Yes, combining prayers (jam') is permissible while traveling according to the majority of scholars. The traveler can combine Dhuhr with Asr, and Maghrib with Isha, at the time of either prayer. The journey should be at least 48 miles (approximately 77 km) according to Hanafi school, while other schools have different distances. The combination is allowed during the entire journey, not just while moving.",
+                mufti: "Sh. Ibn Baz",
+                school: "Hanbali",
+                date: "March 22, 2023",
+                region: "Saudi Arabia",
+                sources: "Sahih Muslim (Book 4, Hadith 1458), Majmu' Fatawa Ibn Taymiyyah (22/293), Fatawa Al-Lajnah Ad-Da'imah (8/110)",
+                isImportant: true,
+                views: "3.5K",
+                image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 3,
+                title: "Cryptocurrency Investment Ruling", 
+                category: "finance", 
+                question: "Is investing in Bitcoin and other cryptocurrencies halal according to Islamic principles?",
+                answer: "Scholars differ on cryptocurrency. The International Islamic Fiqh Academy (2022) considers most cryptocurrencies impermissible due to extreme volatility (gharar), lack of intrinsic value, and potential use in illegal activities. However, some contemporary scholars permit certain stablecoins backed by real assets. Key concerns include: 1) Excessive uncertainty 2) Speculation rather than investment 3) Environmental impact of mining 4) Regulatory uncertainty.",
+                mufti: "Dr. Ali Al-Qaradaghi",
+                school: "International Fiqh Academy",
+                date: "July 10, 2023",
+                region: "Global",
+                sources: "International Islamic Fiqh Academy Resolution (2022), AAOIFI Shariah Standard No. 62, Contemporary research papers on digital assets",
+                isImportant: true,
+                views: "5.1K",
+                image: "https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 4,
+                title: "Delaying Marriage for Education", 
+                category: "family", 
+                question: "Is it permissible to delay marriage for several years to complete higher education and career establishment?",
+                answer: "While education is highly encouraged in Islam, excessively delaying marriage without valid reasons is discouraged. The Prophet (PBUH) said: 'O young people, whoever among you can marry, should marry' (Bukhari). Scholars recommend: 1) Having a simple marriage ceremony while continuing studies 2) Seeking halal alternatives if unable to marry immediately 3) Setting realistic timelines. Delaying solely for luxury or unrealistic expectations is not justified.",
+                mufti: "Sh. Muhammad Al-Munajjid",
+                school: "Salafi",
+                date: "February 14, 2023",
+                region: "Global",
+                sources: "Sahih Bukhari (Book 62, Hadith 4), Fatawa Islamiyah (Vol. 3, p. 175), Contemporary family counseling guidelines",
+                isImportant: false,
+                views: "2.8K",
+                image: "https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 5,
+                title: "Friday Prayer for Women", 
+                category: "prayer", 
+                question: "Is Friday prayer obligatory for women? What if they attend the masjid for Jumu'ah?",
+                answer: "Friday prayer is not obligatory for women according to the majority of scholars based on the hadith: 'Jumu'ah is a duty required of every Muslim in congregation except four: a slave, a woman, a child, and a sick person' (Abu Dawud). They can pray Dhuhr instead. However, if a woman attends Friday prayer, it is valid and she gets its reward. Many scholars encourage women to pray at home for greater privacy and reward.",
+                mufti: "Dr. Abdur Rahman Al-Sudais",
+                school: "Hanbali",
+                date: "April 5, 2023",
+                region: "Saudi Arabia",
+                sources: "Sunan Abu Dawud (Book 2, Hadith 901), Al-Mughni by Ibn Qudamah (3/212), Fatawa Al-Lajnah Ad-Da'imah (8/201)",
+                isImportant: false,
+                views: "3.9K",
+                image: "https://images.unsplash.com/photo-1544364631-99bbd8e23f08?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 6,
+                title: "Artificial Intelligence in Islamic Finance", 
+                category: "modern", 
+                question: "What is the ruling on using AI for Shariah-compliance screening in financial institutions?",
+                answer: "Using AI as a tool to assist scholars in screening investments is permissible as long as: 1) Final approval comes from qualified human scholars 2) AI algorithms are transparent and auditable 3) No riba or haram elements are hidden in complex financial structures 4) The system serves maslahah (public interest). AI cannot replace human ijtihad but can enhance efficiency. Scholars emphasize maintaining human oversight in Shariah compliance decisions.",
+                mufti: "Dr. Hussein Hamid Hassan",
+                school: "Modern Ijtihad",
+                date: "August 20, 2023",
+                region: "Global",
+                sources: "Principles of maslahah in Islamic jurisprudence, Contemporary fiqh research on technology, AAOIFI governance standards",
+                isImportant: true,
+                views: "4.6K",
+                image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 7,
+                title: "Organ Donation After Death", 
+                category: "modern", 
+                question: "Is organ donation permissible in Islam? What are the conditions for both living and deceased donors?",
+                answer: "Most contemporary scholars and councils (including Islamic Fiqh Academy, European Council) permit organ donation as an act of saving lives based on the principle: 'Whoever saves a life, it is as if he has saved all of humanity' (Quran 5:32). Conditions include: 1) No commercial transaction 2) Proper medical necessity 3) Informed consent 4) No harm to donor's life 5) Respect for the deceased's body. Living donations are permissible for close relatives in life-saving situations.",
+                mufti: "European Council for Fatwa",
+                school: "Collective Ijtihad",
+                date: "June 18, 2023",
+                region: "Europe",
+                sources: "Quran 5:32, Islamic Fiqh Academy Resolution No. 17, European Council for Fatwa Resolution No. 99, Contemporary medical ethics in Islam",
+                isImportant: true,
+                views: "3.2K",
+                image: "https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            { 
+                id: 8,
+                title: "Stock Market Investment Guidelines", 
+                category: "finance", 
+                question: "How to invest in the stock market according to Shariah principles? What companies are permissible?",
+                answer: "Permissible if companies meet Shariah screening criteria: 1) Less than 5% income from haram sources (alcohol, gambling, pork, conventional banking) 2) Debt ratio below 33% of total assets 3) Non-interest based business model 4) Liquid assets ratio below 33%. Must avoid: 1) Speculation (day trading) 2) Margin trading (buying on credit) 3) Short selling. Islamic mutual funds and ETFs screened by Shariah boards are recommended for individual investors.",
+                mufti: "AAOIFI Standards",
+                school: "Islamic Finance Standards",
+                date: "September 5, 2023",
+                region: "Global",
+                sources: "AAOIFI Shariah Standard No. 21, Dow Jones Islamic Market Index methodology, Contemporary Islamic finance research",
+                isImportant: true,
+                views: "4.9K",
+                image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', function() {
+            const isDarkMode = body.classList.contains('dark-theme');
+            
+            if (isDarkMode) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                this.innerHTML = '<i class="fas fa-moon"></i><span>Dark</span>';
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                this.innerHTML = '<i class="fas fa-sun"></i><span>Light</span>';
+            }
+            
+            // Save theme preference to localStorage
+            localStorage.setItem('isDarkMode', !isDarkMode);
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('isDarkMode');
+        if (savedTheme === 'true') {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i><span>Light</span>';
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Dark</span>';
+        }
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.history.back();
+            }, 300);
+        });
+
+        // Fatwa filtering functionality
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const fatwasGrid = document.getElementById('fatwasGrid');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let sortBy = 'recent';
+        
+        // Category filter
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active button
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update current category
+                currentCategory = this.getAttribute('data-category');
+                
+                // Filter fatwas
+                filterFatwas();
+            });
+        });
+        
+        // Search functionality
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchQuery = this.value.toLowerCase();
+                filterFatwas();
+            }, 300);
+        });
+        
+        // Sort functionality
+        sortSelect.addEventListener('change', function() {
+            sortBy = this.value;
+            filterFatwas();
+        });
+        
+        // Filter and sort fatwas
+        function filterFatwas() {
+            const fatwaCards = document.querySelectorAll('.fatwa-card');
+            let filteredCount = 0;
+            
+            fatwaCards.forEach(card => {
+                const title = card.querySelector('.fatwa-title').textContent.toLowerCase();
+                const categoryElement = card.querySelector('.fatwa-category');
+                const category = categoryElement ? categoryElement.textContent.toLowerCase() : '';
+                const question = card.querySelector('.fatwa-question').textContent.toLowerCase();
+                const fatwaId = parseInt(card.getAttribute('data-id'));
+                const fatwa = fatwaData.find(f => f.id === fatwaId);
+                
+                // Check if fatwa matches search query
+                const matchesSearch = searchQuery === '' || 
+                    title.includes(searchQuery) || 
+                    question.includes(searchQuery) ||
+                    (fatwa && fatwa.answer.toLowerCase().includes(searchQuery));
+                
+                // Check if fatwa matches category filter
+                const matchesCategory = currentCategory === 'all' || 
+                    (category.includes(currentCategory));
+                
+                // Show or hide fatwa
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex';
+                    filteredCount++;
+                    
+                    // For featured fatwa, ensure it spans full width
+                    if (fatwaId === 1) {
+                        card.classList.add('featured-fatwa');
+                    }
+                } else {
+                    card.style.display = 'none';
+                    if (fatwaId === 1) {
+                        card.classList.remove('featured-fatwa');
+                    }
+                }
+            });
+            
+            // Show empty state if no fatwas found
+            let emptyState = document.querySelector('.empty-state');
+            if (filteredCount === 0) {
+                if (!emptyState) {
+                    emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>No rulings found</h3>
+                        <p>Try adjusting your search or filter to find what you're looking for.</p>
+                    `;
+                    fatwasGrid.appendChild(emptyState);
+                }
+            } else if (emptyState) {
+                emptyState.remove();
+            }
+            
+            // Sort fatwas based on selected option
+            sortFatwas();
+        }
+        
+        // Sort fatwas
+        function sortFatwas() {
+            const container = fatwasGrid;
+            const fatwas = Array.from(container.querySelectorAll('.fatwa-card:not([style*="display: none"])'));
+            
+            fatwas.sort((a, b) => {
+                const aId = parseInt(a.getAttribute('data-id'));
+                const bId = parseInt(b.getAttribute('data-id'));
+                const aFatwa = fatwaData.find(f => f.id === aId);
+                const bFatwa = fatwaData.find(f => f.id === bId);
+                
+                if (sortBy === 'recent') {
+                    // Sort by date (most recent first)
+                    const aDate = new Date(aFatwa.date);
+                    const bDate = new Date(bFatwa.date);
+                    return bDate - aDate;
+                } else if (sortBy === 'important') {
+                    // Sort by importance (important first, then by views)
+                    if (aFatwa.isImportant && !bFatwa.isImportant) return -1;
+                    if (!aFatwa.isImportant && bFatwa.isImportant) return 1;
+                    const aViews = parseInt(aFatwa.views) || 0;
+                    const bViews = parseInt(bFatwa.views) || 0;
+                    return bViews - aViews;
+                } else if (sortBy === 'category') {
+                    // Sort by category
+                    return aFatwa.category.localeCompare(bFatwa.category);
+                }
+                return 0;
+            });
+            
+            // Reorder fatwas in DOM
+            fatwas.forEach(fatwa => {
+                container.appendChild(fatwa);
+            });
+        }
+        
+        // Fatwa card click functionality
+        document.addEventListener('click', function(e) {
+            const fatwaCard = e.target.closest('.fatwa-card');
+            if (!fatwaCard) return;
+            
+            const fatwaId = parseInt(fatwaCard.getAttribute('data-id'));
+            showFatwaDetails(fatwaId);
+        });
+
+        // Show Fatwa Details Modal
+        function showFatwaDetails(fatwaId) {
+            const fatwa = fatwaData.find(f => f.id === fatwaId);
+            if (!fatwa) return;
+            
+            // Format date for display
+            const displayDate = fatwa.date;
+            
+            // Update modal content
+            document.getElementById('modalTitle').textContent = fatwa.title;
+            document.getElementById('modalCategory').textContent = fatwa.category.charAt(0).toUpperCase() + fatwa.category.slice(1);
+            document.getElementById('modalQuestion').textContent = fatwa.question;
+            document.getElementById('modalAnswer').textContent = fatwa.answer;
+            document.getElementById('modalMufti').textContent = fatwa.mufti;
+            document.getElementById('modalSchool').textContent = fatwa.school;
+            document.getElementById('modalDate').textContent = displayDate;
+            document.getElementById('modalRegion').textContent = fatwa.region;
+            document.getElementById('modalSources').innerHTML = `<strong>Sources:</strong> ${fatwa.sources}`;
+            
+            // Update modal header background based on category
+            const modalHeader = document.getElementById('modalHeader');
+            modalHeader.style.background = `linear-gradient(135deg, var(--primary-green), var(--${fatwa.category}-color))`;
+            
+            // Create action buttons
+            const modalActions = document.getElementById('modalActions');
+            modalActions.innerHTML = '';
+            
+            // Share button
+            const shareBtn = document.createElement('button');
+            shareBtn.className = 'action-btn primary';
+            shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share Ruling';
+            shareBtn.addEventListener('click', () => {
+                shareFatwa(fatwa);
+            });
+            modalActions.appendChild(shareBtn);
+            
+            // Save button
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'action-btn secondary';
+            saveBtn.innerHTML = '<i class="far fa-bookmark"></i> Save';
+            saveBtn.addEventListener('click', () => {
+                saveFatwa(fatwaId);
+                saveBtn.innerHTML = '<i class="fas fa-bookmark"></i> Saved!';
+                setTimeout(() => {
+                    saveBtn.innerHTML = '<i class="far fa-bookmark"></i> Save';
+                }, 2000);
+            });
+            modalActions.appendChild(saveBtn);
+            
+            // Close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'action-btn secondary';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i> Close';
+            closeBtn.addEventListener('click', closeModal);
+            modalActions.appendChild(closeBtn);
+            
+            // Show modal
+            openModal();
+        }
+
+        // Share Fatwa
+        function shareFatwa(fatwa) {
+            const shareText = `📜 Islamic Ruling: ${fatwa.title}\n\nQ: ${fatwa.question}\n\nA: ${fatwa.answer.substring(0, 150)}...\n\nMufti: ${fatwa.mufti}\n\nVia DeenLink Fatwa Finder`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `Fatwa: ${fatwa.title}`,
+                    text: shareText,
+                    url: window.location.href
+                }).catch(err => {
+                    console.log('Error sharing:', err);
+                    copyToClipboard(shareText);
+                });
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
+        // Save Fatwa
+        function saveFatwa(fatwaId) {
+            let savedFatwas = JSON.parse(localStorage.getItem('savedFatwas') || '[]');
+            if (!savedFatwas.includes(fatwaId)) {
+                savedFatwas.push(fatwaId);
+                localStorage.setItem('savedFatwas', JSON.stringify(savedFatwas));
+            }
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Fatwa copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        // Open Modal
+        function openModal() {
+            const modal = document.getElementById('fatwaModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        // Close Modal
+        function closeModal() {
+            const modal = document.getElementById('fatwaModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        // Close modal with escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('fatwaModal');
+                if (modal.classList.contains('active')) {
+                    closeModal();
+                }
+            }
+        });
+
+        // Close modal button
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+
+        // Close modal when clicking outside content
+        document.getElementById('fatwaModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Add loading animation to nav items when clicked
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Check if this is a navigation to a different page
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('#') || isSamePage(href, window.location.href)) {
+                    return;
+                }
+                
+                // Add loading class
+                this.classList.add('loading');
+                
+                // Remove loading class after navigation
+                setTimeout(() => {
+                    this.classList.remove('loading');
+                }, 1500);
+            });
+        });
+
+        // Initial filter setup
+        setTimeout(() => {
+            filterFatwas();
+            
+            // Animate fatwa cards on load
+            setTimeout(() => {
+                const fatwaCards = document.querySelectorAll('.fatwa-card');
+                fatwaCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 100));
+                });
+                
+                // Add hover effect to images
+                fatwaCards.forEach(card => {
+                    const image = card.querySelector('.fatwa-image');
+                    if (image) {
+                        card.addEventListener('mouseenter', function() {
+                            image.style.transform = 'scale(1.05)';
+                            image.style.transition = 'transform 0.5s ease';
+                        });
+                        
+                        card.addEventListener('mouseleave', function() {
+                            image.style.transform = 'scale(1)';
+                        });
+                    }
+                });
+            }, 300);
+        }, 500);
+    </script>
+</body>
+</html>

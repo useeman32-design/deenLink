@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Riddles | Test Your Wisdom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --correct-green: #2E7D32;
+            --incorrect-red: #C62828;
+            --quiz-green: #1D6F42;
+            --quiz-light-green: #E8F5E9;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --correct-green: #27ae60;
+            --incorrect-red: #e74c3c;
+            --quiz-green: #27ae60;
+            --quiz-light-green: rgba(39, 174, 96, 0.1);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Page Loader */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Top Section - Green Theme */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Riddles Setup Screen */
+        .riddles-setup {
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .riddles-setup {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .setup-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .setup-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: var(--primary-green);
+        }
+
+        .setup-title i {
+            font-size: 24px;
+        }
+
+        .setup-title h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .setup-description {
+            color: var(--dark-gray);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .setup-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-card {
+            background: var(--light-gray);
+            border-radius: 15px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        .option-card.active {
+            border-color: var(--primary-green);
+            background: rgba(29, 111, 66, 0.05);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .option-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .option-badge {
+            background: var(--primary-green);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+        }
+
+        /* Number Selector - FIXED: Initially hidden */
+        .number-selector {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .number-selector.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .selector-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .number-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .number-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--white);
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+        }
+
+        .number-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .max-hint {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* Start Riddles Button */
+        .start-riddles-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(29, 111, 66, 0.3);
+        }
+
+        .start-riddles-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(29, 111, 66, 0.4);
+        }
+
+        .start-riddles-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Riddles Container */
+        .riddles-container {
+            display: none;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .riddles-container {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Riddles Header - Improved Mobile Layout */
+        .riddles-header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 480px) {
+            .riddles-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .riddles-progress {
+            font-size: 14px;
+            color: var(--text-dark);
+            background: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .riddles-timer {
+            font-size: 14px;
+            color: var(--text-dark);
+            background: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .timer-value {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        /* Tasbeeh Beads Progress - FIXED Mobile Layout */
+        .beads-progress-container {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .progress-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .progress-title i {
+            color: var(--accent-gold);
+            font-size: 18px;
+        }
+
+        .progress-title span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .beads-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .beads-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bead {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, var(--accent-gold), #f1c40f);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 9px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .bead.answered {
+            background: linear-gradient(135deg, var(--correct-green), #4CAF50);
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.4);
+            z-index: 2;
+        }
+
+        .bead.current {
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            transform: translate(-50%, -50%) scale(1.3);
+            box-shadow: 0 4px 10px rgba(29, 111, 66, 0.4);
+            z-index: 3;
+        }
+
+        .beads-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 15px;
+            min-width: 100px;
+            box-sizing: border-box;
+        }
+
+        .beads-progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .beads-progress-count {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-green);
+            font-family: 'Amiri', serif;
+        }
+
+        /* Riddle Card */
+        .riddle-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .riddle-number {
+            display: inline-block;
+            background: var(--primary-green);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .riddle-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.4;
+            margin-bottom: 25px;
+            font-family: 'Amiri', serif;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            padding: 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            color: var(--text-dark);
+            background: var(--white);
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-green);
+            background: rgba(29, 111, 66, 0.05);
+        }
+
+        .option-item.correct {
+            border-color: var(--correct-green);
+            background: rgba(46, 125, 50, 0.1);
+            position: relative;
+        }
+
+        .option-item.correct::after {
+            content: '✓ Correct';
+            position: absolute;
+            right: 10px;
+            color: var(--correct-green);
+            font-weight: bold;
+        }
+
+        .option-item.incorrect {
+            border-color: var(--incorrect-red);
+            background: rgba(198, 40, 40, 0.05);
+            position: relative;
+        }
+
+        .option-item.incorrect::after {
+            content: '✗ Wrong';
+            position: absolute;
+            right: 10px;
+            color: var(--incorrect-red);
+            font-weight: bold;
+        }
+
+        /* Answer Display */
+        .answer-display {
+            background: var(--light-green);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .answer-display.show {
+            display: block;
+        }
+
+        .answer-title {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .answer-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Riddles Navigation */
+        .riddles-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .nav-btn.prev {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .nav-btn.submit {
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .results-screen {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .results-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .results-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: white;
+        }
+
+        .results-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .results-score {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            font-family: 'Amiri', serif;
+        }
+
+        .results-message {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .results-details {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 480px) {
+            .results-actions {
+                flex-direction: row;
+            }
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .action-btn.restart {
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .action-btn.results {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        /* Detailed Results Screen */
+        .detailed-results-screen {
+            display: none;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .detailed-results-screen {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .detailed-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .detailed-results-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-summary {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 5px;
+        }
+
+        /* Question Review */
+        .question-review-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .question-review {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .question-review.correct {
+            border-left: 4px solid var(--correct-green);
+        }
+
+        .question-review.incorrect {
+            border-left: 4px solid var(--incorrect-red);
+        }
+
+        .review-question {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .review-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .review-option {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .review-option.correct-answer {
+            background: rgba(46, 125, 50, 0.1);
+            border: 1px solid var(--correct-green);
+        }
+
+        .review-option.user-answer {
+            background: rgba(198, 40, 40, 0.1);
+            border: 1px solid var(--incorrect-red);
+        }
+
+        .review-option.user-answer.correct-answer {
+            background: rgba(46, 125, 50, 0.1);
+            border: 1px solid var(--correct-green);
+        }
+
+        .option-label {
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .correct-label {
+            background: var(--correct-green);
+        }
+
+        .incorrect-label {
+            background: var(--incorrect-red);
+        }
+
+        .review-answer {
+            background: var(--light-green);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .answer-title {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        /* Responsive Design - FIXED */
+        @media (max-width: 479px) {
+            .container {
+                padding: 0;
+            }
+            
+            .riddles-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .riddles-progress, .riddles-timer {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 8px;
+            }
+            
+            .beads-progress-container {
+                padding: 15px;
+                margin: 0 0 20px 0;
+            }
+            
+            .beads-container {
+                height: 140px;
+                max-width: 320px;
+            }
+            
+            .bead {
+                width: 20px;
+                height: 20px;
+                font-size: 8px;
+            }
+            
+            .beads-center {
+                min-width: 90px;
+                padding: 8px;
+            }
+            
+            .beads-progress-count {
+                font-size: 24px;
+            }
+            
+            .riddle-card {
+                padding: 20px;
+                margin: 0 0 20px 0;
+            }
+            
+            .riddle-text {
+                font-size: 16px;
+            }
+            
+            .option-item {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            .nav-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .results-card {
+                padding: 25px;
+            }
+            
+            .results-score {
+                font-size: 36px;
+            }
+            
+            .detail-value {
+                font-size: 24px;
+            }
+            
+            .results-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 480px) and (max-width: 767px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .beads-container {
+                max-width: 350px;
+            }
+            
+            .riddle-text {
+                font-size: 17px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .container {
+                max-width: 90%;
+            }
+            
+            .beads-container {
+                max-width: 400px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 800px;
+            }
+            
+            .beads-container {
+                max-width: 450px;
+            }
+        }
+
+        /* Fix for very small screens */
+        @media (max-width: 360px) {
+            .beads-container {
+                height: 130px;
+                max-width: 280px;
+            }
+            
+            .bead {
+                width: 18px;
+                height: 18px;
+                font-size: 7px;
+            }
+            
+            .beads-center {
+                min-width: 80px;
+                padding: 6px;
+            }
+            
+            .beads-progress-count {
+                font-size: 20px;
+            }
+            
+            .riddle-text {
+                font-size: 15px;
+            }
+            
+            .option-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading Riddles...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Top Section - Now Green Theme -->
+        <section class="top-section">
+            <div class="top-section-background"></div>
+            
+            <div class="top-bar">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="page-title">
+                    <i class="fas fa-brain"></i>
+                    <span>Islamic Riddles</span>
+                </div>
+                <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+            </div>
+            
+            <div class="page-subtitle">
+                <h1>Test Your Islamic Wisdom</h1>
+                <p>Challenge yourself with riddles from Quran, Hadith and Islamic History</p>
+            </div>
+        </section>
+
+        <!-- Riddles Setup Screen -->
+        <div class="riddles-setup" id="riddlesSetup">
+            <div class="setup-card">
+                <div class="setup-title">
+                    <i class="fas fa-cog"></i>
+                    <h2>Riddle Settings</h2>
+                </div>
+                
+                <p class="setup-description">
+                    Choose how many riddles you want to solve. You can attempt all 24 riddles or select a specific number.
+                </p>
+                
+                <div class="setup-options">
+                    <div class="option-card active" id="optionAll">
+                        <div class="option-header">
+                            <div class="option-name">All Riddles</div>
+                            <div class="option-badge" id="totalRiddlesBadge">24 Riddles</div>
+                        </div>
+                        <div class="option-description">
+                            Solve all 24 available riddles. This is the complete challenge.
+                        </div>
+                    </div>
+                    
+                    <div class="option-card" id="optionCustom">
+                        <div class="option-header">
+                            <div class="option-name">Custom Number</div>
+                            <div class="option-badge">Choose</div>
+                        </div>
+                        <div class="option-description">
+                            Select a specific number of riddles to solve.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Number Selector (hidden by default) -->
+                <div class="number-selector" id="numberSelector">
+                    <div class="selector-label">How many riddles would you like to solve?</div>
+                    <div class="number-input-container">
+                        <input type="number" id="riddleCount" class="number-input" min="1" max="24" value="10">
+                        <div class="option-badge">Riddles</div>
+                    </div>
+                    <div class="max-hint">Maximum: 24 riddles</div>
+                </div>
+                
+                <button class="start-riddles-btn" id="startRiddlesBtn">
+                    <i class="fas fa-play-circle"></i>
+                    Start Riddles
+                </button>
+            </div>
+        </div>
+
+        <!-- Riddles Container -->
+        <div class="riddles-container" id="riddlesContainer">
+            <!-- Riddles Header - Improved for Mobile -->
+            <div class="riddles-header">
+                <div class="riddles-progress">
+                    Riddle <span id="currentRiddleNum">1</span> of <span id="totalRiddles">10</span>
+                </div>
+                <div class="riddles-timer">
+                    <i class="fas fa-clock"></i>
+                    Time: <span class="timer-value" id="timer">00:00</span>
+                </div>
+            </div>
+
+            <!-- Tasbeeh Beads Progress - Fixed Mobile Layout -->
+            <div class="beads-progress-container">
+                <div class="progress-title">
+                    <i class="fas fa-kaaba"></i>
+                    <span>Riddles Progress</span>
+                </div>
+                <div class="beads-container">
+                    <div class="beads-circle" id="beadsCircle">
+                        <!-- Beads will be generated dynamically -->
+                    </div>
+                    <div class="beads-center">
+                        <div class="beads-progress-text">Progress</div>
+                        <div class="beads-progress-count">
+                            <span id="answeredCount">0</span>/<span id="totalRiddlesBeads">10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Riddle Card -->
+            <div class="riddle-card">
+                <div class="riddle-number" id="riddleNumDisplay">Riddle 1</div>
+                <div class="riddle-text" id="riddleText">
+                    Loading riddle...
+                </div>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Options will be generated dynamically -->
+                </div>
+                
+                <!-- Answer Display -->
+                <div class="answer-display" id="answerDisplay">
+                    <div class="answer-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Answer</span>
+                    </div>
+                    <div class="answer-text" id="answerText"></div>
+                </div>
+            </div>
+
+            <!-- Riddles Navigation -->
+            <div class="riddles-navigation">
+                <button class="nav-btn prev" id="prevBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    Previous
+                </button>
+                <button class="nav-btn next" id="nextBtn">
+                    Next
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-card">
+                <div class="results-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h2 class="results-title">Riddles Completed!</h2>
+                <div class="results-score" id="finalScore">0/10</div>
+                <p class="results-message" id="resultMessage">
+                    You've completed the riddles. Well done!
+                </p>
+                
+                <div class="results-details">
+                    <div class="detail-item">
+                        <div class="detail-value" id="correctAnswers">0</div>
+                        <div class="detail-label">Correct</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value" id="incorrectAnswers">0</div>
+                        <div class="detail-label">Incorrect</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value" id="timeTaken">00:00</div>
+                        <div class="detail-label">Time</div>
+                    </div>
+                </div>
+                
+                <div class="results-actions">
+                    <button class="action-btn restart" id="restartBtn">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </button>
+                    <button class="action-btn results" id="viewResultsBtn">
+                        <i class="fas fa-list-check"></i>
+                        View Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Results Screen -->
+        <div class="detailed-results-screen" id="detailedResultsScreen">
+            <div class="detailed-results-header">
+                <div class="detailed-results-title">
+                    <i class="fas fa-list-check"></i>
+                    <span>Detailed Results</span>
+                </div>
+                <button class="back-btn" id="backToResultsBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="results-summary">
+                <div class="summary-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="detailedCorrect">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="detailedIncorrect">0</div>
+                        <div class="stat-label">Incorrect</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="detailedScore">0%</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-review-container" id="questionReviewContainer">
+                <!-- Riddle reviews will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // RIDDLES DATA - All 24 Riddles with Options
+        // ============================================
+        const islamicRiddles = [
+            {
+                riddle: "Leave me and you will never find the treasure, Use me and you will attain Allah's pleasure. What am I?",
+                answer: "Quran",
+                description: "The Quran is the treasure that guides to Allah's pleasure",
+                options: ["Quran", "Prayer", "Faith"],
+                correct: 0
+            },
+            {
+                riddle: "If you have got me, you have got power; BUT the devil will try to increase the 'pride' within you using 'me' every second, minute, hour... I will take you to heaven if you act upon me well.. BUT if you misuse me, I'm also dangerous enough to take you to hell. What am I?",
+                answer: "Knowledge",
+                description: "Knowledge can lead to heaven if used properly, or to hell if misused",
+                options: ["Knowledge", "Wealth", "Authority"],
+                correct: 0
+            },
+            {
+                riddle: "When you use me wrongly you can't undo your mistake,so please control me for Allah's sake. So use me well or at least try, now tell me who am I?",
+                answer: "Tongue",
+                description: "The tongue must be controlled to avoid harmful speech",
+                options: ["Tongue", "Hand", "Heart"],
+                correct: 0
+            },
+            {
+                riddle: "I am a security against the fire of hell for those who act upon me with sincerity and abstain from anything which nullifies me. Who am I?",
+                answer: "Fasting",
+                description: "Fasting in Ramadan is a shield against Hellfire",
+                options: ["Fasting", "Charity", "Pilgrimage"],
+                correct: 0
+            },
+            {
+                riddle: "What is Haraam, but when swallowed loved by Allah?",
+                answer: "Pride",
+                description: "Swallowing one's pride (being humble) is loved by Allah",
+                options: ["Pride", "Anger", "Jealousy"],
+                correct: 0
+            },
+            {
+                riddle: "This is a tricky one. Who was the messenger who was neither of the human nor of the jinn and who warned his people and is mentioned in the Quran?",
+                answer: "Ant (Surah Naml)",
+                description: "An ant warned other ants about Solomon's army in Surah An-Naml",
+                options: ["Ant (Surah Naml)", "Bird", "Mountain"],
+                correct: 0
+            },
+            {
+                riddle: "I am a piece of flesh If I am pure, I can make you full of goodness If I am impure, bad deeds will flow out of you and I will make you distressed. What am I?",
+                answer: "The Heart",
+                description: "The heart is the center of faith and purity in Islam",
+                options: ["The Heart", "The Mind", "The Soul"],
+                correct: 0
+            },
+            {
+                riddle: "I never knew what is a father or what is a mother as I never had any of them. Who am I?",
+                answer: "Adam (as)",
+                description: "Prophet Adam was created without parents",
+                options: ["Adam (as)", "Jesus (as)", "Angels"],
+                correct: 0
+            },
+            {
+                riddle: "I never had a mother yet I am the mother of everyone. Who am I?",
+                answer: "Hawa (Eve)",
+                description: "Hawa (Eve) is the mother of all humankind",
+                options: ["Hawa (Eve)", "Maryam", "Khadijah"],
+                correct: 0
+            },
+            {
+                riddle: "I was miraculously born from a mother without a father. Who am I?",
+                answer: "Isa (as)",
+                description: "Prophet Jesus was born miraculously without a father",
+                options: ["Isa (as)", "Adam (as)", "Ibrahim (as)"],
+                correct: 0
+            },
+            {
+                riddle: "I am a blessed Surah of the Quran, if recited every Friday, I will save you from the evil Dajjal. Which surah am I?",
+                answer: "Surah Kahaf",
+                description: "Reciting Surah Al-Kahf on Friday protects from the trials of Dajjal",
+                options: ["Surah Kahaf", "Surah Yasin", "Surah Fatihah"],
+                correct: 0
+            },
+            {
+                riddle: "I am also the Kabah yet I have no roof. What am I?",
+                answer: "Hateem. It is part of the Kabah.",
+                description: "Hateem is the semicircular area adjacent to the Kaaba",
+                options: ["Hateem. It is part of the Kabah.", "The Maqam Ibrahim", "The Black Stone"],
+                correct: 0
+            },
+            {
+                riddle: "I am the longest surviving human being whom death has not touched yet. I am over 2000 years old and still healthy, strong and breathing. Who am I?",
+                answer: "Prophet Isa (as)",
+                description: "Prophet Jesus was raised alive and will return before the Day of Judgment",
+                options: ["Prophet Isa (as)", "Khidr", "Iblis"],
+                correct: 0
+            },
+            {
+                riddle: "Even a child in kindergarten can be the smartest person in this world by doing this action. What is it?",
+                answer: "Remembrance of death and preparing for it",
+                description: "Remembering death and preparing for the afterlife is the sign of true wisdom",
+                options: ["Remembrance of death and preparing for it", "Memorizing Quran", "Learning Arabic"],
+                correct: 0
+            },
+            {
+                riddle: "The person who buys me doesn't need me, the person who makes me doesn't want me, and the person who uses me can't appreciate me. What am I?",
+                answer: "Coffin or a burial shroud",
+                description: "The coffin is bought for others, made by others, and used by the deceased",
+                options: ["Coffin or a burial shroud", "Medicine", "Prison cell"],
+                correct: 0
+            },
+            {
+                riddle: "I am greater than God, more evil than the Shaitaan, the poor have me, the rich don't, and if you eat me, you'll die.What am I?",
+                answer: "Nothing",
+                description: "Nothing is greater than God, more evil than Shaitan, etc.",
+                options: ["Nothing", "Everything", "Something"],
+                correct: 0
+            },
+            {
+                riddle: "I am the only female whose name has been mentioned in the Quran. Who am I?",
+                answer: "Maryam",
+                description: "Maryam (Mary) is the only woman mentioned by name in the Quran",
+                options: ["Maryam", "Khadijah", "Aisha"],
+                correct: 0
+            },
+            {
+                riddle: "I am the lucky sahabi (companion of the Prophet) whose name appears in the Quran. Who am I?",
+                answer: "Zayd Ibn Haarithah",
+                description: "Zayd ibn Harithah is mentioned by name in Surah Al-Ahzab",
+                options: ["Zayd Ibn Haarithah", "Abu Bakr", "Umar"],
+                correct: 0
+            },
+            {
+                riddle: "I am mother who was not born, not married and did not give birth. Who am I?",
+                answer: "Pregnant She Camel of Prophet Saleh (as)",
+                description: "The she-camel of Prophet Saleh was a miraculous sign from Allah",
+                options: ["Pregnant She Camel of Prophet Saleh (as)", "Mother Earth", "The Night of Power"],
+                correct: 0
+            },
+            {
+                riddle: "I am the blessed Surah of the Quran every verse of which contains the word 'Allah', which surah am I?",
+                answer: "Surah Mujadala",
+                description: "Surah Al-Mujadilah has Allah's name in every verse",
+                options: ["Surah Mujadala", "Surah Ikhlas", "Surah Fatihah"],
+                correct: 0
+            },
+            {
+                riddle: "I am the biggest animal mentioned in the Quran.",
+                answer: "The Elephant",
+                description: "The elephant is mentioned in Surah Al-Fil",
+                options: ["The Elephant", "The Whale", "The Camel"],
+                correct: 0
+            },
+            {
+                riddle: "I am the heart of the Quran yet I am not in the center of the Quran. What am I?",
+                answer: "Surah Yasin",
+                description: "Surah Yasin is called the heart of the Quran",
+                options: ["Surah Yasin", "Surah Rahman", "Surah Mulk"],
+                correct: 0
+            },
+            {
+                riddle: "Greed for wealth made me gone astray, my story is mentioned in Surah Qasas. Who am I?",
+                answer: "Karoon",
+                description: "Qarun (Karoon) was destroyed due to his arrogance and wealth",
+                options: ["Karoon", "Firaun", "Abu Lahab"],
+                correct: 0
+            },
+            {
+                riddle: "We are not tongues nor have the power to speak, yet we will speak one day as witnesses. Who are we?",
+                answer: "Hands and Legs",
+                description: "On Day of Judgment, hands and feet will testify about our deeds",
+                options: ["Hands and Legs", "Eyes and Ears", "Skin and Bones"],
+                correct: 0
+            }
+        ];
+
+        const TOTAL_AVAILABLE_RIDDLES = islamicRiddles.length; // Should be 24
+
+        // ============================================
+        // RIDDLES STATE MANAGEMENT
+        // ============================================
+        let riddlesState = {
+            currentRiddleIndex: 0,
+            selectedRiddles: [],
+            userAnswers: [],
+            userCorrect: [],
+            startTime: null,
+            timerInterval: null,
+            secondsElapsed: 0,
+            totalRiddles: 10,
+            riddlesMode: 'all',
+            answerRevealed: false
+        };
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const pageLoader = document.getElementById('pageLoader');
+        const riddlesSetup = document.getElementById('riddlesSetup');
+        const riddlesContainer = document.getElementById('riddlesContainer');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const detailedResultsScreen = document.getElementById('detailedResultsScreen');
+        const optionAll = document.getElementById('optionAll');
+        const optionCustom = document.getElementById('optionCustom');
+        const numberSelector = document.getElementById('numberSelector');
+        const riddleCountInput = document.getElementById('riddleCount');
+        const totalRiddlesBadge = document.getElementById('totalRiddlesBadge');
+        const startRiddlesBtn = document.getElementById('startRiddlesBtn');
+        const backBtn = document.getElementById('backBtn');
+        const currentRiddleNum = document.getElementById('currentRiddleNum');
+        const totalRiddlesElement = document.getElementById('totalRiddles');
+        const timerElement = document.getElementById('timer');
+        const riddleNumDisplay = document.getElementById('riddleNumDisplay');
+        const riddleText = document.getElementById('riddleText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const answerDisplay = document.getElementById('answerDisplay');
+        const answerText = document.getElementById('answerText');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const beadsCircle = document.getElementById('beadsCircle');
+        const answeredCount = document.getElementById('answeredCount');
+        const totalRiddlesBeads = document.getElementById('totalRiddlesBeads');
+        const finalScore = document.getElementById('finalScore');
+        const resultMessage = document.getElementById('resultMessage');
+        const correctAnswersElement = document.getElementById('correctAnswers');
+        const incorrectAnswersElement = document.getElementById('incorrectAnswers');
+        const timeTakenElement = document.getElementById('timeTaken');
+        const restartBtn = document.getElementById('restartBtn');
+        const viewResultsBtn = document.getElementById('viewResultsBtn');
+        const backToResultsBtn = document.getElementById('backToResultsBtn');
+        const detailedCorrect = document.getElementById('detailedCorrect');
+        const detailedIncorrect = document.getElementById('detailedIncorrect');
+        const detailedScore = document.getElementById('detailedScore');
+        const questionReviewContainer = document.getElementById('questionReviewContainer');
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        // Show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Format time as MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Shuffle array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Shuffle options for a riddle
+        function shuffleRiddleOptions(riddle) {
+            const options = [...riddle.options];
+            const correctAnswer = options[riddle.correct];
+            
+            // Create array of indices
+            let indices = [0, 1, 2];
+            
+            // Remove the correct index
+            indices = indices.filter(index => index !== riddle.correct);
+            
+            // Shuffle the remaining indices
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            
+            // Create new options array with correct answer in random position
+            const newOptions = [];
+            const newCorrectIndex = Math.floor(Math.random() * 3);
+            
+            for (let i = 0; i < 3; i++) {
+                if (i === newCorrectIndex) {
+                    newOptions.push(correctAnswer);
+                } else {
+                    const optionIndex = indices.pop();
+                    newOptions.push(options[optionIndex]);
+                }
+            }
+            
+            return {
+                options: newOptions,
+                correct: newCorrectIndex
+            };
+        }
+
+        // Start timer
+        function startTimer() {
+            riddlesState.startTime = new Date();
+            riddlesState.timerInterval = setInterval(() => {
+                riddlesState.secondsElapsed++;
+                timerElement.textContent = formatTime(riddlesState.secondsElapsed);
+            }, 1000);
+        }
+
+        // Stop timer
+        function stopTimer() {
+            if (riddlesState.timerInterval) {
+                clearInterval(riddlesState.timerInterval);
+                riddlesState.timerInterval = null;
+            }
+        }
+
+        // ============================================
+        // RIDDLES FUNCTIONS
+        // ============================================
+
+        // Initialize riddles with selected options
+        function initializeRiddles() {
+            // Determine riddles mode and number of riddles
+            let totalRiddles;
+            
+            if (riddlesState.riddlesMode === 'all') {
+                totalRiddles = TOTAL_AVAILABLE_RIDDLES;
+            } else {
+                totalRiddles = parseInt(riddleCountInput.value) || 10;
+                totalRiddles = Math.min(totalRiddles, TOTAL_AVAILABLE_RIDDLES);
+                totalRiddles = Math.max(totalRiddles, 1);
+            }
+            
+            riddlesState.totalRiddles = totalRiddles;
+            
+            // Shuffle all riddles and select required number
+            const shuffledRiddles = shuffleArray(islamicRiddles);
+            riddlesState.selectedRiddles = shuffledRiddles.slice(0, totalRiddles);
+            
+            // Shuffle options for each selected riddle
+            riddlesState.selectedRiddles = riddlesState.selectedRiddles.map(riddle => {
+                const shuffled = shuffleRiddleOptions(riddle);
+                return {
+                    ...riddle,
+                    options: shuffled.options,
+                    correct: shuffled.correct
+                };
+            });
+            
+            // Reset user answers
+            riddlesState.userAnswers = new Array(totalRiddles).fill(null);
+            riddlesState.userCorrect = new Array(totalRiddles).fill(null);
+            riddlesState.currentRiddleIndex = 0;
+            riddlesState.secondsElapsed = 0;
+            riddlesState.answerRevealed = false;
+            
+            // Update UI
+            totalRiddlesElement.textContent = totalRiddles;
+            totalRiddlesBeads.textContent = totalRiddles;
+            answeredCount.textContent = '0';
+            
+            // Create beads for progress tracking
+            createBeads(totalRiddles);
+            
+            // Show riddles container
+            riddlesSetup.style.display = 'none';
+            riddlesContainer.style.display = 'block';
+            resultsScreen.style.display = 'none';
+            detailedResultsScreen.style.display = 'none';
+            
+            // Start timer
+            startTimer();
+            
+            // Load first riddle
+            loadRiddle(0);
+        }
+
+        // Create tasbeeh beads for progress tracking - FIXED for mobile
+        function createBeads(totalBeads) {
+            if (!beadsCircle) return;
+            
+            beadsCircle.innerHTML = '';
+            
+            const containerWidth = beadsCircle.clientWidth || 350;
+            const containerHeight = beadsCircle.clientHeight || 150;
+            const centerX = containerWidth / 2;
+            const centerY = containerHeight / 2;
+            
+            // Calculate radius based on container size
+            const radius = Math.min(centerX, centerY) * 0.65; // Reduced to ensure beads fit
+            
+            for (let i = 1; i <= totalBeads; i++) {
+                const angle = (i / totalBeads) * 2 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                const bead = document.createElement('div');
+                bead.className = 'bead';
+                bead.dataset.index = i;
+                bead.style.left = `${x}px`;
+                bead.style.top = `${y}px`;
+                bead.textContent = i;
+                
+                // Adjust font size for smaller screens
+                if (window.innerWidth < 480) {
+                    bead.style.fontSize = '7px';
+                }
+                
+                beadsCircle.appendChild(bead);
+            }
+            
+            // Update beads display
+            updateBeads();
+        }
+
+        // Update beads display based on answered riddles
+        function updateBeads() {
+            const beads = document.querySelectorAll('.bead');
+            const answeredRiddles = riddlesState.userAnswers.filter(answer => answer !== null).length;
+            
+            beads.forEach((bead, index) => {
+                const riddleIndex = index;
+                
+                // Remove all classes
+                bead.classList.remove('answered', 'current');
+                
+                // Mark as answered if user has answered this riddle
+                if (riddlesState.userAnswers[riddleIndex] !== null) {
+                    bead.classList.add('answered');
+                }
+                
+                // Mark as current riddle
+                if (riddleIndex === riddlesState.currentRiddleIndex) {
+                    bead.classList.add('current');
+                }
+            });
+            
+            // Update answered count
+            answeredCount.textContent = answeredRiddles;
+        }
+
+        // Load a specific riddle
+        function loadRiddle(index) {
+            if (index < 0 || index >= riddlesState.selectedRiddles.length) return;
+            
+            riddlesState.currentRiddleIndex = index;
+            riddlesState.answerRevealed = false;
+            const riddle = riddlesState.selectedRiddles[index];
+            
+            // Update riddle number display
+            currentRiddleNum.textContent = index + 1;
+            riddleNumDisplay.textContent = `Riddle ${index + 1}`;
+            
+            // Update riddle text
+            riddleText.textContent = riddle.riddle;
+            
+            // Clear options container
+            optionsContainer.innerHTML = '';
+            
+            // Add options
+            riddle.options.forEach((option, optionIndex) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option-item';
+                
+                // Check if this option was selected by user
+                if (riddlesState.userAnswers[index] === optionIndex) {
+                    optionElement.classList.add('selected');
+                    
+                    // If answer was already revealed, show correct/incorrect
+                    if (riddlesState.userCorrect[index] !== null) {
+                        if (riddlesState.userCorrect[index]) {
+                            optionElement.classList.add('correct');
+                        } else {
+                            optionElement.classList.add('incorrect');
+                        }
+                    }
+                }
+                
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(optionIndex));
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update answer display with description
+            answerText.textContent = riddle.description || riddle.answer;
+            
+            // Hide answer display initially
+            answerDisplay.classList.remove('show');
+            
+            // If user has already answered this riddle, show the answer
+            if (riddlesState.userAnswers[index] !== null && riddlesState.userCorrect[index] !== null) {
+                showAnswer();
+            }
+            
+            // Update navigation buttons
+            prevBtn.style.display = index === 0 ? 'none' : 'flex';
+            
+            if (index === riddlesState.selectedRiddles.length - 1) {
+                nextBtn.innerHTML = 'Submit <i class="fas fa-check"></i>';
+                nextBtn.classList.remove('next');
+                nextBtn.classList.add('submit');
+            } else {
+                nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+                nextBtn.classList.remove('submit');
+                nextBtn.classList.add('next');
+            }
+            
+            // Update beads
+            updateBeads();
+        }
+
+        // Select an option for current riddle
+        function selectOption(optionIndex) {
+            // If answer already revealed for this riddle, don't allow changing
+            if (riddlesState.answerRevealed) return;
+            
+            const currentIndex = riddlesState.currentRiddleIndex;
+            const riddle = riddlesState.selectedRiddles[currentIndex];
+            
+            // Update state
+            riddlesState.userAnswers[currentIndex] = optionIndex;
+            riddlesState.userCorrect[currentIndex] = (optionIndex === riddle.correct);
+            riddlesState.answerRevealed = true;
+            
+            // Update UI
+            const options = document.querySelectorAll('.option-item');
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                    
+                    // Mark as correct or incorrect
+                    if (index === riddle.correct) {
+                        option.classList.add('correct');
+                    } else {
+                        option.classList.add('incorrect');
+                        
+                        // Also highlight the correct answer
+                        options[riddle.correct].classList.add('correct');
+                    }
+                }
+            });
+            
+            // Show the answer
+            showAnswer();
+            
+            // Update beads
+            updateBeads();
+        }
+
+        // Show answer for current riddle
+        function showAnswer() {
+            answerDisplay.classList.add('show');
+        }
+
+        // Calculate and show results
+        function showResults() {
+            // Stop timer
+            stopTimer();
+            
+            // Calculate score
+            let correctCount = 0;
+            riddlesState.selectedRiddles.forEach((riddle, index) => {
+                const userCorrect = riddlesState.userCorrect[index];
+                
+                if (userCorrect !== null && userCorrect === true) {
+                    correctCount++;
+                }
+            });
+            
+            const score = correctCount;
+            const total = riddlesState.selectedRiddles.length;
+            const percentage = Math.round((correctCount / total) * 100);
+            
+            // Update results UI
+            finalScore.textContent = `${score}/${total}`;
+            correctAnswersElement.textContent = correctCount;
+            incorrectAnswersElement.textContent = total - correctCount;
+            timeTakenElement.textContent = formatTime(riddlesState.secondsElapsed);
+            
+            // Set result message based on score
+            let message;
+            if (percentage === 100) {
+                message = "Masha'Allah! Perfect score! You have excellent Islamic wisdom.";
+            } else if (percentage >= 80) {
+                message = "Excellent work! You have very good understanding of Islamic concepts.";
+            } else if (percentage >= 60) {
+                message = "Good job! You have solid Islamic knowledge.";
+            } else if (percentage >= 40) {
+                message = "Not bad! Keep learning to improve your understanding.";
+            } else {
+                message = "Keep learning! Every riddle you got wrong is an opportunity to learn something new.";
+            }
+            
+            resultMessage.textContent = message;
+            
+            // Show results screen
+            riddlesContainer.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            detailedResultsScreen.style.display = 'none';
+        }
+
+        // Show detailed results
+        function showDetailedResults() {
+            // Calculate score
+            let correctCount = 0;
+            let incorrectCount = 0;
+            
+            riddlesState.selectedRiddles.forEach((riddle, index) => {
+                const userCorrect = riddlesState.userCorrect[index];
+                
+                if (userCorrect !== null) {
+                    if (userCorrect === true) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                } else {
+                    incorrectCount++; // Unanswered riddles count as incorrect
+                }
+            });
+            
+            const total = riddlesState.selectedRiddles.length;
+            const percentage = Math.round((correctCount / total) * 100);
+            
+            // Update detailed results UI
+            detailedCorrect.textContent = correctCount;
+            detailedIncorrect.textContent = incorrectCount;
+            detailedScore.textContent = `${percentage}%`;
+            
+            // Clear question review container
+            questionReviewContainer.innerHTML = '';
+            
+            // Create riddle reviews
+            riddlesState.selectedRiddles.forEach((riddle, index) => {
+                const userAnswerIndex = riddlesState.userAnswers[index];
+                const userCorrect = riddlesState.userCorrect[index];
+                const isCorrect = userCorrect !== null ? userCorrect : false;
+                
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = `question-review ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                let optionsHtml = '';
+                riddle.options.forEach((option, optIndex) => {
+                    let optionClass = '';
+                    let label = '';
+                    
+                    // Check if this is the correct answer
+                    const isCorrectAnswer = optIndex === riddle.correct;
+                    
+                    // Check if this is the user's answer
+                    const isUserAnswer = userAnswerIndex === optIndex;
+                    
+                    if (isCorrectAnswer && isUserAnswer) {
+                        optionClass = 'review-option correct-answer user-answer';
+                        label = '<span class="option-label correct-label">Your Answer ✓</span>';
+                    } else if (isCorrectAnswer) {
+                        optionClass = 'review-option correct-answer';
+                        label = '<span class="option-label correct-label">Correct Answer</span>';
+                    } else if (isUserAnswer) {
+                        optionClass = 'review-option user-answer';
+                        label = '<span class="option-label incorrect-label">Your Answer</span>';
+                    } else {
+                        optionClass = 'review-option';
+                    }
+                    
+                    optionsHtml += `
+                        <div class="${optionClass}">
+                            ${option}
+                            ${label}
+                        </div>
+                    `;
+                });
+                
+                reviewDiv.innerHTML = `
+                    <div class="review-question">${index + 1}. ${riddle.riddle}</div>
+                    <div class="review-options">
+                        ${optionsHtml}
+                    </div>
+                    <div class="review-answer">
+                        <div class="answer-title">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Answer</span>
+                        </div>
+                        ${riddle.description || riddle.answer}
+                    </div>
+                `;
+                
+                questionReviewContainer.appendChild(reviewDiv);
+            });
+            
+            // Show detailed results screen
+            resultsScreen.style.display = 'none';
+            detailedResultsScreen.style.display = 'block';
+        }
+
+        // Restart riddles
+        function restartRiddles() {
+            // Reset riddles state
+            riddlesState.userAnswers = new Array(riddlesState.totalRiddles).fill(null);
+            riddlesState.userCorrect = new Array(riddlesState.totalRiddles).fill(null);
+            riddlesState.currentRiddleIndex = 0;
+            riddlesState.secondsElapsed = 0;
+            riddlesState.answerRevealed = false;
+            
+            // Show riddles setup screen
+            riddlesSetup.style.display = 'block';
+            riddlesContainer.style.display = 'none';
+            resultsScreen.style.display = 'none';
+            detailedResultsScreen.style.display = 'none';
+            
+            // Reset timer display
+            timerElement.textContent = '00:00';
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+
+        // Page load
+        window.addEventListener('load', function() {
+            hidePageLoader();
+            
+            // Update total riddles badge
+            totalRiddlesBadge.textContent = `${TOTAL_AVAILABLE_RIDDLES} Riddles`;
+            
+            // Set max value for input
+            riddleCountInput.max = TOTAL_AVAILABLE_RIDDLES;
+            riddleCountInput.value = Math.min(10, TOTAL_AVAILABLE_RIDDLES);
+        });
+
+        // Riddles mode selection
+        optionAll.addEventListener('click', function() {
+            optionAll.classList.add('active');
+            optionCustom.classList.remove('active');
+            numberSelector.classList.remove('active');
+            riddlesState.riddlesMode = 'all';
+        });
+
+        optionCustom.addEventListener('click', function() {
+            optionCustom.classList.add('active');
+            optionAll.classList.remove('active');
+            numberSelector.classList.add('active');
+            riddlesState.riddlesMode = 'custom';
+        });
+
+        // Start riddles button
+        startRiddlesBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                initializeRiddles();
+                hidePageLoader();
+            }, 500);
+        });
+
+        // Back button (from riddles to learning page)
+        backBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                // Change this to your actual learning page URL
+                window.location.href = '../learning/index.html';
+            }, 300);
+        });
+
+        // Previous riddle button
+        prevBtn.addEventListener('click', function() {
+            if (riddlesState.currentRiddleIndex > 0) {
+                loadRiddle(riddlesState.currentRiddleIndex - 1);
+            }
+        });
+
+        // Next/Submit button
+        nextBtn.addEventListener('click', function() {
+            const currentIndex = riddlesState.currentRiddleIndex;
+            
+            if (currentIndex === riddlesState.selectedRiddles.length - 1) {
+                // Submit riddles
+                showResults();
+            } else {
+                // Go to next riddle
+                loadRiddle(currentIndex + 1);
+            }
+        });
+
+        // Restart riddles button
+        restartBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                restartRiddles();
+                hidePageLoader();
+            }, 300);
+        });
+
+        // View Results button
+        viewResultsBtn.addEventListener('click', function() {
+            showDetailedResults();
+        });
+
+        // Back to results button (from detailed results)
+        backToResultsBtn.addEventListener('click', function() {
+            detailedResultsScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Only handle if riddles is active
+            if (riddlesContainer.style.display === 'block') {
+                if (e.key === 'ArrowLeft' && riddlesState.currentRiddleIndex > 0) {
+                    loadRiddle(riddlesState.currentRiddleIndex - 1);
+                } else if (e.key === 'ArrowRight') {
+                    if (riddlesState.currentRiddleIndex < riddlesState.selectedRiddles.length - 1) {
+                        loadRiddle(riddlesState.currentRiddleIndex + 1);
+                    } else {
+                        showResults();
+                    }
+                } else if (e.key >= '1' && e.key <= '3') {
+                    // Select option with number keys 1-3
+                    const optionIndex = parseInt(e.key) - 1;
+                    const currentRiddle = riddlesState.selectedRiddles[riddlesState.currentRiddleIndex];
+                    if (optionIndex < currentRiddle.options.length) {
+                        selectOption(optionIndex);
+                    }
+                } else if (e.key === 'Enter') {
+                    // Submit or next on Enter
+                    if (riddlesState.currentRiddleIndex === riddlesState.selectedRiddles.length - 1) {
+                        showResults();
+                    } else {
+                        loadRiddle(riddlesState.currentRiddleIndex + 1);
+                    }
+                }
+            }
+        });
+
+        // Handle beads click to navigate to specific riddle
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('bead')) {
+                const index = parseInt(e.target.dataset.index) - 1;
+                if (index >= 0 && index < riddlesState.selectedRiddles.length) {
+                    loadRiddle(index);
+                }
+            }
+        });
+
+        // Handle window resize for beads repositioning
+        window.addEventListener('resize', function() {
+            if (riddlesContainer.style.display === 'block') {
+                createBeads(riddlesState.totalRiddles);
+            }
+        });
+
+        // Handle beforeunload to stop timer
+        window.addEventListener('beforeunload', function() {
+            stopTimer();
+        });
+    </script>
+</body>
+</html>

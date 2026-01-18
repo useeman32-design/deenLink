@@ -1,0 +1,2974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Quiz | Test Your Knowledge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --correct-green: #2E7D32;
+            --incorrect-red: #C62828;
+            --quiz-green: #1D6F42;
+            --quiz-light-green: #E8F5E9;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --correct-green: #27ae60;
+            --incorrect-red: #e74c3c;
+            --quiz-green: #27ae60;
+            --quiz-light-green: rgba(39, 174, 96, 0.1);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Page Loader */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Top Section - Changed to Green */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Quiz Setup Screen */
+        .quiz-setup {
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .quiz-setup {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .setup-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .setup-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: var(--quiz-green);
+        }
+
+        .setup-title i {
+            font-size: 24px;
+        }
+
+        .setup-title h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .setup-description {
+            color: var(--dark-gray);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .setup-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-card {
+            background: var(--light-gray);
+            border-radius: 15px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            border-color: var(--quiz-green);
+            transform: translateY(-2px);
+        }
+
+        .option-card.active {
+            border-color: var(--quiz-green);
+            background: rgba(29, 111, 66, 0.05);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .option-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .option-badge {
+            background: var(--quiz-green);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+        }
+
+        /* Number Selector */
+        .number-selector {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .number-selector.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .selector-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .number-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .number-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--white);
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+        }
+
+        .number-input:focus {
+            outline: none;
+            border-color: var(--quiz-green);
+        }
+
+        .max-hint {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* Start Quiz Button */
+        .start-quiz-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--quiz-green), #2E7D32);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(29, 111, 66, 0.3);
+        }
+
+        .start-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(29, 111, 66, 0.4);
+        }
+
+        .start-quiz-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            display: none;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .quiz-container {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Quiz Header - Improved Mobile Layout */
+        .quiz-header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 480px) {
+            .quiz-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .quiz-progress {
+            font-size: 14px;
+            color: var(--text-dark);
+            background: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .quiz-timer {
+            font-size: 14px;
+            color: var(--text-dark);
+            background: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .timer-value {
+            font-weight: 600;
+            color: var(--quiz-green);
+        }
+
+        /* Tasbeeh Beads Progress - FIXED Mobile Layout */
+        .beads-progress-container {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .progress-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .progress-title i {
+            color: var(--accent-gold);
+            font-size: 18px;
+        }
+
+        .progress-title span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .beads-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .beads-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bead {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, var(--accent-gold), #f1c40f);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 9px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .bead.answered {
+            background: linear-gradient(135deg, var(--correct-green), #4CAF50);
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.4);
+            z-index: 2;
+        }
+
+        .bead.current {
+            background: linear-gradient(135deg, var(--quiz-green), #2E7D32);
+            transform: translate(-50%, -50%) scale(1.3);
+            box-shadow: 0 4px 10px rgba(29, 111, 66, 0.4);
+            z-index: 3;
+        }
+
+        .beads-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 15px;
+            min-width: 100px;
+            box-sizing: border-box;
+        }
+
+        .beads-progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .beads-progress-count {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--quiz-green);
+            font-family: 'Amiri', serif;
+        }
+
+        /* Question Card */
+        .question-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--quiz-green);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.4;
+            margin-bottom: 25px;
+            font-family: 'Amiri', serif;
+        }
+
+        /* Options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            padding: 16px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            color: var(--text-dark);
+            background: var(--white);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .option-item:hover {
+            border-color: var(--quiz-green);
+            transform: translateY(-2px);
+        }
+
+        .option-item.selected {
+            border-color: var(--quiz-green);
+            background: rgba(29, 111, 66, 0.05);
+        }
+
+        .option-item.correct {
+            border-color: var(--correct-green);
+            background: rgba(46, 125, 50, 0.05);
+        }
+
+        .option-item.incorrect {
+            border-color: var(--incorrect-red);
+            background: rgba(198, 40, 40, 0.05);
+        }
+
+        /* Quiz Navigation */
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .nav-btn.prev {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, var(--quiz-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .nav-btn.submit {
+            background: linear-gradient(135deg, var(--quiz-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .results-screen {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .results-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .results-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--quiz-green), #2E7D32);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: white;
+        }
+
+        .results-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .results-score {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--quiz-green);
+            margin-bottom: 20px;
+            font-family: 'Amiri', serif;
+        }
+
+        .results-message {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .results-details {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 480px) {
+            .results-actions {
+                flex-direction: row;
+            }
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .action-btn.restart {
+            background: linear-gradient(135deg, var(--quiz-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .action-btn.results {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        /* Detailed Results Screen */
+        .detailed-results-screen {
+            display: none;
+            padding: 20px 16px 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .detailed-results-screen {
+                padding: 25px 30px 50px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .detailed-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .detailed-results-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-summary {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--quiz-green);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 5px;
+        }
+
+        /* Question Review */
+        .question-review-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .question-review {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .question-review.correct {
+            border-left: 4px solid var(--correct-green);
+        }
+
+        .question-review.incorrect {
+            border-left: 4px solid var(--incorrect-red);
+        }
+
+        .review-question {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .review-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .review-option {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .review-option.correct-answer {
+            background: rgba(46, 125, 50, 0.1);
+            border: 1px solid var(--correct-green);
+        }
+
+        .review-option.user-answer {
+            background: rgba(198, 40, 40, 0.1);
+            border: 1px solid var(--incorrect-red);
+        }
+
+        .review-option.user-answer.correct-answer {
+            background: rgba(46, 125, 50, 0.1);
+            border: 1px solid var(--correct-green);
+        }
+
+        .option-label {
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .correct-label {
+            background: var(--correct-green);
+        }
+
+        .incorrect-label {
+            background: var(--incorrect-red);
+        }
+
+        .review-explanation {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            color: var(--quiz-green);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        /* Responsive Design - FIXED */
+        @media (max-width: 479px) {
+            .container {
+                padding: 0;
+            }
+            
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .quiz-progress, .quiz-timer {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 8px;
+            }
+            
+            .beads-progress-container {
+                padding: 15px;
+                margin: 0 0 20px 0;
+            }
+            
+            .beads-container {
+                height: 140px;
+                max-width: 320px;
+            }
+            
+            .bead {
+                width: 20px;
+                height: 20px;
+                font-size: 8px;
+            }
+            
+            .beads-center {
+                min-width: 90px;
+                padding: 8px;
+            }
+            
+            .beads-progress-count {
+                font-size: 24px;
+            }
+            
+            .question-card {
+                padding: 20px;
+                margin: 0 0 20px 0;
+            }
+            
+            .question-text {
+                font-size: 16px;
+            }
+            
+            .option-item {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            .nav-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .results-card {
+                padding: 25px;
+            }
+            
+            .results-score {
+                font-size: 36px;
+            }
+            
+            .detail-value {
+                font-size: 24px;
+            }
+            
+            .results-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 480px) and (max-width: 767px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .beads-container {
+                max-width: 350px;
+            }
+            
+            .question-text {
+                font-size: 17px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .container {
+                max-width: 90%;
+            }
+            
+            .beads-container {
+                max-width: 400px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 800px;
+            }
+            
+            .beads-container {
+                max-width: 450px;
+            }
+        }
+
+        /* Fix for very small screens */
+        @media (max-width: 360px) {
+            .beads-container {
+                height: 130px;
+                max-width: 280px;
+            }
+            
+            .bead {
+                width: 18px;
+                height: 18px;
+                font-size: 7px;
+            }
+            
+            .beads-center {
+                min-width: 80px;
+                padding: 6px;
+            }
+            
+            .beads-progress-count {
+                font-size: 20px;
+            }
+            
+            .question-text {
+                font-size: 15px;
+            }
+            
+            .option-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading Quiz...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Top Section - Now Green -->
+        <section class="top-section">
+            <div class="top-section-background"></div>
+            
+            <div class="top-bar">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="page-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Islamic Quiz</span>
+                </div>
+                <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+            </div>
+            
+            <div class="page-subtitle">
+                <h1>Test Your Islamic Knowledge</h1>
+                <p>Challenge yourself with questions from Quran, Hadith and Islamic History</p>
+            </div>
+        </section>
+
+        <!-- Quiz Setup Screen -->
+        <div class="quiz-setup" id="quizSetup">
+            <div class="setup-card">
+                <div class="setup-title">
+                    <i class="fas fa-cog"></i>
+                    <h2>Quiz Settings</h2>
+                </div>
+                
+                <p class="setup-description">
+                    Choose how many questions you want to answer. You can attempt all available questions or select a specific number.
+                </p>
+                
+                <div class="setup-options">
+                    <div class="option-card active" id="optionAll">
+                        <div class="option-header">
+                            <div class="option-name">All Questions</div>
+                            <div class="option-badge" id="totalQuestionsBadge">147 Questions</div>
+                        </div>
+                        <div class="option-description">
+                            Answer all 147 available questions. This is the complete quiz.
+                        </div>
+                    </div>
+                    
+                    <div class="option-card" id="optionCustom">
+                        <div class="option-header">
+                            <div class="option-name">Custom Number</div>
+                            <div class="option-badge">Choose</div>
+                        </div>
+                        <div class="option-description">
+                            Select a specific number of questions to answer.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Number Selector (hidden by default) -->
+                <div class="number-selector" id="numberSelector">
+                    <div class="selector-label">How many questions would you like to answer?</div>
+                    <div class="number-input-container">
+                        <input type="number" id="questionCount" class="number-input" min="1" max="147" value="10">
+                        <div class="option-badge">Q's</div>
+                    </div>
+                    <div class="max-hint">Maximum: 147 questions</div>
+                </div>
+                
+                <button class="start-quiz-btn" id="startQuizBtn">
+                    <i class="fas fa-play-circle"></i>
+                    Start Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div class="quiz-container" id="quizContainer">
+            <!-- Quiz Header - Improved for Mobile -->
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">10</span>
+                </div>
+                <div class="quiz-timer">
+                    <i class="fas fa-clock"></i>
+                    Time: <span class="timer-value" id="timer">00:00</span>
+                </div>
+            </div>
+
+            <!-- Tasbeeh Beads Progress - Fixed Mobile Layout -->
+            <div class="beads-progress-container">
+                <div class="progress-title">
+                    <i class="fas fa-kaaba"></i>
+                    <span>Quiz Progress</span>
+                </div>
+                <div class="beads-container">
+                    <div class="beads-circle" id="beadsCircle">
+                        <!-- Beads will be generated dynamically -->
+                    </div>
+                    <div class="beads-center">
+                        <div class="beads-progress-text">Progress</div>
+                        <div class="beads-progress-count">
+                            <span id="answeredCount">0</span>/<span id="totalQuestionsBeads">10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card">
+                <div class="question-number" id="questionNumDisplay">Question 1</div>
+                <div class="question-text" id="questionText">
+                    Loading question...
+                </div>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Options will be generated dynamically -->
+                </div>
+            </div>
+
+            <!-- Quiz Navigation -->
+            <div class="quiz-navigation">
+                <button class="nav-btn prev" id="prevBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    Previous
+                </button>
+                <button class="nav-btn next" id="nextBtn">
+                    Next
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-card">
+                <div class="results-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h2 class="results-title">Quiz Completed!</h2>
+                <div class="results-score" id="finalScore">0/10</div>
+                <p class="results-message" id="resultMessage">
+                    You've completed the quiz. Well done!
+                </p>
+                
+                <div class="results-details">
+                    <div class="detail-item">
+                        <div class="detail-value" id="correctAnswers">0</div>
+                        <div class="detail-label">Correct</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value" id="incorrectAnswers">0</div>
+                        <div class="detail-label">Incorrect</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value" id="timeTaken">00:00</div>
+                        <div class="detail-label">Time</div>
+                    </div>
+                </div>
+                
+                <div class="results-actions">
+                    <button class="action-btn restart" id="restartBtn">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </button>
+                    <button class="action-btn results" id="viewResultsBtn">
+                        <i class="fas fa-list-check"></i>
+                        View Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Results Screen -->
+        <div class="detailed-results-screen" id="detailedResultsScreen">
+            <div class="detailed-results-header">
+                <div class="detailed-results-title">
+                    <i class="fas fa-list-check"></i>
+                    <span>Detailed Results</span>
+                </div>
+                <button class="back-btn" id="backToResultsBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="results-summary">
+                <div class="summary-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="detailedCorrect">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="detailedIncorrect">0</div>
+                        <div class="stat-label">Incorrect</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="detailedScore">0%</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-review-container" id="questionReviewContainer">
+                <!-- Question reviews will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // QUIZ DATA - All 147 Questions
+        // ============================================
+
+        // First set of 50 questions (without explanations)
+        const firstSetQuestions = [
+            {
+                question: "How many other sons did Prophet Ya'qub have in addition to Prophet Yusuf?",
+                options: ["5", "7", "11"],
+                correct: 2,
+                explanation: "Prophet Ya'qub (Jacob) had 12 sons in total, including Yusuf. So he had 11 other sons."
+            },
+            {
+                question: "How many Asma-Al-husna are mentioned in the last two verses of Sura Al-Hashr?",
+                options: ["17", "15", "10"],
+                correct: 1,
+                explanation: "15 beautiful names of Allah are mentioned in the last two verses of Surah Al-Hashr."
+            },
+            {
+                question: "After they disobeyed Prophet Hud, they were destroyed by a fierce wind which Allah caused to blow against them for seven nights and eight days. Who were those people?",
+                options: ["People of Aad", "People of Thamud", "People of Makkah"],
+                correct: 0,
+                explanation: "The people of 'Ād were destroyed by a violent windstorm for seven nights and eight days after rejecting Prophet Hud."
+            },
+            {
+                question: "Which important event, mentioned in the Quran occurred one year before Hijrah in Makkah?",
+                options: ["Hunain", "Miraj", "Abu Lahab's death"],
+                correct: 1,
+                explanation: "The Isra and Miraj (Night Journey and Ascension) occurred one year before the Hijrah."
+            },
+            {
+                question: "Prophet Saleh was sent to?",
+                options: ["People of Kahaf", "People of Madyan", "People of Thamud"],
+                correct: 2,
+                explanation: "Prophet Saleh was sent to the people of Thamud."
+            },
+            {
+                question: "The Muslims were the first to explore...",
+                options: ["New York", "The Canary Islands", "Central Africa"],
+                correct: 1,
+                explanation: "Muslims were the first to explore the Canary Islands."
+            },
+            {
+                question: "How old was the Prophet when his Mother died?",
+                options: ["1 year", "5 years", "6 years"],
+                correct: 2,
+                explanation: "Prophet Muhammad (ﷺ) was 6 years old when his mother Amina died."
+            },
+            {
+                question: "The Holy Quran was revealed over how many years?",
+                options: ["25", "23", "21"],
+                correct: 1,
+                explanation: "The Quran was revealed over 23 years: 13 years in Makkah and 10 years in Madinah."
+            },
+            {
+                question: "What completes the fast of Ramadan?",
+                options: ["Payment of Sadaqa-al-fitr", "Paying the Masjid", "Payment of Zakat"],
+                correct: 0,
+                explanation: "Sadaqat al-Fitr (Zakat al-Fitr) is obligatory charity that completes the fast of Ramadan."
+            },
+            {
+                question: "Which ayat of the Quran confirms the Islamic Religion as the complete religion?",
+                options: ["al-Maidah, Ayat 3", "an-nas, Ayat 5", "an-Nahl, Ayat 89"],
+                correct: 0,
+                explanation: "Surah Al-Ma'idah (5:3): 'This day I have perfected for you your religion...'"
+            },
+            {
+                question: "Who was The daughter of Prophet Muhammad (SAW) who married Ali ibn Abi Talib?",
+                options: ["Umm Kulthum", "Fatimah", "Zainab"],
+                correct: 1,
+                explanation: "Fatimah (RA), the youngest daughter of Prophet Muhammad (ﷺ), married Ali ibn Abi Talib (RA)."
+            },
+            {
+                question: "Which surah contains the longest ayah in The Holy Quran?",
+                options: ["Ibrahim", "Al Hijr", "Al Baqarah"],
+                correct: 2,
+                explanation: "Surah Al-Baqarah (2:282) contains the longest verse in the Quran."
+            },
+            {
+                question: "Which kaafir king was killed by a lame mosquito?",
+                options: ["Ferawoon", "Karoon", "Namrud"],
+                correct: 2,
+                explanation: "King Nimrod (Namrud) was killed by a mosquito that entered his brain."
+            },
+            {
+                question: "The rate of Zakaah for money is (in percent)",
+                options: ["2.5", "25", "1.5"],
+                correct: 0,
+                explanation: "The rate of Zakat on money/savings is 2.5% annually."
+            },
+            {
+                question: "Who was known as Khalilullah?",
+                options: ["Isa (as)", "Ismail (as)", "Ibrahim (as)"],
+                correct: 2,
+                explanation: "Prophet Ibrahim (Abraham) is known as Khalilullah (Friend of Allah)."
+            },
+            {
+                question: "Who was first woman?",
+                options: ["Asiya", "Khadija", "Hawa"],
+                correct: 2,
+                explanation: "Hawwa (Eve) was the first woman created by Allah."
+            },
+            {
+                question: "Fatima (r.a.) and her husband had five children Hassan, Hussain, Zainab, Umm Kulthum and",
+                options: ["Ibrahim", "Muhassin", "Abdullah"],
+                correct: 1,
+                explanation: "Fatimah (RA) and Ali (RA) had five children: Hasan, Husayn, Zaynab, Umm Kulthum, and Muhassin."
+            },
+            {
+                question: "That the human being is created in the best of moulds is a verse from",
+                options: ["Sura al Takathur", "Sura al Tin", "Sura Al Maun"],
+                correct: 1,
+                explanation: "Surah At-Tin (95:4): 'We have certainly created man in the best of stature.'"
+            },
+            {
+                question: "Which Prophet was raised up by Allah (swt) and he will return before the end of this world?",
+                options: ["Prophet Musa (as)", "Prophet Isa (as)", "Prophet Yunus (as)"],
+                correct: 1,
+                explanation: "Prophet Isa (Jesus) was raised up by Allah and will return before the Day of Judgment."
+            },
+            {
+                question: "How long did Abu Bakr (r.a.) rule as a Khalifah?",
+                options: ["12 years", "10 years 6 months 4 days", "2 years 3 months"],
+                correct: 2,
+                explanation: "Abu Bakr (RA) ruled as Caliph for 2 years, 3 months, and 10 days."
+            },
+            {
+                question: "The first woman martyr of Islam was",
+                options: ["Fatima (RA)", "Khadija (RA)", "Sumayya (RA)"],
+                correct: 2,
+                explanation: "Sumayya bint Khayyat (RA) was the first martyr of Islam."
+            },
+            {
+                question: "When will the Day of Judgement occur?",
+                options: ["2012", "Only Allah knows", "Year 7000"],
+                correct: 1,
+                explanation: "Only Allah knows when the Day of Judgment will occur."
+            },
+            {
+                question: "Who was the last Prophet?",
+                options: ["Isa (AS)", "Musa (AS)", "Muhammad (SAW)"],
+                correct: 2,
+                explanation: "Prophet Muhammad (ﷺ) is the final prophet."
+            },
+            {
+                question: "How many chapters are in the Quran?",
+                options: ["114", "30", "6666"],
+                correct: 0,
+                explanation: "There are 114 surahs (chapters) in the Quran."
+            },
+            {
+                question: "How tall will we be in Jannah?",
+                options: ["10 feet", "Same as now", "60 cubits"],
+                correct: 2,
+                explanation: "In Paradise, believers will be 60 cubits tall (approximately 90 feet)."
+            },
+            {
+                question: "The Sun will rise from the west",
+                options: ["Never", "Near the Day of Judgement", "After the Day of Judgement"],
+                correct: 1,
+                explanation: "The sun will rise from the west near the Day of Judgment as a major sign."
+            },
+            {
+                question: "Whose dead body from the time of Musa (AS) is still with us today?",
+                options: ["Namrud", "Karoon", "Firawoon"],
+                correct: 2,
+                explanation: "The body of Pharaoh (Firaun) from the time of Musa is preserved as a sign."
+            },
+            {
+                question: "Satan is a",
+                options: ["Angel", "Jinn", "Human"],
+                correct: 1,
+                explanation: "Satan (Iblis) is from the jinn, not an angel."
+            },
+            {
+                question: "Allah is",
+                options: ["All Knowing, All Seeing", "All Hearing, Most Merciful", "All of the above"],
+                correct: 2,
+                explanation: "Allah possesses all perfect attributes including All-Knowing, All-Seeing, All-Hearing, Most Merciful, etc."
+            },
+            {
+                question: "To enter Jannah we must",
+                options: ["Be Rich", "Be Strong", "Follow Islam Totally"],
+                correct: 2,
+                explanation: "To enter Paradise, one must follow Islam completely with sincere faith and good deeds."
+            },
+            {
+                question: "How many times is Allahu Akbar mentioned in one Adhan?",
+                options: ["4", "6", "7"],
+                correct: 0,
+                explanation: "Allahu Akbar is said 4 times at the beginning of the Adhan."
+            },
+            {
+                question: "Can Allah see the things under the deep oceans?",
+                options: ["Yes", "No", "Maybe"],
+                correct: 0,
+                explanation: "Yes, Allah sees everything, even under the deepest oceans."
+            },
+            {
+                question: "When time for prayer comes we should",
+                options: ["Play Video Games", "Watch TV", "Pray right away"],
+                correct: 2,
+                explanation: "We should pray as soon as the prayer time begins."
+            },
+            {
+                question: "Can Muslims eat Pork (Pig)?",
+                options: ["Yes, Pork is Halal", "No, Pork is Haram", "Yes, if you say Bismillah"],
+                correct: 1,
+                explanation: "No, pork is strictly forbidden (haram) in Islam."
+            },
+            {
+                question: "How should we behave with our parents?",
+                options: ["Be nice to them sometimes only", "Always be rude to them", "Always be nice to them"],
+                correct: 2,
+                explanation: "We should always be kind, respectful, and obedient to our parents (within Islamic limits)."
+            },
+            {
+                question: "Who can see you all the time?",
+                options: ["Ghosts", "Angels", "Allah"],
+                correct: 2,
+                explanation: "Allah sees us all the time, everywhere."
+            },
+            {
+                question: "At what age did Prophet Muhammad (peace be upon him) die?",
+                options: ["53", "63", "73"],
+                correct: 1,
+                explanation: "Prophet Muhammad (ﷺ) passed away at the age of 63."
+            },
+            {
+                question: "When do we pray Fajr?",
+                options: ["After Sun rises", "Before going to sleep", "Before Sun rises"],
+                correct: 2,
+                explanation: "Fajr prayer is prayed before sunrise."
+            },
+            {
+                question: "How many ants are in the world?",
+                options: ["5 billion", "7 zillion", "Only Allah knows"],
+                correct: 2,
+                explanation: "Only Allah knows the exact number of all creations."
+            },
+            {
+                question: "Which Prophet invited for 950 years?",
+                options: ["Nuh (AS)", "Adam (AS)", "Ibrahim (AS)"],
+                correct: 0,
+                explanation: "Prophet Nuh (Noah) called his people to Islam for 950 years."
+            },
+            {
+                question: "Who accompanied Prophet Muhammad (pbuh) during his Hijrah (migration)?",
+                options: ["Ali (ra)", "Hamza (ra)", "Abu Bakr (ra)"],
+                correct: 2,
+                explanation: "Abu Bakr (RA) accompanied Prophet Muhammad (ﷺ) during the Hijrah to Madinah."
+            },
+            {
+                question: "Where did they (The Prophet and Abu Bakr) take shelter before proceeding to Al-Madinah?",
+                options: ["Mount Uhud", "Syria", "Cave of Thawr"],
+                correct: 2,
+                explanation: "They took shelter in the Cave of Thawr for three days."
+            },
+            {
+                question: "Where were the first Ayats (Verses) revealed to Prophet Muhammad (phub)?",
+                options: ["Cave of Safa", "Cave of Hira", "Kabah"],
+                correct: 1,
+                explanation: "The first revelation came to Prophet Muhammad (ﷺ) in the Cave of Hira."
+            },
+            {
+                question: "What is dry ablution called?",
+                options: ["Ghusl", "Wudhu", "Tayammum"],
+                correct: 2,
+                explanation: "Tayammum is dry ablution using clean earth when water is unavailable or harmful to use."
+            },
+            {
+                question: "In whose room did the Messenger of Allah (pbuh) die and was then buried there?",
+                options: ["Fatimah", "Aishah", "Hafsah"],
+                correct: 1,
+                explanation: "Prophet Muhammad (ﷺ) passed away in the room of Aishah (RA) and was buried there."
+            },
+            {
+                question: "In which battle was the Prophet's (phub) uncle Hamzah (ra) killed?",
+                options: ["Badr", "Khandaq", "Uhud"],
+                correct: 2,
+                explanation: "Hamzah (RA) was martyred in the Battle of Uhud."
+            },
+            {
+                question: "What major event took place in the 2nd Hijrah year in the month of Ramadan?",
+                options: ["Miraj", "Conquest of Makkah", "Battle of Badr"],
+                correct: 2,
+                explanation: "The Battle of Badr took place in Ramadan of the 2nd year after Hijrah."
+            },
+            {
+                question: "Who was called the 'Sword of Allah'?",
+                options: ["Khalid ibn Al-Walid (ra)", "Abu Dujana (ra)", "Ali (ra)"],
+                correct: 0,
+                explanation: "Khalid ibn Al-Walid (RA) was known as 'Sayfullah' (Sword of Allah)."
+            },
+            {
+                question: "Who amongst the Mothers of the Believers was nicknamed 'Umm ul-Masakeen' (Mother of the Poor)?",
+                options: ["Hafsah (ra)", "Zainab bint Khuzaimah (ra)", "Aishah (ra)"],
+                correct: 1,
+                explanation: "Zainab bint Khuzaimah (RA) was known for her generosity to the poor."
+            },
+            {
+                question: "Who was called 'Tahirah' (Pure) among the Mothers of the Believers (ra)?",
+                options: ["Khadijah (ra)", "Umm Salamah (ra)", "Hafsah (ra)"],
+                correct: 0,
+                explanation: "Khadijah (RA) was called 'At-Tahirah' (The Pure One)."
+            }
+        ];
+
+        // Second set of 97 questions (with references/explanations)
+        const secondSetQuestions = [
+            {
+                question: "Which sahaba did Prophet Muhammad (ﷺ) help to become free from being a slave by planting 300+ date palm trees?",
+                options: ["Bilal ibn Rabah (ra)", "Thawban ibn Bujdud (ra)", "Zayd ibn Harisa (ra)", "Salman al Farisi (ra)"],
+                correct: 3,
+                explanation: "Salman al-Farisi (RA) was a slave who was promised freedom if he planted 300+ date palm trees. The Prophet (ﷺ) helped him complete this task."
+            },
+            {
+                question: "What is the virtue of reciting Ayatul Kursi before going to bed at night to sleep?",
+                options: ["Takes away hunger", "Gives you strength", "You are protected from harm till sunrise", "House in Jannah"],
+                correct: 2,
+                explanation: "Abu Hurairah (r) said: The Messenger of Allah (ﷺ) appointed me to guard the zakaah of Ramadaan, then someone came and started rummaging in the foodstuff; and at the end of the hadeeth he said: 'When you go to your bed, recite Aayat al-Kursiy, for there will remain with you a guardian from Allah, and no devil will approach you, until morning comes.' The Prophet (ﷺ) said: 'He told you the truth although he is a liar. That was a devil.' (Sahih al-Bukhaari 2311)"
+            },
+            {
+                question: "Which Prophet (as) had control of the Jinn and was able to talk to animals?",
+                options: ["Sulaiman (as)", "Dawud (as)", "Yunus (as)", "Musa (as)"],
+                correct: 0,
+                explanation: "Prophet Sulaiman (as) was known for his wisdom and knowledge, and was bestowed with many special gifts and powers, such as the ability to command wind and the mystical jinn, and could understand and speak the language of animals, birds and insects."
+            },
+            {
+                question: "What does Zam Zam mean?",
+                options: ["Holy water", "Water well", "Stop", "Drink"],
+                correct: 2,
+                explanation: "Ibn 'Abbaas said: The Prophet (ﷺ) added, 'May Allah bestow Mercy on Ismaa'eel's mother! Had she left the Zamzam alone (flowing without trying to control it) (or had she not scooped from that water) (to fill her water-skin), Zamzam would have been a stream flowing on the surface of the earth.'"
+            },
+            {
+                question: "What 2 things does a person lose if he/she misses Asr salah intentionally?",
+                options: ["Friends", "Family", "Property", "Time"],
+                correct: 1, // Family is index 1, Property is index 2
+                explanation: "Prophet Muhammad ﷺ said: 'Whoever misses the `Asr prayer (intentionally) then it is as if he lost his family and property.' (Sahih Bukhari 552)",
+                multiCorrect: [1, 2] // Both family and property are correct
+            },
+            {
+                question: "What is Az-Zaqqum?",
+                options: ["Food for the people of hellfire", "Drink for the people of hellfire", "Home for the people of hellfire", "Clothes for the people of hellfire"],
+                correct: 0,
+                explanation: "'Then indeed you, O those astray [who are] deniers, Will be eating from trees of zaqqum' (Quran 56:51-52)"
+            },
+            {
+                question: "What is Sidrat al-Muntaha?",
+                options: ["Food for the people of Jannah", "An olive tree of the farthest boundary", "A lote tree of the farthest boundary", "Drink for the people of Jannah"],
+                correct: 2,
+                explanation: "'And indeed he (Muhammad (ﷺ) saw him (Jibreel) at a second descent (i.e., another time), near Sidrat al-Muntaha (the lote tree of the utmost boundary, beyond which none can pass), near it is the Paradise of Abode, when that covered the lote-tree which did cover it!' (Quran 53:13-16)"
+            },
+            {
+                question: "What was the relation between Prophet Musa (alayhi as-salaam) & Prophet Haroon (alayhi as-salaam)?",
+                options: ["Cousins", "Brothers", "Father & son", "Friends"],
+                correct: 1,
+                explanation: "'And Allah sent Haroon, the brother of Musa as a support to Musa when He wanted to send him to Pharaoh, to call him to worship Allah. This was in response to the request of Musa: 'And We granted him his brother Haroon (Aaron), (also) a Prophet, out of Our Mercy' [Quran 19:53]"
+            },
+            {
+                question: "Which 2 surahs are for seeking protection in Allah from evil-eye & witchcraft?",
+                options: ["Surah Yaseen", "Surah Falaq", "Surah Ikhlas", "Surah Naas"],
+                correct: 1, // Surah Falaq
+                explanation: "It was narrated that Abu Sa'id al-Khudri (r) said: 'The Messenger of Allah (ﷺ) used to seek refuge with Allah from the jinn and from the evil eye until the Mu'awwidhatayn (the last two chapters of the Quran, al-Falaq and al-Nas) were revealed, and when they were revealed he started to recite them and not anything else.' (Tirmidhi, Nasaa'i, Ibn Maajah)",
+                multiCorrect: [1, 3] // Both Surah Falaq and Surah Naas are correct
+            },
+            {
+                question: "Which of the following is not an example of Major Shirk?",
+                options: ["Asking help from a Prophet", "Going to a pious person's grave for blessings", "Denying Allah & His religion", "Showing off"],
+                correct: 3,
+                explanation: "The Prophet ﷺ said: 'What I fear for you the most is the minor shirk, that is ar-riya. Allah will say on the Day of Judgement when He is rewarding the people for their actions: Go to those for whom you did riya for in the world then see if you find the reward with them.' [Ahmad (5/428, 429)]"
+            },
+            {
+                question: "What does Allah's name Al-Mu'izz mean?",
+                options: ["The One who dishonours", "The One who will judge", "The One who honours", "The One who sees it all"],
+                correct: 2,
+                explanation: "Say (O Muhammad ﷺ): 'O Allah! Possessor of the kingdom, You give the kingdom to whom You will, and You take the kingdom from whom You will, and You endue with honour whom You will, and You humiliate whom You will. In Your Hand is the good. Verily, You are Able to do all things.' (Quran 3:26)"
+            },
+            {
+                question: "Whose dua Allah will not accept? 2 answers.",
+                options: ["A person who asks Allah many times", "A person who asks Allah using a dead person as an intermediary", "A person who asks Allah with tears", "A person who asks Allah with no focus"],
+                correct: 1, // Using dead person as intermediary
+                explanation: "Anas ibn Malik reported: If a drought became threatening, Umar ibn al-Khattab, may Allah be pleased with him, would ask Al-Abbas ibn Abdul Muttalib to supplicate for Allah to send rain. Umar would say, 'O Allah, we used to ask our Prophet, peace and blessings be upon him, to supplicate for rain and you would bless us with rain. Now we ask the uncle of our Prophet to supplicate for rain, so bless us with rain.' And so it would rain. (Sahih al Bukhari 964) The Prophet (ﷺ) said: 'Know that Allah does not answer a du'aa from a distracted heart.' (Tirmidhi, 3479; classed as hasan by al-Albaani in Saheeh al-Jaami', 245)",
+                multiCorrect: [1, 3] // Both using dead person as intermediary and asking with no focus
+            },
+            {
+                question: "Who was a first cousin of Prophet Muhammad (peace be upon him)?",
+                options: ["Abdullah ibn al-Abbas (ra)", "Abdullah ibn Umar (ra)", "Khalid ibn Waleed (ra)", "Abu Hurairah (ra)"],
+                correct: 0,
+                explanation: "Abdullah was the son of Abbas, an uncle of the Prophet ﷺ. He was born just three years before the Hijrah."
+            },
+            {
+                question: "Who will get their book of deeds in the right hand on the Day of Judgment?",
+                options: ["The disbelievers", "The believers", "The hypocrites", "The leaders"],
+                correct: 1,
+                explanation: "'Then as for him who will be given his Record in his right hand will say: 'Here! read my Record 'Surely, I did believe that I shall meet my Account! So he shall be in a life, well‑pleasing. In a lofty Paradise,' (Quran 69:19-22)"
+            },
+            {
+                question: "What issue was Imam al-Bukhari (rh) born with and how as it fixed?",
+                options: ["Deaf & fixed with medicine", "Blind & fixed with medicine", "Deaf & fixed with mother's dua", "Blind & fixed with mother's dua"],
+                correct: 3,
+                explanation: "Imam al-Bukhari was born blind and his mother's sincere dua restored his sight."
+            },
+            {
+                question: "Who was Umar bin Abdul Aziz (r)? 2 answers.",
+                options: ["A companion of the Prophet (ﷺ)", "A caliph of Islamic empire", "Grandson of Umar ibn al-Khattab", "Great grandson of Umar ibn al-Khattab"],
+                correct: 1, // A caliph
+                explanation: "Umar bin Abdul Aziz was the 8th Umayyad caliph, known for his justice and piety. He was the great grandson of Umar ibn al-Khattab.",
+                multiCorrect: [1, 3] // Both caliph and great grandson
+            },
+            {
+                question: "In Jannah, what is Tuba?",
+                options: ["A fruit", "A tree", "A river", "A door"],
+                correct: 1,
+                explanation: "'Those who believe, and work righteousness, Tuba is for them and a beautiful place of (final) return.' (Quran 13:29) Imam Ahmad recorded that Abu Sa'id Al-Khudri said that a man asked, 'O Allah's Messenger! Tuba for those who saw you and believed in you!' The Prophet ﷺ said, 'Tuba is for he who saw me and believed in me. Tuba, and another Tuba, and another Tuba for he who believed in me, but did not see me.' A man asked, 'What is Tuba?' The Prophet ﷺ said, 'A tree in Paradise whose width is a hundred years, and the clothes of the people of Paradise are taken from its bark.'"
+            },
+            {
+                question: "What does Allah's name Al-Ghani mean?",
+                options: ["The Giver", "The Protector", "The Independent", "The Wise"],
+                correct: 2,
+                explanation: "'O mankind! You are the poor ones in need of Allah, where as Allah is the Rich Beyond Need , the Praiseworthy.' (Quran 35:15)"
+            },
+            {
+                question: "Which Surah was favoured over the rest of the Quran with two prostrations?",
+                options: ["Surah Hajj", "Surah Tawbah", "Surah Muhammad", "Surah Yaseen"],
+                correct: 0,
+                explanation: "Amr bin Al-Ass (r) narrated that 'The Prophet (ﷺ) taught him (to read) 15 Sajda, 3 of which are in the Mufassal and 2 of which are in Surah Al-Hajj (22)'. [Abu Dawud, Al-Hakim, Ibn Majah, Daruqutni and Al-Mundiri said that 'it is a sound Hadith']"
+            },
+            {
+                question: "Which is not one of the rights of a Muslim upon another Muslim?",
+                options: ["If one invites, you accept it", "If one dies, you attend the funeral", "If one asks for advice, you give sincerely", "If one asks for money, you give"],
+                correct: 3,
+                explanation: "Prophet Muhammad ﷺ said: 'The rights of one Muslim over another are five: returning the greeting of salaam, visiting the sick, attending funerals, accepting invitations, and saying yarhamuk Allah (may Allah have mercy on you) to one who sneezes.' (Al-Bukhari (1240) and Muslim (2162))"
+            },
+            {
+                question: "Which Surah is referred as the oft-repeating verses Surah?",
+                options: ["Surah Ikhlas", "Surah Fatihah", "Surah Naas", "Surah Rahman"],
+                correct: 1,
+                explanation: "Abu Sa'eed al-Mu'alla (r) that the Messenger of Allah (ﷺ) said to him: 'I will surely teach you a soorah that is the greatest soorah in the Qur'an...' Then he said: 'Al-hamdu Lillahi Rabb al-'Aalameen... It is the seven oft-repeated verses and the Glorious Qur'an that I have been given (cf. al-Hijr 15:87).' (Bukhari 4474)"
+            },
+            {
+                question: "Which Angel will blow the horn to signal the Day of Judgement?",
+                options: ["Jibraeel (as)", "Mikaeel (as)", "Malik Ul Moat (as)", "Israfeel (as)"],
+                correct: 3,
+                explanation: "Messenger of Allah (ﷺ) said, 'How can I feel at ease when the Angel of the Trumpet, (Israfil) has put his lips to the Trumpet and is waiting for the order to blow it'. (Tirmidhi, Hasan)"
+            },
+            {
+                question: "Which Prophet (as) addressed the ruler King Nimrod?",
+                options: ["Prophet Ibrahim (as)", "Prophet Isa (as)", "Prophet Yusuf (as)", "Prophet Lut (as)"],
+                correct: 0,
+                explanation: "The Tafseer of Muhammad al-Kittaani Al-Idreesi reads, 'Nimrood, the dictator and tyrant who considered himself to be god, the disbeliever, tried to inflict harm upon Ibrahim (Abraham), but Allah gave a sweeping victory to Ibrahim as Allah hit Nimrood and his people with the smallest and most despicable creation. He sent mosquitoes upon them; a mosquito would enter their ears, and then their nostrils, and it would keep moving until it reached their brain; as a result, they died.'"
+            },
+            {
+                question: "Which uncle of Prophet Muhammad (peace be upon him) didn't accept Islam?",
+                options: ["Abdul Muttalib", "Hamza", "Abu Lahab", "Al-Abbas"],
+                correct: 2,
+                explanation: "'Perished be the hands of Abu Lahab and ruined he be, Neither his wealth nor what he has earned shall avail him. He shall shortly roast in a flaming fire. And his wife — laden with faggots, Shall have a rope of palm fiber round her neck.' (Qur'an 111:1-5)"
+            },
+            {
+                question: "What are you not allowed to do in Sujood?",
+                options: ["Make dua in Arabic", "Recite Quran", "Make dua in another language", "Recite adhkar"],
+                correct: 1,
+                explanation: "The Prophet ﷺ said: 'I have been forbidden to recite the Quran in the state of bowing and prostration. So whilst bowing, extol the Lord in it, and while you are in prostration strive your hardest supplicating, as it is most likely that you will be responded to.' [Muslim]"
+            },
+            {
+                question: "Which Surah doesn't begin with the basmallah?",
+                options: ["Surah Rahman", "Surah Yasin", "Surah Fatihah", "Surah Tawbah"],
+                correct: 3,
+                explanation: "Imam an-Nawawi (r) said: 'He should always recite Bismillah ir-Rahmaan ir-Raheem at the beginning of every Surah except Surah Baraa'ah (at-Tawbah), because the majority of scholars said that it is a verse wherever it is written in the Mushaf, and it was written at the beginning of all the soorahs except Surah at-Tawbah. If he recites it at the beginning of every soorah (other than at-Tawbah), then there is certainty that he had recited the entire Qur'an or Surah, and if he fails to recite the Basmalah, he has omitted part of the Qur'an according to the majority.' (at-Tibyaan fi Adaab Hamalat al-Qur'aan, 100)"
+            },
+            {
+                question: "How did Abu Hurairah (ra) stop forgetting and had an amazing memory?",
+                options: ["The Prophet ﷺ made dua for him (r)", "The Prophet ﷺ blessed his (r) clothing sheet", "He (r) ate lots of nuts", "He (r) drank a lot of milk"],
+                correct: 1,
+                explanation: "Abu Hurairah (r) reported: I said, 'O Messenger of Allah, I hear many traditions from you and I forget them.'; The Prophet (s) said: 'Spread open your garment.'; I spread it and then he placed something from his hand into it, saying, 'Wrap it.'. I wrapped it around me and I never forgot a tradition ever again. (Sahih Bukhari 3448)"
+            },
+            {
+                question: "What is Abu Bakr (r)'s full name?",
+                options: ["Abdur Rahman ibn Uthman", "Uthman ibn Abdullah", "Abdullah ibn Uthman", "Abdullah ibn Abdur Rahman"],
+                correct: 2,
+                explanation: "His full name is Abdullah bin Abu Quhafah Uthman bin Aamer Al Qurashi Al Taymi. His lineage joins with that of the Prophet ﷺ six generations before himself, in Murrah Ben Kaab."
+            },
+            {
+                question: "For whom is this dua for? – Rabbir Humhumma Kama Rabba Yaani Sahgeera",
+                options: ["Children", "Parents", "Whole Ummah", "The Deceased"],
+                correct: 1,
+                explanation: "'My Lord! Be merciful to them as they raised me when I was young.' (Quran 17:24)"
+            },
+            {
+                question: "Why does Allah allow suffering to happen? 2 answers.",
+                options: ["Because life is a test", "Because we were born to suffer", "Because Allah likes us to suffer", "Because we appreciate the good even more"],
+                correct: 0, // Because life is a test
+                explanation: "'We will certainly test you with a touch of fear and famine and loss of property, life, and crops. Give good news to those who patiently endure.' (Quran 2:155)",
+                multiCorrect: [0, 3] // Both life is a test and appreciate the good
+            },
+            {
+                question: "How many gates of Jannah are there?",
+                options: ["5", "6", "7", "8"],
+                correct: 3,
+                explanation: "The Messenger of Allah (ﷺ) said: 'Whoever performs Wudu' and does it well, then says: 'Ashhadu an la ilaha ill-Allah was ashhadu anna Muhammadan 'abduhu wa rasuluh (I bear witness that there is none worthy of worship except Allah, and I bear witness that Muhammad is his slave and Messenger),' eight gates of Paradise will be opened for him, and he may enter through whichever one he wishes.'' (Sunan Nisaai, Sahih)"
+            },
+            {
+                question: "What is not one of the conditions of the Shahada?",
+                options: ["Knowledge (Ilm)", "Submission (Inqiyad)", "Memorisation (Hifz)", "Sincerity (Ikhlas)"],
+                correct: 2,
+                explanation: "The conditions of Shahada are: Knowledge, Certainty, Acceptance, Submission, Truthfulness, Sincerity, and Love. Memorization is not a condition."
+            },
+            {
+                question: "Who was the only person did the Prophet ﷺ pray a full rakat behind?",
+                options: ["Abu Bakr (r)", "Umar ibn al Khattab (r)", "Abdur Rahman ibn Awf (r)", "Bilal ibn Rabah (r)"],
+                correct: 2,
+                explanation: "In the wording of Ahmad: 'Al-Mugheerah Ibn Shu'bah said: '...I saw the Prophet ﷺ praying behind Abdur-Rahmaan Ibn 'Awf one Rak'ah of Fajr [as he had missed one Rak'ah] and I saw the Prophet ﷺ, wiping over his socks.'"
+            },
+            {
+                question: "Which fruit is mentioned in the Quran?",
+                options: ["Grapes", "Apples", "Mangoes", "Oranges"],
+                correct: 0,
+                explanation: "'By means of it We produce gardens of dates and grapes for you, in which there are many fruits for you and from which you eat. (23:19)'"
+            },
+            {
+                question: "Where is it not allowed to pray Salah? (2 answers)",
+                options: ["Inside the Kaaba", "On top of the Kaaba", "Graveyard", "Market"],
+                correct: 1, // On top of Kaaba
+                explanation: "Ibn 'Umar relates that the Prophet ﷺ in seven places: 'dunghills, slaughterhouses, graveyards, middle of the road, bathhouses, watering places where the camels drink and rest, and on the roof of the house of Allah [the Ka'bah in Makkah].' [Ibn Majah, 'Abd ibn Humaid, and Tirmidhi]",
+                multiCorrect: [1, 2] // Both on top of Kaaba and graveyard
+            },
+            {
+                question: "What is another name given to the Quran?",
+                options: ["Ar-Rahmaan", "Al-Baqarah", "Al-Furqan", "Al-Sahih"],
+                correct: 2,
+                explanation: "'The month of Ramadan in which was revealed the Quran, a guidance for mankind and clear proofs for the guidance and the criterion (between right and wrong)...' (Quran 2:185)"
+            },
+            {
+                question: "Which Khalifah took control of Al-Aqsa in Jerusalem?",
+                options: ["Abu Bakr (Radhi'Allah Annhu)", "Umar ibn al-Khattab (Radhi'Allah Annhu)", "Uthman ibn Affan (Radhi'Allah Annhu)", "Ali ibn Abi Talib (Radhi'Allah Annhu)"],
+                correct: 1,
+                explanation: "The Bishop of Jerusalem handed over the keys of the city of Jerusalem to Umar ibn Al-Khattab. No killing or destruction was carried out by Muslims. It was a peaceful transition and all the holy sites of Christians were left untouched. Caliph Umar signed a treaty with Sophronius and as a result, Christians were allowed to live in the city, but must pay jizya, or tax."
+            },
+            {
+                question: "What is the consultation between the Muslim leader and the followers called?",
+                options: ["Ijma", "Shura", "Shariah", "Daleel"],
+                correct: 1,
+                explanation: "Shura is an Arabic word that literally means consultation and, in its simplest form, as an Islamic principle. Chapter 42 of the Quran is called Ash-Shurra (The Consultation)."
+            },
+            {
+                question: "How many Prophets did Prophet Muhammad ﷺ meet on the different heavens during Isra wal Miraaj?",
+                options: ["5", "6", "7", "8"],
+                correct: 3,
+                explanation: "Muhammad ﷺ met the Prophets Adam, Yahya (John), Isa (Jesus), Yusuf (Joseph), Idris, Harun (Aaron), Musa (Moses), and Ibrahim (Abraham) and visit hell and paradise."
+            },
+            {
+                question: "In which battle did some Muslim archers disobey the order of Prophet Muhammad ﷺ?",
+                options: ["Battle of Badr", "Battle of Uhud", "Battle of Khaybar", "Battle of Khandaq"],
+                correct: 1,
+                explanation: "This is the mountain that the Prophet ﷺ ordered the archers to remain on during the Battle of Uhud. The number of archers was fifty men who were in charge of protecting the backs of the Muslim fighters. They disobeyed the orders of the Prophet ﷺ as they thought that the battle was over."
+            },
+            {
+                question: "At what age does a person become an adult in Islam?",
+                options: ["18 years old", "10 years old", "Puberty", "15 years old"],
+                correct: 2,
+                explanation: "Prophet Muhammad ﷺ said: 'The pen is lifted from three people: a sleeping person until he awakens, a child until he becomes an adult, and an insane person until he regains his sanity.' In another narration, the Prophet said, 'A young boy until he reaches puberty.' (Sunan al-Tirmidhī 1423)"
+            },
+            {
+                question: "Who is one of the 4 best women of Jannah?",
+                options: ["Aasiya (wife of Firawn)", "Hajar (wife of Ibrahim (as))", "Aisha (wife of Muhammad ﷺ)", "Ruqayyah (wife of Uthman)"],
+                correct: 0,
+                explanation: "Prophet Muhammad ﷺ said: 'The best of women among the people of Paradise are Khadija bint Khuwaylid, Fatimah bint Muhammad, Maryam bint 'Imran, and 'Asiyah bint Muzahim, the wife of Pharaoh.' (Musnad Aḥmad 2896)"
+            },
+            {
+                question: "Which Prophet (as) is mentioned the most in the Quran by name?",
+                options: ["Prophet Muhammad ﷺ", "Prophet Isa (as)", "Prophet Musa (as)", "Prophet Adam (as)"],
+                correct: 2,
+                explanation: "Prophet Musa (Moses) was mentioned 136 times. He was mentioned the most in the Quran, as his story and the morals within them transcends time and has great value in Islamic history."
+            },
+            {
+                question: "What is the linguistic meaning of Taraweeh?",
+                options: ["To rest", "To pray", "To stay up", "To sleep"],
+                correct: 0,
+                explanation: "The Word Taraweeh ( تراويح ) comes from an Arabic word. The root word of Tarabih (Taraweeh) is rauh or raha. In the Arabic language, Rauh or Raha means taking rest."
+            },
+            {
+                question: "What is the linguistic meaning of Ramadan?",
+                options: ["To fast", "To suffer", "To burn the sins", "To race"],
+                correct: 2,
+                explanation: "Imam Qurtubi said: 'It (this month) was named Ramaḍān because it burns the sins of people with righteous deeds.'"
+            },
+            {
+                question: "The scholars have divided shirk into how many types?",
+                options: ["2", "3", "4", "5"],
+                correct: 0,
+                explanation: "Two types – Major and Minor Shirk."
+            },
+            {
+                question: "Which pillar was commanded in the journey of al Isra wal Miraaj?",
+                options: ["Fasting Ramadan", "Performing Hajj", "Praying 5 Times Salah", "Paying Zakat"],
+                correct: 2,
+                explanation: "Al-Bukhaari (349) and Muslim (162) narrated from Anas ibn Maalik (r) the famous hadeeth of the Isra' (Prophet's Night Journey) in which it is reported that the Messenger of Allah ﷺ said: 'Then Allah revealed what He revealed to me, and enjoined fifty prayers on me every day and night. I came back down to Moosa (as) and he said: What did your Lord enjoin upon your ummah? I said: Fifty prayers. He said: Go back to your Lord and ask Him to reduce it... I kept going back and forth between my Lord, may He be blessed and exalted, and Moosa (peace be upon him), until He said: 'O Muhammad, they are five prayers each day and night, for every prayer there will be a tenfold (reward), and that is fifty prayers.''"
+            },
+            {
+                question: "For whom bad deeds are not written?",
+                options: ["Before puberty age", "After puberty age", "Sick people", "Non-Muslims"],
+                correct: 0,
+                explanation: "The Messenger of Allah, ﷺ said, 'The pen is lifted from three people: a sleeping person until he awakens, a child until he becomes an adult, and an insane person until he regains his sanity.' In another narration, the Prophet ﷺ said, 'A young boy until he reaches puberty.' [Sunan al-Tirmidhī 1423 | Sahih]"
+            },
+            {
+                question: "Which Angel is Hellfire's gatekeeper?",
+                options: ["Jibraeel (as)", "Mikaeel (as)", "Maalik (as)", "Israfeel (as)"],
+                correct: 2,
+                explanation: "'Surely, the disbelievers will be in the torment of Hell to abide therein forever. (The torment) will not be lightened for them, and they will be plunged into destruction with deep regrets, sorrows and in despair therein. We wronged them not, but they were the wrongdoers. And they will cry: 'O Malik! Let your Lord make an end of us' He will say: 'Surely, you shall abide forever.' Indeed We have brought the truth to you, but most of you have a hatred for the truth' (Quran 43:74-78)"
+            },
+            {
+                question: "What is the hidden Shirk?",
+                options: ["Drinking alcohol & gambling", "Gossiping & lying", "Showing off your good deeds", "Keeping your good deeds secret"],
+                correct: 2,
+                explanation: "Abu Sa'eed (r) narrated that the Prophet ﷺ said: 'Shall I not tell you about that which I fear more for you than the Dajjaal?' We said: 'Yes.' He said: 'Hidden Shirk; which is when a man stands to pray and makes it look good because he sees a man looking at him.' [Ahmad and Ibn Maajah. Al-Haakim classified it as authentic]"
+            },
+            {
+                question: "How many times was Prophet Muhammad (peace be upon him)'s heart physically washed by Angel Jibraeel?",
+                options: ["0", "1", "2", "3"],
+                correct: 2,
+                explanation: "The first occurred when he was small and living among Banu Sa'd. The second occurred on the night of the Isra'."
+            },
+            {
+                question: "Which is the correct order of Prophet Muhammad ﷺ marriages to these 4 wives?",
+                options: ["Aisha, Khadija, Zaynab & Hafsa", "Khadija, Aisha, Hafsa & Zaynab", "Khadija, Hafsa, Aisha & Zaynab", "Aisha, Hafsa, Khadija & Zaynab"],
+                correct: 1,
+                explanation: "Khadijah was his first wife, then Aisha, then Hafsa bint Umar, then Zaynab bint Khuzaymah."
+            },
+            {
+                question: "Which of the following is not part of Tawheed Ar-Rububiyyah?",
+                options: ["Allah alone created everything", "Allah alone do we worship", "Allah alone owns everything", "Allah alone controls everything"],
+                correct: 1,
+                explanation: "The oneness of Allah's Lordship (Tawheed Ar Rububiyyah) is the belief that Allah alone has created the universe, that He alone is its Provider and Sustainer, and that He has complete ownership and power over His creation. In other words, Allah is one and unique in regard to His actions, such that no creature shares His power in creating and managing the universe."
+            },
+            {
+                question: "What should you do if you forget to say Bismillah before eating?",
+                options: ["Say Astaghfirullah", "Say Bismillah", "Say Bismillah Awwalahu wa Aakhiruhu", "It's ok, keep eating"],
+                correct: 2,
+                explanation: "Prophet Muhammad ﷺ said: 'When one of you eats, let him mention the name of Allah. If he forgets to mention the name of Allah at the beginning, let him say: In the name of Allah at the beginning and at the end (Bismillahi awwalahu wa aakhiruhu).' (Abu Dawud 3767, Tirmidhi 1858 & Ibn Majah 3264)"
+            },
+            {
+                question: "Why did the Muslims change their qibla (prayer direction) from Jerusalem to Makkah?",
+                options: ["They hated the Jews", "Prophet Muhammad ﷺ wanted to do so", "Allah commanded it", "The sahaba wanted to do so"],
+                correct: 2,
+                explanation: "'So turn your face [i.e., yourself] toward al-Masjid al-Haram. And wherever you [believers] are, turn your faces [i.e., yourselves] toward it [in prayer]...' (Quran 2:144)"
+            },
+            {
+                question: "Reciting Surah Fatiha in each rakat of the salah is...",
+                options: ["Optional", "Encouraged", "Not necessary", "A must"],
+                correct: 3,
+                explanation: "Prophet Muhammad ﷺ said: 'There is no prayer for the one who does not recite the Opening of the Book [i.e., al-Fatiha].' (Bukhari 714)"
+            },
+            {
+                question: "What was the first masjid Prophet Muhammad (peace be upon him) built?",
+                options: ["Masjid Quba", "Masjid an Nabawi", "Masjid al Haram", "Masjid al Aqsa"],
+                correct: 0,
+                explanation: "Ibn al-Qayyim (r) said in Zaad al-Ma'aad (3/58), when describing the arrival of the Messenger ﷺ in Madeenah: The Muslims said takbeer, rejoicing at his arrival, and they went out to meet him... He continued until he stopped in Quba', among Banu 'Amr ibn 'Awf, and he stayed among them for fourteen days, and founded the mosque of Quba', which is the first mosque to be established after the beginning of his Prophethood."
+            },
+            {
+                question: "What was the name of the flying animal on which Prophet Muhammad (peace be upon him) travelled to the heavens?",
+                options: ["Mikaeel", "Buraaq", "Miraaj", "Suraaq"],
+                correct: 1,
+                explanation: "It was during the night journey to the heavens."
+            },
+            {
+                question: "What is the reward for reciting Surah Ikhlas 10 times?",
+                options: ["A palace in Paradise", "A huge tree in Paradise", "A special fountain in Paradise", "A delicious meal in Paradise"],
+                correct: 0,
+                explanation: "The Prophet ﷺ said, 'Whoever recites the chapter ten times completely, 'He is Allah, the One' (112:1), Allah will build a palace for him in Paradise.' (Musnad Ahmad 15183 | Sahih (authentic) Al-Albani)"
+            },
+            {
+                question: "Who is the only Sahaba whose name is mentioned in the Quran?",
+                options: ["Abu Bakr as Siddiq (r)", "Zayd ibn Haarith (r)", "Umar ibn al Khattab (r)", "Khalid ibn Waleed (r)"],
+                correct: 1,
+                explanation: "'...So when Zayd had no longer any need for her, We married her to you...' (Quran 33:37)"
+            },
+            {
+                question: "Which act will not break Wudu?",
+                options: ["Saying bad words", "Fainting", "Touching private part without barrier", "Eating camel meat"],
+                correct: 0,
+                explanation: "Saying bad words does not break wudu, though it is sinful. Things that break wudu include: using the toilet, passing gas, deep sleep, loss of consciousness, direct touching of private parts without barrier, etc."
+            },
+            {
+                question: "Which pillar was commanded in the journey of al Isra wal Miraaj?",
+                options: ["Fasting Ramadan", "Performing Hajj", "Praying 5 times a day", "Paying Zakat"],
+                correct: 2,
+                explanation: "Al-Bukhari (349) and Muslim (162) narrated from Anas ibn Maalik (r) the famous hadeeth of the Isra' (Prophet's Night Journey) in which it is reported that the Messenger of Allah ﷺ said: 'Then Allah revealed what He revealed to me, and enjoined fifty prayers on me every day and night. I came back down to Musa (as) and he said: What did your Lord enjoin upon your ummah? I said: Fifty prayers. He said: Go back to your Lord and ask Him to reduce it... I kept going back and forth between my Lord, may He be blessed and exalted, and Musa (peace be upon him), until He said: 'O Muhammad, they are five prayers each day and night, for every prayer there will be a tenfold (reward), and that is fifty prayers.''"
+            },
+            {
+                question: "How old was Prophet Muhammad (peace be upon him) when he got the first revelation?",
+                options: ["25 years old", "35 years old", "40 years old", "63 years old"],
+                correct: 2,
+                explanation: "It was in the year 610 CE when Prophet Muhammad (ﷺ) was 40 years old."
+            },
+            {
+                question: "What does Tawheed mean?",
+                options: ["Belief in Prophet Muhammad ﷺ", "Belief in the Angels (as)", "Belief the Oneness of Allah", "Belief in the Day of Judgement"],
+                correct: 2,
+                explanation: "Tawheed means the Oneness of Allah - believing that Allah is One without partners in His Lordship, Worship, and Names & Attributes."
+            },
+            {
+                question: "Who narrated the most number of ahadeeth?",
+                options: ["Abu Hurayrah (r)", "Abdullah ibn Umar (r)", "Anas ibn Maalik (r)", "Aisha bint Abu Bakr (r)"],
+                correct: 0,
+                explanation: "Abu Hurayrah (Abdur-Rahman) d.59 AH at the age of 78; he narrated 5,374 Ahadith. The number of his students reaches 800."
+            },
+            {
+                question: "What does Shirk mean?",
+                options: ["Putting partners to Allah", "Lying to others", "Killing others", "Disobeying parents"],
+                correct: 0,
+                explanation: "Shirk means associating partners with Allah in worship, lordship, or His names and attributes."
+            },
+            {
+                question: "Which is not one of the 5 pillars of Islam?",
+                options: ["Ramadan", "Praying the 5 Salah", "Zakat", "Paradise"],
+                correct: 3,
+                explanation: "Islam is based on five pillars which the Messenger ﷺ has explained for us, when he said: 'Islam is built upon five [pillars]: the testimony that there is no god but Allah and that Muhammad is the Messenger of Allah; establishing regular prayer (salah); paying the zakaah; Hajj (pilgrimage) and fasting Ramadan.' (Bukhari, 8)"
+            },
+            {
+                question: "How many Prophets (as) are mentioned by name in the Quran?",
+                options: ["25", "313", "110,000", "124,000"],
+                correct: 0,
+                explanation: "25 prophets are mentioned by name in the Quran."
+            },
+            {
+                question: "When will the Prophet ﷺ intercede for us?",
+                options: ["In his ﷺ grave", "On the Day of Resurrection", "In our graves", "On the Sirat"],
+                correct: 1,
+                explanation: "Allah says: 'It may be that your Lord will raise you to Maqaam Mahmood (a station of praise and glory, i.e., the honour of intercession on the Day of Resurrection)' [Quran 17:79]."
+            },
+            {
+                question: "Which 3 types of people Jibraeel (as) & the Prophet (ﷺ) cursed? (Select 3)?",
+                options: ["The one who doesn't serve his elderly parents", "The one who doesn't gain forgiveness in Ramadan", "The one who doesn't send salawat upon the Prophet (ﷺ) when hearing his (ﷺ) name", "The one who doesn't reply to salaam"],
+                correct: 0, // Doesn't serve parents
+                explanation: "Kaab Ibn Ujrah (radiallahu anhu) relates that the Messenger of Allah (ﷺ) said: 'Come near to the minbar', and we came near the minbar. When he climbed the first step of the minbar, he said 'Amin', When he ascended the second step, he said 'Amin', When he climbed the third step, he said 'Amin'. When he came down, We said: 'O Messenger of Allah (ﷺ), we have heard from you today something which we never heard before.' He said: 'When I climbed the first step, the angel Jibreel (alayhi salam) appeared before me and said: 'Destruction to him who found the blessed month of Ramadhan and let it pass by without gaining forgiveness', upon that I said 'Amin'. When I climbed the second step, he said: 'Destruction to him before whom your name is taken and then he does not make Du'a for Allah's blessing on me (by saying, for example sallallahu alayhi wasalam).', I replied 'Amin'. When I climbed the third step, he said: 'Destruction unto him in whose lifetime his parents or either one of them reaches old age, and (through failure to serve them) he is not allowed to enter Jannah'., I said 'Amin'.' [Ibn Hibbaan, 3/188; also narrated by Al-Baihaqi and Al-Haakim; classed as saheeh by Shaykh Al-Albani in Saheeh al-Targheeb, 1679]",
+                multiCorrect: [0, 1, 2] // All three: doesn't serve parents, doesn't gain forgiveness in Ramadan, doesn't send salawat
+            },
+            {
+                question: "The angels at the Battle of Badr copied which sahabi's yellow turban?",
+                options: ["Sa'ad ibn Abi Waqqas (r)", "Bilal ibn Rabbah (r)", "Zubayr ibn Awwam (r)", "Ali ibn Abi Taalib (r)"],
+                correct: 2,
+                explanation: "Ibn Hajar (rahimahullah) has written that Imam Ibn Sa'd (rahimahullah) has recorded a narration with an authentic chain stating that Zubayr (radiyallahu'anhu) wore a yellow turban on the day of Badr. Rasulullah (sallallahu'alayhi wasallam) then said:'Indeed the Angels descended [to assist the Muslim army] in the same sign [clothing] as Zubayr.' (Tabaqat Ibn Sa'd, vol.3 pg.103 & Al-Isabah, number: 2796)"
+            },
+            {
+                question: "Why we should not curse time?",
+                options: ["Because it will bring bad luck", "Because Allah says He is Time", "Because Allah says He will cut our time", "Because it will bring good luck"],
+                correct: 1,
+                explanation: "Prophet Muhammad (ﷺ) said: 'Allah says, 'The sons of Adam offend Me and say, Woe to time, but they should not say Woe to time. I am time, I alternate the night and the day, and if I willed, I could seize them both.'' (Muslim 5827)"
+            },
+            {
+                question: "In Islam, the one who doesn't acknowledge the rights of the elders is..",
+                options: ["Acceptable at times", "Not from the Muslims", "Punished in Hellfire forever", "Same as being a murderer"],
+                correct: 1,
+                explanation: "Prophet Muhammad ﷺ said: 'Whoever does not show mercy to our young ones, or acknowledge the rights of our elders, is not one of us.' (Musnad Aḥmad 7033 | Sahih (authentic) according to Ahmad Shakir)"
+            },
+            {
+                question: "What is the name of Madinah in the Quran?",
+                options: ["Bakkah", "Quds", "Marwah", "Yathrib"],
+                correct: 3,
+                explanation: "'And when a faction of them said, 'O people of Yathrib, there is no stability for you [here], so return [home].' And a party of them asked permission of the Prophet, saying, 'Indeed, our houses are unprotected,' while they were not exposed. They did not intend except to flee.' (Quran 33:13)"
+            },
+            {
+                question: "According to the Prophet ﷺ, honesty leads to what? (2 answers)?",
+                options: ["Life span increase", "Righteousness", "Paradise", "Children increase"],
+                correct: 1, // Righteousness
+                explanation: "Prophet Muhammad ﷺ said: 'You must be truthful. Verily, truthfulness leads to righteousness and righteousness leads to Paradise. A man continues to be truthful and encourages honesty until he is recorded with Allah as truthful. And beware of falsehood. Verily, falsehood leads to wickedness and wickedness leads to the Hellfire. A man continues tell lies and encourages falsehood until he is recorded with Allah as a liar.' (Sahih Bukhari 6094 & Sahih Muslim 2607)",
+                multiCorrect: [1, 2] // Both righteousness and Paradise
+            },
+            {
+                question: "In sujood, which body part shouldn't be touching the ground?",
+                options: ["Forearms", "Nose", "Feet", "Hands"],
+                correct: 0,
+                explanation: "Prophet Muhammad ﷺ said: 'Be straight in prostration and let none of you put his forearms on the ground like a dog.' (Sahih al-Bukhari 788, Sahih Muslim 493)"
+            },
+            {
+                question: "Which wife of the Prophet ﷺ had children and was a widow when he ﷺ married her?",
+                options: ["Hafsa (r)", "Khadija (r)", "Zaynab bint Jahsh (r)", "Umm Salamah (r)"],
+                correct: 3,
+                explanation: "Umm Salamah (RA) was a widow with children when Prophet Muhammad (ﷺ) married her."
+            },
+            {
+                question: "Which of the following is the name of Allah with the meaning – The Most Loving One?",
+                options: ["Al-Majeed", "Al-Wadud", "Al-Muqtadir", "Al-Waarith"],
+                correct: 1,
+                explanation: "'Wahuwa l-Ghafūru l-Wadūd' - 'And He is the Most-Forgiving, the Most-Loving,' (Qur'an 85:14)"
+            },
+            {
+                question: "Which battle happened in Ramadan?",
+                options: ["Battle of Badr", "Battle of Khandaq", "Battle of Uhud", "Battle of Hunayn"],
+                correct: 0,
+                explanation: "The Battle of Badr took place in Ramadan of the 2nd year after Hijrah."
+            },
+            {
+                question: "How many times more reward does one gets for praying salah inside Masjid al Aqsa?",
+                options: ["250 times more", "500 times more", "1,000 times more", "50,000 times more"],
+                correct: 1,
+                explanation: "Prophet Muhammad ﷺ said: 'A prayer in Makkah (Ka'bah) is worth 100,000 times (reward), a prayer in my Masjid (Madinah) is worth 1,000 times and a prayer in Al-Aqsa Sanctuary is worth 500 times more reward than anywhere else.' [Tabarani, Bayhaqi, Suyuti]"
+            },
+            {
+                question: "Allah says, with His knowledge, He is more closer to us than our ________?",
+                options: ["Thoughts", "Heart", "Jugular Vein", "Blood"],
+                correct: 2,
+                explanation: "'And indeed We have created man, and We know whatever thoughts his inner self develops, and We are closer to him than (his) jugular vein.' (Quran 50:16)"
+            },
+            {
+                question: "Which Prophet (as) was tested with a severe illness by Allah?",
+                options: ["Prophet Yusuf (as)", "Prophet Ayub (as)", "Prophet Idris (as)", "Prophet Musa (as)"],
+                correct: 1,
+                explanation: "Prophet Ayub (Job) was tested with severe illness and loss of family and wealth, but remained patient and faithful to Allah."
+            },
+            {
+                question: "What is the virtue for praying the 4 voluntary salah before and after Dhuhr fardh salah?",
+                options: ["Protection from Hellfire", "Palace in Jannah", "1000 sins forgiven", "1000 good deeds written"],
+                correct: 0,
+                explanation: "Prophet Muhammad ﷺ said: 'Whoever prays four (rak'ahs) before Dhuhr and four after it, the Fire will not touch him.' (Al-Nasaa'i 1817 and al-Tirmidhi 428)"
+            },
+            {
+                question: "When does Allah say we should say Innā lillāhi wa innā ilayhi rāji'ūn?",
+                options: ["Only at someone's death", "When any calamity happens", "Wishing someone dies", "When you read it in the Quran"],
+                correct: 1,
+                explanation: "Allah says: 'We will certainly test you with a touch of fear and famine and loss of property, life, and crops. Give good news to those who patiently endure— who, when faced with a disaster, say, 'Surely to Allah we belong and to Him we will ˹all˺ return.' (Quran 2:155-156)"
+            },
+            {
+                question: "What is the encouraged Sunnah way to show appreciation to a fellow Muslim for his/her kind act?",
+                options: ["Saying Jazak'Allahu Khayr", "Saying Jazak'Allahu", "Saying Thank You", "Saying Well Done"],
+                correct: 0,
+                explanation: "Prophet Muhammad ﷺ said: 'Whoever has a favour done for him and says to the one who did it, 'Jazak Allaahu khayran,' has done enough to thank him.' (Tirmidhi 1958 & Nasaa'i in al-Sunan al-Kubra (6/53) | Hasan by Al-Albani)"
+            },
+            {
+                question: "What is the Arabic word for Allah's inspiration or revelation to a Prophet (as) called?",
+                options: ["Seerah", "Wahyi", "Iqra", "Daleel"],
+                correct: 1,
+                explanation: "Wahyi is the Arabic term for divine revelation or inspiration from Allah to His prophets."
+            },
+            {
+                question: "Which side did Prophet Muhammad ﷺ encourage us not to sleep on?",
+                options: ["Back side", "Left side", "Right side", "Stomach side"],
+                correct: 3,
+                explanation: "Ya'eesh ibn Tihfah al-Ghifaari reported that his father said: 'I stayed as a guest with the Messenger of Allah (ﷺ) with those of the poor whom he hosted. The Messenger of Allah (ﷺ) came out in the night to check up on his guests, and saw me lying on my stomach. He prodded me with his foot and said, 'Do not lie in this manner, for it is a way of lying that Allah hates.' According to another report, the Prophet (ﷺ) prodded him with his foot and woke him up, and said, 'Do not lie like this, for this is how the people of Hell lie.' (Reported by Ahmad, al-Fath al-Rabbaani, 14/244-245; by al-Tirmidhi, no. 2798, Shaakir edn.; and by Abu Dawood, al-Sunan, Kitaab al-Adab, no. 5040, al-Da'aas edn. Also reported in Saheeh al-Jaami', 2270-2271)"
+            },
+            {
+                question: "One type of minor shirk is the hidden shirk, what is it?",
+                options: ["Showing off", "Saying bad words", "Being selfish", "Not praying salah"],
+                correct: 0,
+                explanation: "Abu Sa'id al-Khudri reported: The Messenger of Allah, peace and blessings be upon him, came to us while we were discussing the False Messiah. The Prophet ﷺ said, 'Shall I not tell you about my greater fear for you than the False Messiah?' We said, 'Of course!' The Prophet ﷺ said, 'It is hidden idolatry, that a man stands for prayer and beautifies his prayer when he sees another man looking at him.' (Sunan Ibn Mājah 4204)"
+            },
+            {
+                question: "What are the two benefits of maintaining family ties?",
+                options: ["Increase in provision", "Status of a martyr", "Status of a Quran hafidh", "Increase in life"],
+                correct: 0, // Increase in provision
+                explanation: "The Prophet ﷺ said: 'Whoever would like his rizq (provision) to be increased and his life to be extended, should uphold the ties of kinship.' (Bukhari 5986 and Muslim 2557)",
+                multiCorrect: [0, 3] // Both increase in provision and increase in life
+            },
+            {
+                question: "Which body part(s) shouldn't be touching the floor during sujood?",
+                options: ["Toes", "Nose", "Fingers", "Elbows"],
+                correct: 3,
+                explanation: "The Prophet ﷺ said: 'Be straight in the prostrations and none of you should put his forearms on the ground (in the prostration) like a dog.' (Al-Bukhari)"
+            },
+            {
+                question: "Prophet Muhammad ﷺ said he ﷺ and Prophet Isa (as) are like what?",
+                options: ["Father and son", "Brothers", "Cousins", "Friends"],
+                correct: 1,
+                explanation: "The Prophet ﷺ said: 'I am the closest of the people to Jesus the son of Mary in this life and in the Hereafter.' It was said, 'How is that, O Messenger of Allah?' The Prophet ﷺ said,'The prophets are brothers from one father with different mothers. They have one religion and there was no other prophet between us.' (Sahih Muslim 2365)"
+            },
+            {
+                question: "Who was the only human to whom Allah blew the soul into him by Himself?",
+                options: ["Prophet Muhammad (ﷺ)", "Prophet Isa (as)", "Prophet Musa (as)", "Prophet Adam (as)"],
+                correct: 3,
+                explanation: "Prophet Muhammad ﷺ said: 'When Allah created Adam, He breathed the soul into him, then he sneezed and said: 'All praise is due to Allah.' So he praised Allah by His permission. Then His Lord said to him: 'May Allah have mercy upon you O Adam...' (Tirmidhi 3367, Hasan)"
+            },
+            {
+                question: "What does Allah's name Al-Musawwir mean?",
+                options: ["The Fashioner", "The Provider", "The Judge", "The Most High"],
+                correct: 0,
+                explanation: "Allah says: 'He is Allah: the Creator, the Inventor, the Shaper...' (Quran 59:24)"
+            },
+            {
+                question: "For which 2 reasons can a Muslim keep a dog?",
+                options: ["Protection", "As a pet", "For racing", "For hunting"],
+                correct: 0, // Protection
+                explanation: "Prophet Muhammad ﷺ said: 'Whoever keeps a dog, his good deeds will decrease every day by one qeeraat (a unit of measurement), unless it is a dog for farming or herding.' According to another report: '. . . unless it is a dog for herding sheep, farming or hunting.' (Sahih Bukhari 2322)",
+                multiCorrect: [0, 3] // Both protection and hunting
+            },
+            {
+                question: "During which battle did Prophet Muhammad (s) strike a massive rock once and it got smashed into pieces?",
+                options: ["Battle of Badr", "Battle of Uhud", "Battle of Khandaq", "Battle of Tabuk"],
+                correct: 2,
+                explanation: "During the Battle of Khandaq (the Trench), the Muslims encountered a massive rock while digging the trench. Prophet Muhammad (ﷺ) struck it and it broke into pieces."
+            },
+            {
+                question: "When is our Dua more readily accepted? 2 answers",
+                options: ["During sunshine", "During rain", "If being oppressed", "If going through ease"],
+                correct: 1, // During rain
+                explanation: "Prophet Muhammad ﷺ said: 'Two (du'as) are not rejected: du'a at the time of the call to prayer and du'a at the time of rain.' (al-Hakim in al-Mustadrak (2534); at-Tabarani in al-Mu'jam al-Kabir (5756); classed as sahih by al-Albani in Sahih al-Jami' (3078).) Prophet Muhammad ﷺ said: 'The supplications of three are never turned back: a fasting person until he breaks his fast, a just leader, and the supplication of the oppressed is raised above the clouds by Allah, the gates of heaven open for it and the Lord says: By My might, I will surely help you in due time.' (Sunan al-Tirmidhī 3598, Hasan)",
+                multiCorrect: [1, 2] // Both during rain and if being oppressed
+            },
+            {
+                question: "Prophet Muhammad ﷺ said he's the answer of which Prophet (as)'s Dua?",
+                options: ["Prophet Isa (as)", "Prophet Musa (as)", "Prophet Ibraheem (as)", "Prophet Adam (as)"],
+                correct: 2,
+                explanation: "Prophet Muhammad ﷺ said: 'I am the supplication of my forefather Ibraheem (as).' (Ibn Hisham, Sira: 1/175; Tabari, Tarikh: 2/128.)"
+            },
+            {
+                question: "Prophet Muhammad ﷺ encouraged rinsing the mouth with water after having which item?",
+                options: ["Dates", "Milk", "Lamb", "Bread"],
+                correct: 1,
+                explanation: "Prophet Muhammad ﷺ drank some milk and rinsed his mouth. The Prophet ﷺ said: 'It contains fatty grease.' (Sahih Bukhari 208, Sahih Muslim 358)"
+            }
+        ];
+
+        // Combine all questions
+        const allQuestions = [...firstSetQuestions, ...secondSetQuestions];
+        const TOTAL_AVAILABLE_QUESTIONS = allQuestions.length; // Should be 147
+
+        // ============================================
+        // QUIZ STATE MANAGEMENT
+        // ============================================
+        let quizState = {
+            currentQuestionIndex: 0,
+            selectedQuestions: [],
+            userAnswers: [],
+            startTime: null,
+            timerInterval: null,
+            secondsElapsed: 0,
+            totalQuestions: 10,
+            quizMode: 'all'
+        };
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const pageLoader = document.getElementById('pageLoader');
+        const quizSetup = document.getElementById('quizSetup');
+        const quizContainer = document.getElementById('quizContainer');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const detailedResultsScreen = document.getElementById('detailedResultsScreen');
+        const optionAll = document.getElementById('optionAll');
+        const optionCustom = document.getElementById('optionCustom');
+        const numberSelector = document.getElementById('numberSelector');
+        const questionCountInput = document.getElementById('questionCount');
+        const totalQuestionsBadge = document.getElementById('totalQuestionsBadge');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        const backBtn = document.getElementById('backBtn');
+        const currentQuestionNum = document.getElementById('currentQuestionNum');
+        const totalQuestionsElement = document.getElementById('totalQuestions');
+        const timerElement = document.getElementById('timer');
+        const questionNumDisplay = document.getElementById('questionNumDisplay');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const beadsCircle = document.getElementById('beadsCircle');
+        const answeredCount = document.getElementById('answeredCount');
+        const totalQuestionsBeads = document.getElementById('totalQuestionsBeads');
+        const finalScore = document.getElementById('finalScore');
+        const resultMessage = document.getElementById('resultMessage');
+        const correctAnswersElement = document.getElementById('correctAnswers');
+        const incorrectAnswersElement = document.getElementById('incorrectAnswers');
+        const timeTakenElement = document.getElementById('timeTaken');
+        const restartBtn = document.getElementById('restartBtn');
+        const viewResultsBtn = document.getElementById('viewResultsBtn');
+        const backToResultsBtn = document.getElementById('backToResultsBtn');
+        const detailedCorrect = document.getElementById('detailedCorrect');
+        const detailedIncorrect = document.getElementById('detailedIncorrect');
+        const detailedScore = document.getElementById('detailedScore');
+        const questionReviewContainer = document.getElementById('questionReviewContainer');
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        // Show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Format time as MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Shuffle array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Start timer
+        function startTimer() {
+            quizState.startTime = new Date();
+            quizState.timerInterval = setInterval(() => {
+                quizState.secondsElapsed++;
+                timerElement.textContent = formatTime(quizState.secondsElapsed);
+            }, 1000);
+        }
+
+        // Stop timer
+        function stopTimer() {
+            if (quizState.timerInterval) {
+                clearInterval(quizState.timerInterval);
+                quizState.timerInterval = null;
+            }
+        }
+
+        // ============================================
+        // QUIZ FUNCTIONS
+        // ============================================
+
+        // Initialize quiz with selected options - FIXED: Now allows all 147 questions
+        function initializeQuiz() {
+            // Determine quiz mode and number of questions
+            let totalQuestions;
+            
+            if (quizState.quizMode === 'all') {
+                // FIXED: Use all 147 questions instead of limiting to 50
+                totalQuestions = Math.min(TOTAL_AVAILABLE_QUESTIONS, 147); // Now uses all 147 questions
+            } else {
+                totalQuestions = parseInt(questionCountInput.value) || 10;
+                totalQuestions = Math.min(totalQuestions, TOTAL_AVAILABLE_QUESTIONS);
+                totalQuestions = Math.max(totalQuestions, 1);
+            }
+            
+            quizState.totalQuestions = totalQuestions;
+            
+            // Shuffle all questions and select required number
+            const shuffledQuestions = shuffleArray(allQuestions);
+            quizState.selectedQuestions = shuffledQuestions.slice(0, totalQuestions);
+            
+            // Reset user answers
+            quizState.userAnswers = new Array(totalQuestions).fill(null);
+            quizState.currentQuestionIndex = 0;
+            quizState.secondsElapsed = 0;
+            
+            // Update UI
+            totalQuestionsElement.textContent = totalQuestions;
+            totalQuestionsBeads.textContent = totalQuestions;
+            answeredCount.textContent = '0';
+            
+            // Create beads for progress tracking
+            createBeads(totalQuestions);
+            
+            // Show quiz container
+            quizSetup.style.display = 'none';
+            quizContainer.style.display = 'block';
+            resultsScreen.style.display = 'none';
+            detailedResultsScreen.style.display = 'none';
+            
+            // Start timer
+            startTimer();
+            
+            // Load first question
+            loadQuestion(0);
+        }
+
+        // Create tasbeeh beads for progress tracking - FIXED for mobile
+        function createBeads(totalBeads) {
+            if (!beadsCircle) return;
+            
+            beadsCircle.innerHTML = '';
+            
+            const containerWidth = beadsCircle.clientWidth || 350;
+            const containerHeight = beadsCircle.clientHeight || 150;
+            const centerX = containerWidth / 2;
+            const centerY = containerHeight / 2;
+            
+            // Calculate radius based on container size
+            const radius = Math.min(centerX, centerY) * 0.65; // Reduced to ensure beads fit
+            
+            for (let i = 1; i <= totalBeads; i++) {
+                const angle = (i / totalBeads) * 2 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                const bead = document.createElement('div');
+                bead.className = 'bead';
+                bead.dataset.index = i;
+                bead.style.left = `${x}px`;
+                bead.style.top = `${y}px`;
+                bead.textContent = i;
+                
+                // Adjust font size for smaller screens
+                if (window.innerWidth < 480) {
+                    bead.style.fontSize = '7px';
+                }
+                
+                beadsCircle.appendChild(bead);
+            }
+            
+            // Update beads display
+            updateBeads();
+        }
+
+        // Update beads display based on answered questions
+        function updateBeads() {
+            const beads = document.querySelectorAll('.bead');
+            const answeredQuestions = quizState.userAnswers.filter(answer => answer !== null).length;
+            
+            beads.forEach((bead, index) => {
+                const questionIndex = index;
+                
+                // Remove all classes
+                bead.classList.remove('answered', 'current');
+                
+                // Mark as answered if user has answered this question
+                if (quizState.userAnswers[questionIndex] !== null) {
+                    bead.classList.add('answered');
+                }
+                
+                // Mark as current question
+                if (questionIndex === quizState.currentQuestionIndex) {
+                    bead.classList.add('current');
+                }
+            });
+            
+            // Update answered count
+            answeredCount.textContent = answeredQuestions;
+        }
+
+        // Load a specific question
+        function loadQuestion(index) {
+            if (index < 0 || index >= quizState.selectedQuestions.length) return;
+            
+            quizState.currentQuestionIndex = index;
+            const question = quizState.selectedQuestions[index];
+            
+            // Update question number display
+            currentQuestionNum.textContent = index + 1;
+            questionNumDisplay.textContent = `Question ${index + 1}`;
+            
+            // Update question text
+            questionText.textContent = question.question;
+            
+            // Clear options container
+            optionsContainer.innerHTML = '';
+            
+            // Add options
+            question.options.forEach((option, optionIndex) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option-item';
+                
+                // Check if this option was selected by user
+                if (quizState.userAnswers[index] === optionIndex) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(optionIndex));
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.style.display = index === 0 ? 'none' : 'flex';
+            
+            if (index === quizState.selectedQuestions.length - 1) {
+                nextBtn.innerHTML = 'Submit <i class="fas fa-check"></i>';
+                nextBtn.classList.remove('next');
+                nextBtn.classList.add('submit');
+            } else {
+                nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+                nextBtn.classList.remove('submit');
+                nextBtn.classList.add('next');
+            }
+            
+            // Update beads display
+            updateBeads();
+        }
+
+        // Select an option for current question
+        function selectOption(optionIndex) {
+            const currentIndex = quizState.currentQuestionIndex;
+            quizState.userAnswers[currentIndex] = optionIndex;
+            
+            // Update UI
+            const options = document.querySelectorAll('.option-item');
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            // Update beads
+            updateBeads();
+        }
+
+        // Calculate and show results
+        function showResults() {
+            // Stop timer
+            stopTimer();
+            
+            // Calculate score
+            let correctCount = 0;
+            quizState.selectedQuestions.forEach((question, index) => {
+                const userAnswer = quizState.userAnswers[index];
+                
+                if (userAnswer !== null) {
+                    if (question.multiCorrect) {
+                        // For questions with multiple correct answers
+                        if (question.multiCorrect.includes(userAnswer)) {
+                            correctCount++;
+                        }
+                    } else {
+                        // For single answer questions
+                        if (userAnswer === question.correct) {
+                            correctCount++;
+                        }
+                    }
+                }
+            });
+            
+            const score = correctCount;
+            const total = quizState.selectedQuestions.length;
+            const percentage = Math.round((correctCount / total) * 100);
+            
+            // Update results UI
+            finalScore.textContent = `${score}/${total}`;
+            correctAnswersElement.textContent = correctCount;
+            incorrectAnswersElement.textContent = total - correctCount;
+            timeTakenElement.textContent = formatTime(quizState.secondsElapsed);
+            
+            // Set result message based on score
+            let message;
+            if (percentage === 100) {
+                message = "Masha'Allah! Perfect score! You have excellent knowledge of Islam.";
+            } else if (percentage >= 80) {
+                message = "Excellent work! You have very good Islamic knowledge.";
+            } else if (percentage >= 60) {
+                message = "Good job! You have solid Islamic knowledge.";
+            } else if (percentage >= 40) {
+                message = "Not bad! Keep learning to improve your knowledge.";
+            } else {
+                message = "Keep learning! Every question you got wrong is an opportunity to learn something new.";
+            }
+            
+            resultMessage.textContent = message;
+            
+            // Show results screen
+            quizContainer.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            detailedResultsScreen.style.display = 'none';
+        }
+
+        // Show detailed results
+        function showDetailedResults() {
+            // Calculate score
+            let correctCount = 0;
+            let incorrectCount = 0;
+            
+            quizState.selectedQuestions.forEach((question, index) => {
+                const userAnswer = quizState.userAnswers[index];
+                
+                if (userAnswer !== null) {
+                    if (question.multiCorrect) {
+                        if (question.multiCorrect.includes(userAnswer)) {
+                            correctCount++;
+                        } else {
+                            incorrectCount++;
+                        }
+                    } else {
+                        if (userAnswer === question.correct) {
+                            correctCount++;
+                        } else {
+                            incorrectCount++;
+                        }
+                    }
+                } else {
+                    incorrectCount++; // Unanswered questions count as incorrect
+                }
+            });
+            
+            const total = quizState.selectedQuestions.length;
+            const percentage = Math.round((correctCount / total) * 100);
+            
+            // Update detailed results UI
+            detailedCorrect.textContent = correctCount;
+            detailedIncorrect.textContent = incorrectCount;
+            detailedScore.textContent = `${percentage}%`;
+            
+            // Clear question review container
+            questionReviewContainer.innerHTML = '';
+            
+            // Create question reviews
+            quizState.selectedQuestions.forEach((question, index) => {
+                const userAnswer = quizState.userAnswers[index];
+                const isCorrect = userAnswer !== null ? 
+                    (question.multiCorrect ? 
+                        question.multiCorrect.includes(userAnswer) : 
+                        userAnswer === question.correct) : 
+                    false;
+                
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = `question-review ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                let optionsHtml = '';
+                question.options.forEach((option, optIndex) => {
+                    let optionClass = '';
+                    let label = '';
+                    
+                    // Check if this is the correct answer
+                    const isCorrectAnswer = question.multiCorrect ? 
+                        question.multiCorrect.includes(optIndex) : 
+                        optIndex === question.correct;
+                    
+                    // Check if this is the user's answer
+                    const isUserAnswer = userAnswer === optIndex;
+                    
+                    if (isCorrectAnswer && isUserAnswer) {
+                        optionClass = 'review-option correct-answer user-answer';
+                        label = '<span class="option-label correct-label">Your Answer ✓</span>';
+                    } else if (isCorrectAnswer) {
+                        optionClass = 'review-option correct-answer';
+                        label = '<span class="option-label correct-label">Correct Answer</span>';
+                    } else if (isUserAnswer) {
+                        optionClass = 'review-option user-answer';
+                        label = '<span class="option-label incorrect-label">Your Answer</span>';
+                    } else {
+                        optionClass = 'review-option';
+                    }
+                    
+                    optionsHtml += `
+                        <div class="${optionClass}">
+                            ${option}
+                            ${label}
+                        </div>
+                    `;
+                });
+                
+                reviewDiv.innerHTML = `
+                    <div class="review-question">${index + 1}. ${question.question}</div>
+                    <div class="review-options">
+                        ${optionsHtml}
+                    </div>
+                    ${question.explanation ? `
+                        <div class="review-explanation">
+                            <div class="explanation-title">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Explanation</span>
+                            </div>
+                            ${question.explanation}
+                        </div>
+                    ` : ''}
+                `;
+                
+                questionReviewContainer.appendChild(reviewDiv);
+            });
+            
+            // Show detailed results screen
+            resultsScreen.style.display = 'none';
+            detailedResultsScreen.style.display = 'block';
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            // Reset quiz state
+            quizState.userAnswers = new Array(quizState.totalQuestions).fill(null);
+            quizState.currentQuestionIndex = 0;
+            quizState.secondsElapsed = 0;
+            
+            // Show quiz setup screen
+            quizSetup.style.display = 'block';
+            quizContainer.style.display = 'none';
+            resultsScreen.style.display = 'none';
+            detailedResultsScreen.style.display = 'none';
+            
+            // Reset timer display
+            timerElement.textContent = '00:00';
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+
+        // Page load
+        window.addEventListener('load', function() {
+            hidePageLoader();
+            
+            // Update total questions badge
+            totalQuestionsBadge.textContent = `${TOTAL_AVAILABLE_QUESTIONS} Questions`;
+            
+            // Set max value for input
+            questionCountInput.max = TOTAL_AVAILABLE_QUESTIONS;
+            questionCountInput.value = Math.min(10, TOTAL_AVAILABLE_QUESTIONS);
+        });
+
+        // Quiz mode selection
+        optionAll.addEventListener('click', function() {
+            optionAll.classList.add('active');
+            optionCustom.classList.remove('active');
+            numberSelector.classList.remove('active');
+            quizState.quizMode = 'all';
+        });
+
+        optionCustom.addEventListener('click', function() {
+            optionCustom.classList.add('active');
+            optionAll.classList.remove('active');
+            numberSelector.classList.add('active');
+            quizState.quizMode = 'custom';
+        });
+
+        // Start quiz button
+        startQuizBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                initializeQuiz();
+                hidePageLoader();
+            }, 500);
+        });
+
+        // Back button (from quiz to learning page)
+        backBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = '../learning/index.html';
+            }, 300);
+        });
+
+        // Previous question button
+        prevBtn.addEventListener('click', function() {
+            if (quizState.currentQuestionIndex > 0) {
+                loadQuestion(quizState.currentQuestionIndex - 1);
+            }
+        });
+
+        // Next/Submit button
+        nextBtn.addEventListener('click', function() {
+            const currentIndex = quizState.currentQuestionIndex;
+            
+            if (currentIndex === quizState.selectedQuestions.length - 1) {
+                // Submit quiz
+                showResults();
+            } else {
+                // Go to next question
+                loadQuestion(currentIndex + 1);
+            }
+        });
+
+        // Restart quiz button
+        restartBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                restartQuiz();
+                hidePageLoader();
+            }, 300);
+        });
+
+        // View Results button
+        viewResultsBtn.addEventListener('click', function() {
+            showDetailedResults();
+        });
+
+        // Back to results button (from detailed results)
+        backToResultsBtn.addEventListener('click', function() {
+            detailedResultsScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Only handle if quiz is active
+            if (quizContainer.style.display === 'block') {
+                if (e.key === 'ArrowLeft' && quizState.currentQuestionIndex > 0) {
+                    loadQuestion(quizState.currentQuestionIndex - 1);
+                } else if (e.key === 'ArrowRight') {
+                    if (quizState.currentQuestionIndex < quizState.selectedQuestions.length - 1) {
+                        loadQuestion(quizState.currentQuestionIndex + 1);
+                    } else {
+                        showResults();
+                    }
+                } else if (e.key >= '1' && e.key <= '9') {
+                    // Select option with number keys 1-9
+                    const optionIndex = parseInt(e.key) - 1;
+                    const currentQuestion = quizState.selectedQuestions[quizState.currentQuestionIndex];
+                    if (optionIndex < currentQuestion.options.length) {
+                        selectOption(optionIndex);
+                    }
+                } else if (e.key === 'Enter') {
+                    // Submit or next on Enter
+                    if (quizState.currentQuestionIndex === quizState.selectedQuestions.length - 1) {
+                        showResults();
+                    } else {
+                        loadQuestion(quizState.currentQuestionIndex + 1);
+                    }
+                }
+            }
+        });
+
+        // Handle beads click to navigate to specific question
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('bead')) {
+                const index = parseInt(e.target.dataset.index) - 1;
+                if (index >= 0 && index < quizState.selectedQuestions.length) {
+                    loadQuestion(index);
+                }
+            }
+        });
+
+        // Handle window resize for beads repositioning
+        window.addEventListener('resize', function() {
+            if (quizContainer.style.display === 'block') {
+                createBeads(quizState.totalQuestions);
+            }
+        });
+
+        // Handle beforeunload to stop timer
+        window.addEventListener('beforeunload', function() {
+            stopTimer();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic App | Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --quran-blue: #1A5F7A;
+            --mecca-red: #C62828;
+            --medina-green: #2E7D32;
+            --prayer-blue: #1976D2;
+            --dua-teal: #00796B;
+            --zakat-orange: #E65100;
+            --fasting-cyan: #0097A7;
+            --deenlink-purple: #6A1B9A;
+            --ask-blue: #0D47A1;
+            --ask-light-blue: #E3F2FD;
+            --success-green: #27ae60;
+            --follow-green: #1D6F42;
+            --unfollow-red: #E53935;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --quran-blue: #3498db;
+            --mecca-red: #e74c3c;
+            --medina-green: #27ae60;
+            --prayer-blue: #3498db;
+            --dua-teal: #1abc9c;
+            --zakat-orange: #e67e22;
+            --fasting-cyan: #1abc9c;
+            --deenlink-purple: #9b59b6;
+            --ask-blue: #3498db;
+            --ask-light-blue: #1a3a5f;
+            --success-green: #2ecc71;
+            --follow-green: #2ecc71;
+            --unfollow-red: #e74c3c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* FIX: Remove all initial loading styles */
+        body {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Page Loader - Only for page transitions */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* FIXED: Default Islamic Loader from your code */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Top Section - Profile Header */
+        .top-section {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1522441815192-d9f04eb0615c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* FIXED: Top bar with centered profile text and proper spacing */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        /* FIXED: Profile text centered in header */
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Profile Info Section */
+        .profile-info-section {
+            position: relative;
+            margin-top: -60px;
+            z-index: 5;
+            padding: 0 16px;
+        }
+
+        @media (min-width: 768px) {
+            .profile-info-section {
+                padding: 0 30px;
+            }
+        }
+
+        .profile-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image-container {
+            position: relative;
+            margin-top: -70px;
+            margin-bottom: 15px;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--white);
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .profile-username {
+            font-size: 14px;
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+        }
+
+        .profile-bio {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            max-width: 400px;
+            margin: 0 auto 15px;
+        }
+
+        .profile-bio i {
+            color: var(--primary-green);
+            margin-right: 5px;
+        }
+
+        /* FIXED: Profile Stats without DeenPoints */
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 320px) {
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+        }
+
+        .stat-item {
+            padding: 12px 8px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-item:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .stat-item.posts .stat-value {
+            color: var(--primary-green);
+        }
+
+        .stat-item.followers .stat-value {
+            color: var(--primary-green);
+        }
+
+        .stat-item.following .stat-value {
+            color: var(--primary-green);
+        }
+
+        .stat-item.likes .stat-value {
+            color: var(--primary-green);
+        }
+
+        /* FIXED: Profile actions - Follow and Share buttons */
+        .profile-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .profile-actions {
+                gap: 6px;
+            }
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 8px;
+            border-radius: 12px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 380px) {
+            .action-btn {
+                font-size: 11px;
+                padding: 8px 6px;
+                gap: 4px;
+            }
+            
+            .action-btn i {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .profile-actions {
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                min-width: calc(50% - 3px);
+                margin-bottom: 6px;
+            }
+        }
+
+        .action-btn.follow {
+            background: linear-gradient(135deg, var(--follow-green), #2E7D32);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.2);
+        }
+
+        .action-btn.follow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(29, 111, 66, 0.3);
+        }
+
+        .action-btn.unfollow {
+            background: linear-gradient(135deg, var(--unfollow-red), #f44336);
+            color: white;
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
+        }
+
+        .action-btn.unfollow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(229, 57, 53, 0.3);
+        }
+
+        .action-btn.share {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .action-btn.share:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.more {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            border: 1px solid var(--medium-gray);
+            position: relative;
+            width: 40px;
+            flex: 0 0 40px;
+        }
+
+        .action-btn.more:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+
+        /* More Options Dropdown */
+        .more-options-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .more-options-dropdown.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .dropdown-item.report {
+            color: #e74c3c;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Posts Section */
+        .posts-section {
+            padding: 20px 16px 100px;
+        }
+
+        @media (min-width: 768px) {
+            .posts-section {
+                padding: 25px 30px 120px;
+                max-width: 700px;
+                margin: 0 auto;
+            }
+        }
+
+        .posts-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .posts-title i {
+            color: var(--primary-green);
+        }
+
+        /* Text Post Cards */
+        .text-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .text-post-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .text-post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--medium-gray);
+        }
+
+        /* Post header with user info */
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .post-user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .post-user-username {
+            font-size: 11px;
+            color: var(--dark-gray);
+            margin-bottom: 2px;
+        }
+
+        .post-content {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            white-space: pre-line;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .post-time {
+            font-size: 11px;
+            color: var(--dark-gray);
+        }
+
+        .post-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .post-stat:hover {
+            background-color: var(--light-gray);
+        }
+
+        .post-stat i {
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .post-stat.liked i {
+            color: #e74c3c;
+        }
+
+        .post-stat.liked {
+            color: #e74c3c;
+        }
+
+        /* Post More Options */
+        .post-more-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 2;
+        }
+
+        .post-more-btn:hover {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        /* Post More Options Dropdown */
+        .post-more-dropdown {
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .post-more-dropdown.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Comment Section */
+        .comments-section {
+            margin-top: 12px;
+            padding: 12px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .comments-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .comment-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .comment-text {
+            font-size: 12px;
+            color: var(--text-dark);
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .comment-time {
+            font-size: 10px;
+            color: var(--dark-gray);
+            margin-top: 2px;
+        }
+
+        /* Comment Like Button */
+        .comment-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .comment-like {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .comment-like:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .comment-like i {
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .comment-like.liked i {
+            color: #e74c3c;
+        }
+
+        .comment-like.liked {
+            color: #e74c3c;
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 15px;
+            font-size: 12px;
+            color: var(--text-dark);
+            background-color: var(--white);
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .send-comment-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .send-comment-btn:hover {
+            background-color: #155c35;
+            transform: scale(1.05);
+        }
+
+        /* Report Modal */
+        .report-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .report-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .report-modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .report-modal-overlay.active .report-modal-content {
+            transform: translateY(0);
+        }
+
+        .report-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .report-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .report-modal-title i {
+            font-size: 20px;
+            color: #e74c3c;
+        }
+
+        .report-modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--dark-gray);
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .report-modal-close:hover {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .report-modal-body {
+            padding: 20px;
+        }
+
+        .report-reason-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .report-reason-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .report-reason-option:hover {
+            background-color: var(--light-gray);
+        }
+
+        .report-reason-option.selected {
+            border-color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .report-reason-option input[type="radio"] {
+            display: none;
+        }
+
+        .report-reason-option label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .report-custom-reason {
+            margin-top: 15px;
+        }
+
+        .report-custom-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--text-dark);
+            background-color: var(--white);
+            min-height: 80px;
+            resize: vertical;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .report-custom-textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .report-modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .report-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .report-btn.cancel {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .report-btn.cancel:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .report-btn.submit {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .report-btn.submit:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .report-btn.submit:disabled {
+            background-color: var(--dark-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            background-color: var(--white);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            z-index: 100;
+            border-radius: 0;
+        }
+
+        @media (min-width: 768px) {
+            .bottom-nav {
+                max-width: 768px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                max-width: 480px;
+            }
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        /* Nav Loader Animation */
+        .nav-loader {
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item.loading .nav-loader {
+            opacity: 1;
+            animation: pulseLoader 1s infinite;
+        }
+
+        @keyframes pulseLoader {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0.7;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .profile-name {
+                font-size: 22px;
+            }
+            
+            .stat-value {
+                font-size: 16px;
+            }
+            
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .profile-actions {
+                gap: 6px;
+            }
+            
+            .action-btn {
+                font-size: 12px;
+                padding: 10px;
+                gap: 5px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .page-title {
+                font-size: 18px;
+            }
+            
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-btn {
+                font-size: 11px;
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader - Only for page transitions -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="report-modal-overlay" id="reportModalOverlay">
+        <div class="report-modal-content">
+            <div class="report-modal-header">
+                <div class="report-modal-title">
+                    <i class="fas fa-flag"></i>
+                    <span id="reportModalTitle">Report Content</span>
+                </div>
+                <button class="report-modal-close" id="reportModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="report-modal-body">
+                <form id="reportForm">
+                    <div class="report-reason-options">
+                        <div class="report-reason-option">
+                            <input type="radio" id="reason1" name="reportReason" value="Inappropriate Content">
+                            <label for="reason1">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Inappropriate Content</span>
+                            </label>
+                        </div>
+                        <div class="report-reason-option">
+                            <input type="radio" id="reason2" name="reportReason" value="Harassment or Bullying">
+                            <label for="reason2">
+                                <i class="fas fa-user-slash"></i>
+                                <span>Harassment or Bullying</span>
+                            </label>
+                        </div>
+                        <div class="report-reason-option">
+                            <input type="radio" id="reason3" name="reportReason" value="Spam or Misinformation">
+                            <label for="reason3">
+                                <i class="fas fa-ban"></i>
+                                <span>Spam or Misinformation</span>
+                            </label>
+                        </div>
+                        <div class="report-reason-option">
+                            <input type="radio" id="reason4" name="reportReason" value="Hate Speech">
+                            <label for="reason4">
+                                <i class="fas fa-comment-slash"></i>
+                                <span>Hate Speech</span>
+                            </label>
+                        </div>
+                        <div class="report-reason-option">
+                            <input type="radio" id="reason5" name="reportReason" value="Violence or Threats">
+                            <label for="reason5">
+                                <i class="fas fa-fist-raised"></i>
+                                <span>Violence or Threats</span>
+                            </label>
+                        </div>
+                        <div class="report-reason-option">
+                            <input type="radio" id="reason6" name="reportReason" value="Other">
+                            <label for="reason6">
+                                <i class="fas fa-ellipsis-h"></i>
+                                <span>Other</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="report-custom-reason" id="customReasonContainer" style="display: none;">
+                        <textarea 
+                            class="report-custom-textarea" 
+                            id="customReason" 
+                            placeholder="Please describe the issue in detail..."
+                            maxlength="500"
+                        ></textarea>
+                        <div style="text-align: right; margin-top: 5px; font-size: 12px; color: var(--dark-gray);">
+                            <span id="charCount">0</span>/500
+                        </div>
+                    </div>
+                    
+                    <div class="report-modal-actions">
+                        <button type="button" class="report-btn cancel" id="cancelReportBtn">Cancel</button>
+                        <button type="submit" class="report-btn submit" id="submitReportBtn" disabled>Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <!-- FIXED: Top bar with centered profile text -->
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    
+                    <!-- FIXED: Profile text centered -->
+                    <div class="page-title">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Info Section -->
+            <div class="profile-info-section">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-image-container">
+                            <img src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Profile" class="profile-image">
+                        </div>
+                        
+                        <h1 class="profile-name">Ahmad Ali</h1>
+                        <div class="profile-username">@ahmadalidev</div>
+                        
+                        <div class="profile-bio">
+                            <i class="fas fa-quote-left"></i>
+                            Muslim Developer • Quran Memorizer • Love for Deen & Dunya
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        
+                        <!-- FIXED: Profile stats for visitors -->
+                        <div class="profile-stats">
+                            <div class="stat-item posts">
+                                <div class="stat-value">47</div>
+                                <div class="stat-label">Posts</div>
+                            </div>
+                            <div class="stat-item followers">
+                                <div class="stat-value">1.2K</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="stat-item following">
+                                <div class="stat-value">348</div>
+                                <div class="stat-label">Following</div>
+                            </div>
+                            <div class="stat-item likes">
+                                <div class="stat-value">2.5K</div>
+                                <div class="stat-label">Likes</div>
+                            </div>
+                        </div>
+                        
+                        <!-- FIXED: Visitor action buttons - Only Follow, Share, and Report -->
+                        <div class="profile-actions">
+                            <button class="action-btn follow" id="followBtn">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Follow</span>
+                            </button>
+                            <button class="action-btn share" id="shareBtn">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Share</span>
+                            </button>
+                            <div style="position: relative;">
+                                <button class="action-btn more" id="moreBtn">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="more-options-dropdown" id="moreOptions">
+                                    <div class="dropdown-item report" id="reportProfileBtn">
+                                        <i class="fas fa-flag"></i>
+                                        <span>Report Profile</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Section -->
+            <section class="posts-section">
+                <h2 class="posts-title">
+                    <i class="fas fa-feather-alt"></i>
+                    <span>Posts</span>
+                </h2>
+                
+                <div class="text-posts" id="textPosts">
+                    <!-- Posts will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <a href="../index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-home"></i>
+                    <span class="nav-label">Home</span>
+                </a>
+                <a href="../quranHadith/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-quran"></i>
+                    <span class="nav-label">Quran &<br>Hadith</span>
+                </a>
+                <a href="../tools/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-pray"></i>
+                    <span class="nav-label">Worship<br>Tools</span>
+                </a>
+                <a href="../learning/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="nav-label">Learning</span>
+                </a>
+                <a href="#" class="nav-item active">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-user"></i>
+                    <span class="nav-label">Profile</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // FIXED: COMPLETELY REMOVED BLINKING ISSUE
+        // ============================================
+
+        // Show content immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            // Page is already loaded, content is visible
+            document.body.classList.add('loaded');
+            
+            // Set active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('.nav-item[href="#"]').classList.add('active');
+            
+            // Initialize app
+            initializeApp();
+        });
+
+        // Page loader for transitions only
+        const pageLoader = document.getElementById('pageLoader');
+
+        // Function to show page loader (only for page transitions)
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            const currentPath = window.location.pathname;
+            
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            const normalizePath = (path) => {
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            if (isSamePage(href, window.location.href)) {
+                if (anchor.classList.contains('nav-item')) {
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    anchor.classList.add('active');
+                }
+                return;
+            }
+            
+            e.preventDefault();
+            
+            // Show loading state on nav item
+            if (anchor.classList.contains('nav-item')) {
+                anchor.classList.add('loading');
+            }
+            
+            showPageLoader();
+            
+            // Navigate with minimal delay
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300);
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+            }
+        });
+
+        // ============================================
+        // APPLICATION STATE
+        // ============================================
+
+        const state = {
+            user: {
+                name: 'Ahmad Ali',
+                username: '@ahmadalidev',
+                bio: 'Muslim Developer • Quran Memorizer • Love for Deen & Dunya',
+                posts: 47,
+                followers: 1256,
+                following: 348,
+                likes: 2500,
+                profileImage: 'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+            },
+            visitor: {
+                isFollowing: false
+            },
+            currentReport: {
+                type: null, // 'profile' or 'post'
+                id: null // profile id or post id
+            },
+            posts: [
+                {
+                    id: 1,
+                    content: `"The best among you are those who have the best manners and character." - Prophet Muhammad (peace be upon him)
+
+Today I reflected on how our character is our most valuable asset. It's not just about rituals but how we treat others in our daily interactions.`,
+                    time: '2 hours ago',
+                    likes: 245,
+                    comments: 47,
+                    liked: false,
+                    commentsList: [
+                        { 
+                            id: 1, 
+                            user: 'Maryam Khan', 
+                            avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80', 
+                            text: 'Beautiful reminder! JazakAllah khair', 
+                            time: '1 hour ago',
+                            likes: 12,
+                            liked: false
+                        },
+                        { 
+                            id: 2, 
+                            user: 'Omar Farooq', 
+                            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80', 
+                            text: 'Character is indeed everything in Islam', 
+                            time: '45 mins ago',
+                            likes: 8,
+                            liked: true
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    content: `Just completed my morning Adhkar and felt such peace. The remembrance of Allah truly brings tranquility to the heart.
+
+Morning routine:
+1. Fajr prayer
+2. Morning Adhkar
+3. Quran recitation
+4. Planning the day with gratitude`,
+                    time: '1 day ago',
+                    likes: 189,
+                    comments: 32,
+                    liked: true,
+                    commentsList: [
+                        { 
+                            id: 1, 
+                            user: 'Fatima Ahmed', 
+                            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80', 
+                            text: 'May Allah accept your efforts!', 
+                            time: '22 hours ago',
+                            likes: 5,
+                            liked: false
+                        },
+                        { 
+                            id: 2, 
+                            user: 'Yusuf Islam', 
+                            avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80', 
+                            text: 'I need to start this routine too', 
+                            time: '20 hours ago',
+                            likes: 3,
+                            liked: false
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    content: `The importance of sincerity (Ikhlas) in our actions cannot be overstated. The Prophet (ﷺ) said: "Actions are judged by intentions, and every person will have what they intended." (Bukhari & Muslim)
+
+Always check your intentions before any act of worship or good deed.`,
+                    time: '3 days ago',
+                    likes: 312,
+                    comments: 54,
+                    liked: false,
+                    commentsList: [
+                        { 
+                            id: 1, 
+                            user: 'Abdullah Rahman', 
+                            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80', 
+                            text: 'This hadith changed my life', 
+                            time: '2 days ago',
+                            likes: 15,
+                            liked: false
+                        },
+                        { 
+                            id: 2, 
+                            user: 'Aisha Malik', 
+                            avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80', 
+                            text: 'Such an important reminder!', 
+                            time: '1 day ago',
+                            likes: 9,
+                            liked: true
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+
+        // Page elements
+        const backBtn = document.getElementById('backBtn');
+        const followBtn = document.getElementById('followBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const moreBtn = document.getElementById('moreBtn');
+        const moreOptions = document.getElementById('moreOptions');
+        const reportProfileBtn = document.getElementById('reportProfileBtn');
+        const textPosts = document.getElementById('textPosts');
+
+        // Report modal elements
+        const reportModalOverlay = document.getElementById('reportModalOverlay');
+        const reportModalClose = document.getElementById('reportModalClose');
+        const reportModalTitle = document.getElementById('reportModalTitle');
+        const reportForm = document.getElementById('reportForm');
+        const cancelReportBtn = document.getElementById('cancelReportBtn');
+        const submitReportBtn = document.getElementById('submitReportBtn');
+        const customReasonContainer = document.getElementById('customReasonContainer');
+        const customReason = document.getElementById('customReason');
+        const charCount = document.getElementById('charCount');
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        function initializeApp() {
+            updateProfileUI();
+            renderPosts();
+            setupEventListeners();
+            updateFollowButton();
+            setupReportModal();
+        }
+
+        // ============================================
+        // PROFILE FUNCTIONS
+        // ============================================
+
+        function updateProfileUI() {
+            document.querySelector('.profile-name').textContent = state.user.name;
+            document.querySelector('.profile-username').textContent = state.user.username;
+            document.querySelector('.profile-bio').innerHTML = `<i class="fas fa-quote-left"></i> ${state.user.bio} <i class="fas fa-quote-right"></i>`;
+            
+            document.querySelector('.stat-item.posts .stat-value').textContent = state.user.posts;
+            document.querySelector('.stat-item.followers .stat-value').textContent = state.user.followers;
+            document.querySelector('.stat-item.following .stat-value').textContent = state.user.following;
+            document.querySelector('.stat-item.likes .stat-value').textContent = state.user.likes;
+        }
+
+        function updateFollowButton() {
+            if (state.visitor.isFollowing) {
+                followBtn.innerHTML = '<i class="fas fa-check"></i><span>Following</span>';
+                followBtn.classList.remove('follow');
+                followBtn.classList.add('unfollow');
+            } else {
+                followBtn.innerHTML = '<i class="fas fa-user-plus"></i><span>Follow</span>';
+                followBtn.classList.remove('unfollow');
+                followBtn.classList.add('follow');
+            }
+        }
+
+        function toggleFollow() {
+            state.visitor.isFollowing = !state.visitor.isFollowing;
+            
+            if (state.visitor.isFollowing) {
+                state.user.followers++;
+                showNotification(`You are now following ${state.user.name}`);
+            } else {
+                state.user.followers--;
+                showNotification(`You unfollowed ${state.user.name}`);
+            }
+            
+            updateFollowButton();
+            updateProfileUI();
+        }
+
+        function shareProfile() {
+            if (navigator.share) {
+                navigator.share({
+                    title: `${state.user.name}'s Profile`,
+                    text: `Check out ${state.user.name}'s profile on DeenLink!`,
+                    url: window.location.href
+                })
+                .then(() => showNotification('Profile shared successfully!'))
+                .catch(err => console.log('Error sharing:', err));
+            } else {
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(window.location.href)
+                    .then(() => showNotification('Profile link copied to clipboard!'))
+                    .catch(err => console.log('Error copying:', err));
+            }
+        }
+
+        // ============================================
+        // REPORT MODAL FUNCTIONS
+        // ============================================
+
+        function setupReportModal() {
+            // Character count for custom reason
+            customReason.addEventListener('input', function() {
+                const length = this.value.length;
+                charCount.textContent = length;
+                
+                if (length > 0) {
+                    // Auto-select "Other" radio button if custom reason has text
+                    document.getElementById('reason6').checked = true;
+                    document.querySelectorAll('.report-reason-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    document.querySelector('#reason6').closest('.report-reason-option').classList.add('selected');
+                }
+            });
+
+            // Show/hide custom reason textarea when "Other" is selected
+            document.querySelectorAll('input[name="reportReason"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Update UI for selected option
+                    document.querySelectorAll('.report-reason-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.closest('.report-reason-option').classList.add('selected');
+                    
+                    // Show/hide custom reason textarea
+                    if (this.value === 'Other') {
+                        customReasonContainer.style.display = 'block';
+                    } else {
+                        customReasonContainer.style.display = 'none';
+                        customReason.value = '';
+                        charCount.textContent = '0';
+                    }
+                    
+                    // Enable submit button
+                    submitReportBtn.disabled = false;
+                });
+            });
+
+            // Form submission
+            reportForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedReason = document.querySelector('input[name="reportReason"]:checked');
+                if (!selectedReason) return;
+                
+                let reason = selectedReason.value;
+                if (reason === 'Other') {
+                    reason = customReason.value.trim();
+                    if (!reason) {
+                        showNotification('Please describe the issue.');
+                        return;
+                    }
+                }
+                
+                // Show loading state
+                submitReportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitReportBtn.disabled = true;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    closeReportModal();
+                    
+                    // Show success message based on report type
+                    if (state.currentReport.type === 'profile') {
+                        showNotification('Profile reported successfully. Our team will review it.');
+                    } else if (state.currentReport.type === 'post') {
+                        showNotification('Post reported successfully. Our team will review it.');
+                    }
+                    
+                    // Reset form
+                    reportForm.reset();
+                    document.querySelectorAll('.report-reason-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    customReasonContainer.style.display = 'none';
+                    customReason.value = '';
+                    charCount.textContent = '0';
+                    submitReportBtn.disabled = true;
+                    submitReportBtn.innerHTML = 'Submit Report';
+                }, 1500);
+            });
+        }
+
+        function openReportModal(type, id) {
+            state.currentReport.type = type;
+            state.currentReport.id = id;
+            
+            // Set modal title based on report type
+            if (type === 'profile') {
+                reportModalTitle.textContent = 'Report Profile';
+            } else if (type === 'post') {
+                reportModalTitle.textContent = 'Report Post';
+            }
+            
+            // Reset form
+            reportForm.reset();
+            document.querySelectorAll('.report-reason-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            customReasonContainer.style.display = 'none';
+            customReason.value = '';
+            charCount.textContent = '0';
+            submitReportBtn.disabled = true;
+            submitReportBtn.innerHTML = 'Submit Report';
+            
+            // Show modal
+            reportModalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReportModal() {
+            reportModalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ============================================
+        // POSTS WITH REPORT FUNCTIONALITY
+        // ============================================
+
+        function renderPosts() {
+            textPosts.innerHTML = '';
+            
+            state.posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'text-post-card';
+                postElement.setAttribute('data-post', post.id);
+                
+                const likeClass = post.liked ? 'post-stat liked' : 'post-stat';
+                const likeIcon = post.liked ? 'fas fa-heart' : 'far fa-heart';
+                
+                // Render comments with like buttons
+                const commentsHTML = post.commentsList.map(comment => {
+                    const commentLikeClass = comment.liked ? 'comment-like liked' : 'comment-like';
+                    const commentLikeIcon = comment.liked ? 'fas fa-heart' : 'far fa-heart';
+                    
+                    return `
+                        <div class="comment" data-post="${post.id}" data-comment="${comment.id}">
+                            <img src="${comment.avatar}" alt="${comment.user}" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-author">${comment.user}</div>
+                                <div class="comment-text">${comment.text}</div>
+                                <div class="comment-time">${comment.time}</div>
+                                <div class="comment-actions">
+                                    <div class="${commentLikeClass}" data-post="${post.id}" data-comment="${comment.id}">
+                                        <i class="${commentLikeIcon}"></i>
+                                        <span class="comment-like-count">${comment.likes}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <img src="${state.user.profileImage}" alt="Profile" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">${state.user.name}</div>
+                            <div class="post-user-username">${state.user.username}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Post More Button -->
+                    <button class="post-more-btn" data-post="${post.id}">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    
+                    <!-- Post More Options Dropdown -->
+                    <div class="post-more-dropdown" id="post-more-${post.id}">
+                        <div class="dropdown-item report post-report-btn" data-post="${post.id}">
+                            <i class="fas fa-flag"></i>
+                            <span>Report Post</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-meta">
+                        <div class="post-time">${post.time}</div>
+                        <div class="post-stats">
+                            <div class="${likeClass}" data-post="${post.id}" data-action="like">
+                                <i class="${likeIcon}"></i>
+                                <span class="like-count">${post.likes}</span>
+                            </div>
+                            <div class="post-stat" data-post="${post.id}" data-action="comment">
+                                <i class="far fa-comment"></i>
+                                <span>${post.comments}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comments-section" id="comments-${post.id}">
+                        ${commentsHTML}
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment..." data-post="${post.id}">
+                            <button class="send-comment-btn" data-post="${post.id}">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                textPosts.appendChild(postElement);
+            });
+        }
+
+        function togglePostLike(postId) {
+            const post = state.posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                state.user.likes += post.liked ? 1 : -1;
+                
+                const likeElement = document.querySelector(`.post-stat[data-post="${postId}"][data-action="like"]`);
+                if (likeElement) {
+                    likeElement.classList.toggle('liked', post.liked);
+                    likeElement.innerHTML = `
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
+                        <span class="like-count">${post.likes}</span>
+                    `;
+                }
+                
+                // Update profile stats
+                updateProfileUI();
+                
+                showNotification(post.liked ? 'Post liked!' : 'Post unliked');
+            }
+        }
+
+        function toggleCommentLike(postId, commentId) {
+            const post = state.posts.find(p => p.id === postId);
+            if (post) {
+                const comment = post.commentsList.find(c => c.id === commentId);
+                if (comment) {
+                    comment.liked = !comment.liked;
+                    comment.likes += comment.liked ? 1 : -1;
+                    
+                    const commentLikeElement = document.querySelector(`.comment-like[data-post="${postId}"][data-comment="${commentId}"]`);
+                    if (commentLikeElement) {
+                        commentLikeElement.classList.toggle('liked', comment.liked);
+                        commentLikeElement.innerHTML = `
+                            <i class="${comment.liked ? 'fas' : 'far'} fa-heart"></i>
+                            <span class="comment-like-count">${comment.likes}</span>
+                        `;
+                    }
+                    
+                    showNotification(comment.liked ? 'Comment liked!' : 'Comment unliked');
+                }
+            }
+        }
+
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            if (commentsSection) {
+                commentsSection.classList.toggle('active');
+            }
+        }
+
+        function addComment(postId, commentText) {
+            const post = state.posts.find(p => p.id === postId);
+            if (post && commentText.trim()) {
+                const newComment = {
+                    id: post.commentsList.length + 1,
+                    user: 'You',
+                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80',
+                    text: commentText,
+                    time: 'Just now',
+                    likes: 0,
+                    liked: false
+                };
+                
+                post.commentsList.push(newComment);
+                post.comments += 1;
+                
+                // Update UI
+                const commentsSection = document.getElementById(`comments-${postId}`);
+                if (commentsSection) {
+                    const newCommentElement = document.createElement('div');
+                    newCommentElement.className = 'comment';
+                    newCommentElement.setAttribute('data-post', postId);
+                    newCommentElement.setAttribute('data-comment', newComment.id);
+                    newCommentElement.innerHTML = `
+                        <img src="${newComment.avatar}" alt="${newComment.user}" class="comment-avatar">
+                        <div class="comment-content">
+                            <div class="comment-author">${newComment.user}</div>
+                            <div class="comment-text">${newComment.text}</div>
+                            <div class="comment-time">${newComment.time}</div>
+                            <div class="comment-actions">
+                                <div class="comment-like" data-post="${postId}" data-comment="${newComment.id}">
+                                    <i class="far fa-heart"></i>
+                                    <span class="comment-like-count">${newComment.likes}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    commentsSection.insertBefore(newCommentElement, commentsSection.querySelector('.add-comment'));
+                    
+                    // Update comment count
+                    const commentStat = document.querySelector(`.post-stat[data-post="${postId}"][data-action="comment"] span`);
+                    if (commentStat) {
+                        commentStat.textContent = post.comments;
+                    }
+                }
+                
+                showNotification('Comment added!');
+            }
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+
+        function setupEventListeners() {
+            // Navigation
+            backBtn.addEventListener('click', function() {
+                showPageLoader();
+                setTimeout(() => {
+                    window.history.back();
+                }, 300);
+            });
+
+            // Profile actions
+            followBtn.addEventListener('click', toggleFollow);
+            shareBtn.addEventListener('click', shareProfile);
+            
+            // More options dropdown
+            moreBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                moreOptions.classList.toggle('active');
+            });
+            
+            // Report profile
+            reportProfileBtn.addEventListener('click', function() {
+                openReportModal('profile', state.user.username);
+                moreOptions.classList.remove('active');
+            });
+            
+            // Report modal
+            reportModalClose.addEventListener('click', closeReportModal);
+            cancelReportBtn.addEventListener('click', closeReportModal);
+            
+            // Close modal when clicking outside
+            reportModalOverlay.addEventListener('click', function(e) {
+                if (e.target === reportModalOverlay) {
+                    closeReportModal();
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                // Close profile more options
+                if (!e.target.closest('.more') && !e.target.closest('.more-options-dropdown')) {
+                    moreOptions.classList.remove('active');
+                }
+                
+                // Close post more options
+                if (!e.target.closest('.post-more-btn') && !e.target.closest('.post-more-dropdown')) {
+                    document.querySelectorAll('.post-more-dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+
+            // Post interactions
+            document.addEventListener('click', function(e) {
+                // Like button for posts
+                if (e.target.closest('.post-stat[data-action="like"]')) {
+                    const likeElement = e.target.closest('.post-stat');
+                    const postId = parseInt(likeElement.getAttribute('data-post'));
+                    togglePostLike(postId);
+                }
+                
+                // Like button for comments
+                if (e.target.closest('.comment-like')) {
+                    const likeElement = e.target.closest('.comment-like');
+                    const postId = parseInt(likeElement.getAttribute('data-post'));
+                    const commentId = parseInt(likeElement.getAttribute('data-comment'));
+                    toggleCommentLike(postId, commentId);
+                }
+                
+                // Comment button for posts
+                if (e.target.closest('.post-stat[data-action="comment"]')) {
+                    const commentElement = e.target.closest('.post-stat');
+                    const postId = parseInt(commentElement.getAttribute('data-post'));
+                    toggleComments(postId);
+                }
+                
+                // Send comment
+                if (e.target.closest('.send-comment-btn')) {
+                    const button = e.target.closest('.send-comment-btn');
+                    const postId = parseInt(button.getAttribute('data-post'));
+                    const input = document.querySelector(`.comment-input[data-post="${postId}"]`);
+                    
+                    if (input && input.value.trim()) {
+                        addComment(postId, input.value.trim());
+                        input.value = '';
+                    }
+                }
+                
+                // Post more button
+                if (e.target.closest('.post-more-btn')) {
+                    const button = e.target.closest('.post-more-btn');
+                    const postId = button.getAttribute('data-post');
+                    const dropdown = document.getElementById(`post-more-${postId}`);
+                    
+                    // Close other dropdowns
+                    document.querySelectorAll('.post-more-dropdown').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('active');
+                    });
+                    
+                    // Toggle current dropdown
+                    dropdown.classList.toggle('active');
+                }
+                
+                // Report post button
+                if (e.target.closest('.post-report-btn')) {
+                    const button = e.target.closest('.post-report-btn');
+                    const postId = parseInt(button.getAttribute('data-post'));
+                    openReportModal('post', postId);
+                    
+                    // Close dropdown
+                    document.getElementById(`post-more-${postId}`).classList.remove('active');
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Close modal with Escape
+                if (e.key === 'Escape' && reportModalOverlay.classList.contains('active')) {
+                    closeReportModal();
+                }
+                
+                // Submit comment with Enter
+                if (e.key === 'Enter' && e.target.classList.contains('comment-input')) {
+                    const postId = parseInt(e.target.getAttribute('data-post'));
+                    if (e.target.value.trim()) {
+                        addComment(postId, e.target.value.trim());
+                        e.target.value = '';
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // NOTIFICATION FUNCTION
+        // ============================================
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: var(--primary-green);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 3000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease, slideOut 0.3s ease 2s forwards;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2500);
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // ============================================
+        // PAGE TRANSITION HANDLER
+        // ============================================
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            hidePageLoader();
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+    </script>
+</body>
+</html>

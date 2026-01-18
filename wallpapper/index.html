@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Wallpapers | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --deenlink-purple: #6A1B9A;
+            --ask-blue: #0D47A1;
+            --ask-light-blue: #E3F2FD;
+            --success-green: #27ae60;
+            --my-questions-orange: #FF9800;
+            --my-questions-light-orange: #FFF3E0;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --deenlink-purple: #9b59b6;
+            --ask-blue: #3498db;
+            --ask-light-blue: #1a3a5f;
+            --success-green: #2ecc71;
+            --my-questions-orange: #f39c12;
+            --my-questions-light-orange: #2c2c1a;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - Wallpapers Theme */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(106, 27, 154, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(155, 89, 182, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* DeenPoints Balance Display */
+        .deenpoints-balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .deenpoints-balance:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .deenpoints-balance img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Wallpapers Container */
+        .wallpapers-container {
+            padding: 20px 16px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .wallpapers-container {
+                padding: 25px 30px 50px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Grid Layout */
+        .wallpapers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .wallpapers-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .wallpapers-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 25px;
+            }
+        }
+
+        /* Wallpaper Card */
+        .wallpaper-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid transparent;
+        }
+
+        .wallpaper-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-green);
+        }
+
+        .dark-theme .wallpaper-card {
+            background-color: var(--medium-gray);
+        }
+
+        .wallpaper-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .wallpaper-card:hover .wallpaper-image {
+            transform: scale(1.05);
+        }
+
+        .wallpaper-info {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wallpaper-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70%;
+        }
+
+        .download-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .download-btn:hover {
+            background-color: #155c35;
+            transform: scale(1.1);
+        }
+
+        .download-btn i {
+            font-size: 14px;
+        }
+
+        /* Wallpaper Modal */
+        .wallpaper-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .wallpaper-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content-wrapper {
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-image-container {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            max-height: 70vh;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .modal-download-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .modal-download-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        .modal-download-btn i {
+            font-size: 14px;
+        }
+
+        /* Categories Section */
+        .categories-section {
+            margin-bottom: 30px;
+            padding: 0 5px;
+        }
+
+        .categories-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .categories-title i {
+            color: var(--primary-green);
+        }
+
+        .categories-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-green) var(--light-gray);
+        }
+
+        .categories-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .categories-container::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 3px;
+        }
+
+        .categories-container::-webkit-scrollbar-thumb {
+            background: var(--primary-green);
+            border-radius: 3px;
+        }
+
+        .category-btn {
+            background-color: var(--white);
+            border: 1px solid var(--medium-gray);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .category-btn.active {
+            background-color: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .dark-theme .category-btn {
+            background-color: var(--medium-gray);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .category-btn.active {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        /* Modal Styles (for purchase modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .close-modal:hover {
+            background-color: var(--light-gray);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            font-size: 14px;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.1);
+        }
+
+        /* Purchase DeenPoints Modal */
+        .purchase-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 480px) {
+            .purchase-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .purchase-option {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--medium-gray);
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .purchase-option:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+        }
+
+        .purchase-option.selected {
+            border-color: var(--accent-gold);
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        .purchase-amount {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .purchase-amount img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .purchase-cost {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .custom-purchase {
+            grid-column: 1 / -1;
+        }
+
+        .custom-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .custom-input-group input {
+            flex: 1;
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            font-size: 14px;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .custom-input-group input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.1);
+        }
+
+        .currency {
+            font-size: 14px;
+            color: var(--dark-gray);
+            white-space: nowrap;
+        }
+
+        /* Purchase Success Modal */
+        .purchase-success {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .purchase-success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 36px;
+            animation: successPulse 2s ease infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .purchase-success-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--success-green);
+            margin-bottom: 15px;
+        }
+
+        .purchase-success-message {
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .purchase-success-details {
+            background-color: var(--light-green);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .purchase-success-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .purchase-success-amount img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .purchase-success-cost {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .purchase-success-balance {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .close-success-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .close-success-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Important Note Box */
+        .important-note {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .important-note-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .important-note-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Modal Navigation */
+        .modal-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background-color: var(--medium-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--dark-gray);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Info Box */
+        .info-box {
+            margin-top: 30px;
+            padding: 16px;
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .info-box {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            display: none;
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: var(--dark-gray);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .wallpaper-image {
+                height: 250px;
+            }
+            
+            .wallpaper-info {
+                padding: 12px;
+            }
+            
+            .wallpaper-name {
+                font-size: 13px;
+            }
+            
+            .modal-content-wrapper {
+                max-height: 85vh;
+            }
+            
+            .modal-image-container {
+                max-height: 60vh;
+            }
+            
+            .modal-image {
+                max-height: 60vh;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .wallpaper-image {
+                height: 280px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .wallpaper-image {
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Wallpaper Modal -->
+    <div class="wallpaper-modal" id="wallpaperModal">
+        <div class="modal-content-wrapper">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-image-container">
+                <img class="modal-image" id="modalImage" src="" alt="Islamic Wallpaper">
+            </div>
+            <button class="modal-download-btn" id="modalDownloadBtn">
+                <i class="fas fa-download"></i>
+                Download Wallpaper
+            </button>
+        </div>
+    </div>
+
+    <!-- Purchase DeenPoints Modal -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-coins"></i>
+                    <span>Purchase DeenPoints</span>
+                </div>
+                <button class="close-modal" id="closePurchaseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Purchase Success Content -->
+                <div class="purchase-success" id="purchaseSuccessContent" style="display: none;">
+                    <div class="purchase-success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 class="purchase-success-title">Purchase Successful!</h2>
+                    <p class="purchase-success-message">Your DeenPoints have been added to your account.</p>
+                    
+                    <div class="purchase-success-details">
+                        <div class="purchase-success-amount" id="purchaseSuccessAmount">
+                            <img src="../img/deenPoints.png" alt="DeenPoints">
+                            <span>0</span>
+                        </div>
+                        <div class="purchase-success-cost" id="purchaseSuccessCost">₦0.00</div>
+                        <div class="purchase-success-balance">
+                            New Balance: <strong id="newBalance">750</strong> DeenPoints
+                        </div>
+                    </div>
+                    
+                    <button class="close-success-btn" id="closeSuccessBtn">
+                        <i class="fas fa-check-circle"></i>
+                        Continue
+                    </button>
+                </div>
+                
+                <!-- Purchase Form Content -->
+                <div id="purchaseFormContent">
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Current Balance</span>
+                        </div>
+                        <div class="info-text">
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600;">
+                                <img src="../img/deenPoints.png" alt="DeenPoints" style="width: 24px; height: 24px;">
+                                <span id="currentBalanceDisplay">750</span>
+                                <span>DeenPoints</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Quick Purchase Options</label>
+                        <div class="purchase-options">
+                            <div class="purchase-option" data-points="500" data-cost="750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>500</span>
+                                </div>
+                                <div class="purchase-cost">₦750</div>
+                            </div>
+                            <div class="purchase-option" data-points="1000" data-cost="1500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>1,000</span>
+                                </div>
+                                <div class="purchase-cost">₦1,500</div>
+                            </div>
+                            <div class="purchase-option" data-points="2500" data-cost="3750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>2,500</span>
+                                </div>
+                                <div class="purchase-cost">₦3,750</div>
+                            </div>
+                            <div class="purchase-option" data-points="5000" data-cost="7500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>5,000</span>
+                                </div>
+                                <div class="purchase-cost">₦7,500</div>
+                            </div>
+                            <div class="purchase-option custom-purchase">
+                                <label class="form-label">Custom Amount</label>
+                                <div class="custom-input-group">
+                                    <input type="number" class="form-input" id="customDeenPoints" min="100" max="10000" placeholder="Enter amount">
+                                    <span class="currency">DeenPoints</span>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 14px; color: var(--dark-gray);">
+                                    Cost: <span id="customCostDisplay">₦0.00</span> (₦1.5 per DeenPoint)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="important-note">
+                        <div class="important-note-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Important Note</span>
+                        </div>
+                        <div class="important-note-text">
+                            ⚠️ DeenPoints do NOT buy fatwas or opinions. Scholars answer only according to Islamic evidence and knowledge. DeenLink just helps in setting the priority and urgency of your questions.
+                        </div>
+                    </div>
+                    
+                    <div class="modal-navigation">
+                        <button class="modal-btn btn-secondary" id="cancelPurchaseBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button class="modal-btn btn-primary" id="confirmPurchaseBtn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-image"></i>
+                        <span>Islamic Wallpapers</span>
+                    </div>
+                    <div class="deenpoints-balance" id="deenpointsBalanceBtn">
+                        <img src="../img/deenPoints.png" alt="DeenPoints">
+                        <span id="userDeenPoints">750</span>
+                    </div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Beautiful Islamic Wallpapers</h1>
+                    <p>Download high-quality mobile wallpapers with Islamic themes and verses</p>
+                </div>
+            </section>
+
+            <!-- Wallpapers Container -->
+            <div class="wallpapers-container">
+                <!-- Categories -->
+                <div class="categories-section">
+                    <div class="categories-title">
+                        <i class="fas fa-tags"></i>
+                        <span>Categories</span>
+                    </div>
+                    <div class="categories-container">
+                        <button class="category-btn active" data-category="all">All Wallpapers</button>
+                        <button class="category-btn" data-category="arabic">Arabic Calligraphy</button>
+                        <button class="category-btn" data-category="mosque">Mosques</button>
+                        <button class="category-btn" data-category="nature">Nature & Islam</button>
+                        <button class="category-btn" data-category="verses">Quranic Verses</button>
+                        <button class="category-btn" data-category="minimal">Minimal Design</button>
+                        <button class="category-btn" data-category="ramadan">Ramadan</button>
+                        <button class="category-btn" data-category="eid">Eid Mubarak</button>
+                    </div>
+                </div>
+
+                <!-- Wallpapers Grid -->
+                <div class="wallpapers-grid" id="wallpapersGrid">
+                    <!-- Wallpapers will be dynamically added here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-image"></i>
+                    <h3>No Wallpapers Found</h3>
+                    <p>There are no wallpapers available for the selected category. Please try another category.</p>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <div class="info-title">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About These Wallpapers</span>
+                    </div>
+                    <div class="info-text">
+                        All wallpapers are optimized for mobile devices. Download and set as your phone wallpaper to keep Islamic reminders with you throughout the day. All images are free to use for personal purposes.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                // Don't show loader for same page
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after 1 second delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+            
+            // Initialize the page
+            initializePage();
+            
+            // Check for dark theme from settings
+            checkDarkTheme();
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 300);
+        });
+
+        // ============================================
+        // WALLPAPERS DATA - UPDATED PATH
+        // ============================================
+        
+        const wallpapers = [
+            { id: 1, name: "Arabic Calligraphy 1", category: "arabic", src: "../img/wallpapper/1.jpeg" },
+            { id: 2, name: "Mosque Sunset", category: "mosque", src: "../img/wallpapper/2.jpeg" },
+            { id: 3, name: "Quranic Verse", category: "verses", src: "../img/wallpapper/3.jpeg" },
+            { id: 4, name: "Minimal Design", category: "minimal", src: "../img/wallpapper/4.jpeg" },
+            { id: 5, name: "Islamic Pattern", category: "arabic", src: "../img/wallpapper/5.jpeg" },
+            { id: 6, name: "Nature & Faith", category: "nature", src: "../img/wallpapper/6.jpeg" },
+            { id: 7, name: "Ramadan Kareem", category: "ramadan", src: "../img/wallpapper/7.jpeg" },
+            { id: 8, name: "Eid Celebration", category: "eid", src: "../img/wallpapper/8.jpeg" },
+            { id: 9, name: "Arabic Calligraphy 2", category: "arabic", src: "../img/wallpapper/9.jpeg" },
+            { id: 10, name: "Blue Mosque", category: "mosque", src: "../img/wallpapper/10.jpeg" },
+            { id: 11, name: "Quran Verse 2", category: "verses", src: "../img/wallpapper/11.jpeg" },
+            { id: 12, name: "Minimal Design 2", category: "minimal", src: "../img/wallpapper/12.jpeg" },
+            { id: 13, name: "Islamic Art", category: "arabic", src: "../img/wallpapper/13.jpeg" },
+            { id: 14, name: "Nature Scene", category: "nature", src: "../img/wallpapper/14.jpeg" },
+            { id: 15, name: "Ramadan Lantern", category: "ramadan", src: "../img/wallpapper/15.jpeg" },
+            { id: 16, name: "Eid Mubarak", category: "eid", src: "../img/wallpapper/16.jpeg" }
+        ];
+
+        // ============================================
+        // MODAL ELEMENTS
+        // ============================================
+        
+        const wallpaperModal = document.getElementById('wallpaperModal');
+        const purchaseModal = document.getElementById('purchaseModal');
+        const modalClose = document.getElementById('modalClose');
+        const closePurchaseModal = document.getElementById('closePurchaseModal');
+        const cancelPurchaseBtn = document.getElementById('cancelPurchaseBtn');
+        const confirmPurchaseBtn = document.getElementById('confirmPurchaseBtn');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        const modalImage = document.getElementById('modalImage');
+        const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+        const wallpapersGrid = document.getElementById('wallpapersGrid');
+        const emptyState = document.getElementById('emptyState');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const deenpointsBalanceBtn = document.getElementById('deenpointsBalanceBtn');
+        
+        // Purchase form elements
+        const purchaseFormContent = document.getElementById('purchaseFormContent');
+        const purchaseSuccessContent = document.getElementById('purchaseSuccessContent');
+        const currentBalanceDisplay = document.getElementById('currentBalanceDisplay');
+        const userDeenPointsDisplay = document.getElementById('userDeenPoints');
+        const customDeenPointsInput = document.getElementById('customDeenPoints');
+        const customCostDisplay = document.getElementById('customCostDisplay');
+        
+        // Purchase success elements
+        const purchaseSuccessAmount = document.getElementById('purchaseSuccessAmount');
+        const purchaseSuccessCost = document.getElementById('purchaseSuccessCost');
+        const newBalance = document.getElementById('newBalance');
+        
+        // Current filter state
+        let currentFilter = 'all';
+        let currentWallpaperInModal = null;
+        let userDeenPoints = 750; // Starting balance
+
+        // ============================================
+        // INITIALIZE PAGE
+        // ============================================
+        
+        function initializePage() {
+            // Render all wallpapers initially
+            renderWallpapers(wallpapers);
+            
+            // Setup category filter buttons
+            setupCategoryFilters();
+            
+            // Setup modal events
+            setupModalEvents();
+            
+            // Setup wallpaper card events
+            setupWallpaperCardEvents();
+            
+            // Setup purchase modal events
+            setupPurchaseModalEvents();
+            
+            // Setup purchase options
+            setupPurchaseOptions();
+            
+            // Setup custom DeenPoints input
+            setupCustomDeenPointsInput();
+            
+            // Update DeenPoints displays
+            updateDeenPointsDisplays();
+        }
+
+        // Update DeenPoints displays
+        function updateDeenPointsDisplays() {
+            userDeenPointsDisplay.textContent = userDeenPoints;
+            currentBalanceDisplay.textContent = userDeenPoints;
+        }
+
+        // Render wallpapers to the grid
+        function renderWallpapers(wallpapersToRender) {
+            // Clear the grid
+            wallpapersGrid.innerHTML = '';
+            
+            // If no wallpapers to render, show empty state
+            if (wallpapersToRender.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Render each wallpaper
+            wallpapersToRender.forEach(wallpaper => {
+                const wallpaperCard = createWallpaperCard(wallpaper);
+                wallpapersGrid.appendChild(wallpaperCard);
+                
+                // Add fade-in animation
+                setTimeout(() => {
+                    wallpaperCard.style.opacity = '1';
+                    wallpaperCard.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        }
+
+        // Create a wallpaper card element
+        function createWallpaperCard(wallpaper) {
+            const card = document.createElement('div');
+            card.className = 'wallpaper-card';
+            card.dataset.id = wallpaper.id;
+            card.dataset.category = wallpaper.category;
+            
+            // Initial state for animation
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            card.innerHTML = `
+                <img class="wallpaper-image" src="${wallpaper.src}" alt="${wallpaper.name}" loading="lazy">
+                <div class="wallpaper-info">
+                    <div class="wallpaper-name">${wallpaper.name}</div>
+                    <button class="download-btn" data-id="${wallpaper.id}">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Setup category filter buttons
+        function setupCategoryFilters() {
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get the category
+                    currentFilter = this.dataset.category;
+                    
+                    // Filter wallpapers
+                    filterWallpapers(currentFilter);
+                });
+            });
+        }
+
+        // Filter wallpapers by category
+        function filterWallpapers(category) {
+            if (category === 'all') {
+                renderWallpapers(wallpapers);
+            } else {
+                const filteredWallpapers = wallpapers.filter(wp => wp.category === category);
+                renderWallpapers(filteredWallpapers);
+            }
+        }
+
+        // Setup wallpaper card events
+        function setupWallpaperCardEvents() {
+            // Use event delegation for wallpaper cards (since they're dynamically added)
+            document.addEventListener('click', function(e) {
+                // Check if click was on a wallpaper card (not the download button)
+                const wallpaperCard = e.target.closest('.wallpaper-card');
+                if (wallpaperCard && !e.target.closest('.download-btn')) {
+                    const wallpaperId = parseInt(wallpaperCard.dataset.id);
+                    openWallpaperModal(wallpaperId);
+                }
+                
+                // Check if click was on a download button
+                const downloadBtn = e.target.closest('.download-btn');
+                if (downloadBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const wallpaperId = parseInt(downloadBtn.dataset.id);
+                    downloadWallpaper(wallpaperId);
+                }
+            });
+        }
+
+        // Setup modal events
+        function setupModalEvents() {
+            // Close modal when close button is clicked
+            modalClose.addEventListener('click', closeWallpaperModal);
+            
+            // Close modal when clicking outside the image
+            wallpaperModal.addEventListener('click', function(e) {
+                if (e.target === wallpaperModal) {
+                    closeWallpaperModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && wallpaperModal.classList.contains('active')) {
+                    closeWallpaperModal();
+                }
+            });
+            
+            // Download button in modal
+            modalDownloadBtn.addEventListener('click', function() {
+                if (currentWallpaperInModal) {
+                    downloadWallpaper(currentWallpaperInModal.id);
+                }
+            });
+            
+            // DeenPoints balance click opens purchase modal
+            deenpointsBalanceBtn.addEventListener('click', openPurchaseModal);
+        }
+
+        // Setup purchase modal events
+        function setupPurchaseModalEvents() {
+            closePurchaseModal.addEventListener('click', closePurchaseModalFunc);
+            cancelPurchaseBtn.addEventListener('click', closePurchaseModalFunc);
+            confirmPurchaseBtn.addEventListener('click', confirmPurchase);
+            closeSuccessBtn.addEventListener('click', closePurchaseModalFunc);
+            
+            // Close modal when clicking outside
+            purchaseModal.addEventListener('click', function(event) {
+                if (event.target === purchaseModal) {
+                    closePurchaseModalFunc();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && purchaseModal.classList.contains('active')) {
+                    closePurchaseModalFunc();
+                }
+            });
+        }
+
+        // Setup purchase options
+        function setupPurchaseOptions() {
+            const purchaseOptions = document.querySelectorAll('.purchase-option:not(.custom-purchase)');
+            
+            purchaseOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    purchaseOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Clear custom input
+                    customDeenPointsInput.value = '';
+                    customCostDisplay.textContent = '₦0.00';
+                });
+            });
+        }
+
+        // Setup custom DeenPoints input
+        function setupCustomDeenPointsInput() {
+            customDeenPointsInput.addEventListener('input', function() {
+                const points = parseInt(this.value) || 0;
+                const cost = points * 1.5;
+                
+                if (points > 0) {
+                    // Remove selection from other options
+                    document.querySelectorAll('.purchase-option:not(.custom-purchase)').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                }
+                
+                customCostDisplay.textContent = `₦${cost.toFixed(2)}`;
+            });
+        }
+
+        // Open wallpaper modal
+        function openWallpaperModal(wallpaperId) {
+            // Find the wallpaper
+            const wallpaper = wallpapers.find(wp => wp.id === wallpaperId);
+            if (!wallpaper) return;
+            
+            // Set current wallpaper
+            currentWallpaperInModal = wallpaper;
+            
+            // Set modal image
+            modalImage.src = wallpaper.src;
+            modalImage.alt = wallpaper.name;
+            
+            // Show modal
+            wallpaperModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close wallpaper modal
+        function closeWallpaperModal() {
+            wallpaperModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Clear current wallpaper after a delay
+            setTimeout(() => {
+                currentWallpaperInModal = null;
+            }, 300);
+        }
+
+        // Open purchase modal
+        function openPurchaseModal() {
+            // Update current balance display
+            currentBalanceDisplay.textContent = userDeenPoints;
+            
+            // Show purchase form (hide success)
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+            
+            // Show modal
+            purchaseModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Show purchase success
+        function showPurchaseSuccess(pointsAdded, cost) {
+            // Update success content
+            purchaseSuccessAmount.innerHTML = `<img src="../img/deenPoints.png" alt="DeenPoints"> <span>${pointsAdded}</span>`;
+            purchaseSuccessCost.textContent = `₦${cost.toFixed(2)}`;
+            newBalance.textContent = userDeenPoints;
+            
+            // Show success, hide form
+            purchaseFormContent.style.display = 'none';
+            purchaseSuccessContent.style.display = 'block';
+        }
+
+        // Confirm purchase
+        function confirmPurchase() {
+            let pointsToAdd = 0;
+            let cost = 0;
+            
+            // Check if a quick purchase option is selected
+            const selectedOption = document.querySelector('.purchase-option:not(.custom-purchase).selected');
+            if (selectedOption) {
+                pointsToAdd = parseInt(selectedOption.dataset.points);
+                cost = parseInt(selectedOption.dataset.cost);
+            } 
+            // Check custom input
+            else if (customDeenPointsInput.value) {
+                pointsToAdd = parseInt(customDeenPointsInput.value);
+                cost = pointsToAdd * 1.5;
+            }
+            
+            if (pointsToAdd <= 0) {
+                alert("Please select a purchase option or enter a custom amount.");
+                return;
+            }
+            
+            // In a real app, you would process payment here
+            // For now, just add the points
+            userDeenPoints += pointsToAdd;
+            updateDeenPointsDisplays();
+            
+            // Show loading state
+            confirmPurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            confirmPurchaseBtn.disabled = true;
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Reset button
+                confirmPurchaseBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Purchase';
+                confirmPurchaseBtn.disabled = false;
+                
+                // Show success message
+                showPurchaseSuccess(pointsToAdd, cost);
+            }, 1000); // 1 second delay to simulate processing
+        }
+
+        // Close purchase modal
+        function closePurchaseModalFunc() {
+            purchaseModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset purchase options
+            document.querySelectorAll('.purchase-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            customDeenPointsInput.value = '';
+            customCostDisplay.textContent = '₦0.00';
+            
+            // Reset to purchase form
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+        }
+
+        // ============================================
+        // FIXED DOWNLOAD FUNCTION - WORKING VERSION
+        // ============================================
+        
+        async function downloadWallpaper(wallpaperId) {
+            // Find the wallpaper
+            const wallpaper = wallpapers.find(wp => wp.id === wallpaperId);
+            if (!wallpaper) return;
+            
+            // Show loading state
+            const downloadBtn = document.querySelector(`.download-btn[data-id="${wallpaperId}"]`);
+            if (downloadBtn) {
+                const originalHTML = downloadBtn.innerHTML;
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                downloadBtn.disabled = true;
+                
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalHTML;
+                    downloadBtn.disabled = false;
+                }, 1500);
+            }
+            
+            try {
+                // Create a temporary link
+                const link = document.createElement('a');
+                
+                // Set the href to the image URL
+                link.href = wallpaper.src;
+                
+                // Set the download attribute with a filename
+                link.download = `islamic-wallpaper-${wallpaperId}.jpg`;
+                
+                // Set target to _blank to prevent navigation away from page
+                link.target = '_blank';
+                
+                // Append to body
+                document.body.appendChild(link);
+                
+                // Trigger the click
+                link.click();
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                }, 100);
+                
+                // Show success message
+                showDownloadSuccess(wallpaper.name);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                
+                // Fallback: Open image in new tab and let user save manually
+                alert(`To download "${wallpaper.name}", please:\n\n1. Right-click on the image that opens\n2. Select "Save image as..."\n3. Choose where to save it`);
+                
+                // Open the image in a new tab
+                window.open(wallpaper.src, '_blank');
+            }
+        }
+
+        // Show download success message
+        function showDownloadSuccess(wallpaperName) {
+            // Create a temporary notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--primary-green);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1001;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s forwards;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <strong>Download Started!</strong>
+                    <div style="font-size: 12px; opacity: 0.9;">${wallpaperName}</div>
+                </div>
+            `;
+            
+            // Add CSS for animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+                if (style.parentNode) {
+                    style.parentNode.removeChild(style);
+                }
+            }, 3000);
+        }
+
+        // ============================================
+        // DARK THEME CHECK FROM SETTINGS
+        // ============================================
+        
+        function checkDarkTheme() {
+            // Check localStorage for theme preference (like the home page does)
+            const savedTheme = localStorage.getItem('isDarkMode');
+            const body = document.body;
+            
+            if (savedTheme === 'true') {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+        
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effect to wallpaper cards
+            const cards = document.querySelectorAll('.wallpaper-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('.wallpaper-image');
+                    if (img) {
+                        img.style.transform = 'scale(1.05)';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('.wallpaper-image');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

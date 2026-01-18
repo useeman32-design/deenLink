@@ -1,0 +1,4056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakat Payment | Islamic App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --zakat-green: #1D6F42;
+            --zakat-light-green: #E8F5E9;
+            --step-inactive: #E0E0E0;
+            --step-active: #1D6F42;
+            --step-completed: #2E7D32;
+            --paystack-blue: #0055FF;
+            --nowpayments-purple: #7B1FA2;
+            --error-red: #dc3545;
+            --success-green: #28a745;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --zakat-green: #2ecc71;
+            --zakat-light-green: #1a2526;
+            --step-inactive: #4a6572;
+            --step-active: #2ecc71;
+            --step-completed: #27ae60;
+            --paystack-blue: #3498db;
+            --nowpayments-purple: #9b59b6;
+            --error-red: #e74c3c;
+            --success-green: #2ecc71;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Ensure all containers transition smoothly */
+        .container,
+        .step-content,
+        .receipt-container,
+        .card,
+        .zakat-calculator-content,
+        .payment-method,
+        .category-option,
+        .calculator-section,
+        .facilitator-info,
+        .nisab-info,
+        .success-message,
+        .results-card,
+        .options-grid .option-card,
+        .currency-option-small,
+        .currency-dropdown-menu,
+        .currency-dropdown-toggle,
+        .form-input,
+        .search-input,
+        .asset-input,
+        .note-textarea,
+        .currency-amount-input {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Page Loader Overlay - Reduced Transparency */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Reduced from 0.95 to 0.7 */
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.7); /* Reduced from 0.95 to 0.7 */
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - Zakat Theme */
+        .top-section {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(45, 125, 50, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(39, 174, 96, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 13px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px 10px;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .step-indicator {
+                padding: 25px 30px 15px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--step-inactive);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-circle {
+            background-color: var(--step-active);
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-circle {
+            background-color: var(--step-completed);
+        }
+
+        .step.completed .step-circle i {
+            display: block;
+        }
+
+        .step.completed .step-circle span {
+            display: none;
+        }
+
+        .step-circle i {
+            display: none;
+            font-size: 16px;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--step-inactive);
+            z-index: 1;
+        }
+
+        .step:first-child .step-line {
+            left: 50%;
+            width: 50%;
+        }
+
+        .step:last-child .step-line {
+            left: 0;
+            width: 50%;
+        }
+
+        .step.active ~ .step .step-line {
+            background-color: var(--step-inactive);
+        }
+
+        .step.active .step-line,
+        .step.completed .step-line {
+            background-color: var(--step-active);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--dark-gray);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-label {
+            color: var(--step-active);
+            font-weight: 600;
+        }
+
+        .step.completed .step-label {
+            color: var(--step-completed);
+        }
+
+        /* Step Content Container */
+        .step-content-container {
+            padding: 0 16px;
+        }
+
+        @media (min-width: 768px) {
+            .step-content-container {
+                padding: 0 30px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .step-title i {
+            color: var(--zakat-green);
+        }
+
+        /* Step 1 Styles */
+        .zakat-info {
+            background-color: var(--zakat-light-green);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--zakat-green);
+        }
+
+        .zakat-info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--zakat-green);
+            margin-bottom: 8px;
+        }
+
+        .zakat-info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Currency Selector - FIXED */
+        .currency-selector {
+            margin-bottom: 25px;
+        }
+
+        .currency-selector-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .currency-selector-label i {
+            color: var(--zakat-green);
+        }
+
+        .currency-input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .currency-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .currency-dropdown {
+            flex: 0 0 120px;
+            position: relative;
+        }
+
+        .currency-dropdown-toggle {
+            width: 100%;
+            padding: 12px 14px; /* Reduced padding for mobile */
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 14px; /* Smaller font for mobile */
+            font-weight: 600;
+            color: var(--text-dark);
+            background-color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .currency-dropdown-toggle:hover {
+            border-color: var(--zakat-green);
+        }
+
+        .currency-dropdown-toggle i {
+            font-size: 12px; /* Smaller icon */
+            transition: transform 0.3s;
+        }
+
+        .currency-dropdown-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .currency-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .currency-dropdown-menu.active {
+            display: block;
+        }
+
+        .currency-search-container {
+            padding: 12px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .currency-search-input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .currency-search-input {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .currency-search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+
+        .currency-options {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .currency-option {
+            padding: 10px 12px; /* Reduced padding */
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .currency-option:hover {
+            background-color: var(--light-gray);
+        }
+
+        .currency-option.selected {
+            background-color: rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .currency-option.selected {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .currency-option-code {
+            font-weight: 600;
+            font-size: 13px; /* Smaller font */
+            color: var(--text-dark);
+        }
+
+        .currency-option-name {
+            font-size: 11px; /* Smaller font */
+            color: var(--dark-gray);
+            margin-left: 6px;
+        }
+
+        .currency-option-symbol {
+            font-size: 13px; /* Smaller font */
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        /* FIXED: Currency amount input - won't go out of border */
+        .currency-amount-input {
+            flex: 1;
+            min-width: 0; /* Prevents overflow */
+            padding: 12px 14px; /* Reduced padding */
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 16px; /* Slightly smaller */
+            font-weight: 600;
+            color: var(--text-dark);
+            background-color: var(--white);
+            transition: all 0.3s;
+            text-align: right;
+            box-sizing: border-box; /* Ensures padding is included in width */
+            max-width: calc(100% - 130px); /* Ensures it fits */
+        }
+
+        .currency-amount-input:focus {
+            outline: none;
+            border-color: var(--zakat-green);
+            box-shadow: 0 0 0 3px rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .currency-amount-input:focus {
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        .minimum-amount {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-top: 8px;
+        }
+
+        /* Note Field */
+        .note-field {
+            margin-bottom: 20px;
+        }
+
+        .note-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .note-label i {
+            color: var(--zakat-green);
+        }
+
+        .note-textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-dark);
+            background-color: var(--white);
+            min-height: 80px;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        .note-textarea:focus {
+            outline: none;
+            border-color: var(--zakat-green);
+            box-shadow: 0 0 0 3px rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .note-textarea:focus {
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        /* Category Selection */
+        .category-selection {
+            margin-bottom: 25px;
+        }
+
+        .category-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-label i {
+            color: var(--zakat-green);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 480px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .category-option {
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .category-option:hover {
+            border-color: var(--zakat-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .category-option:hover {
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.1);
+        }
+
+        .category-option.selected {
+            border-color: var(--zakat-green);
+            background-color: rgba(29, 111, 66, 0.05);
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.15);
+        }
+
+        .dark-theme .category-option.selected {
+            background-color: rgba(46, 204, 113, 0.1);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.15);
+        }
+
+        .category-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .category-option.selected .category-checkbox {
+            background-color: var(--zakat-green);
+            border-color: var(--zakat-green);
+        }
+
+        .category-checkbox i {
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .category-option.selected .category-checkbox i {
+            opacity: 1;
+        }
+
+        .category-content {
+            flex: 1;
+        }
+
+        .category-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .category-description {
+            font-size: 12px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+        }
+
+        /* Calculator Button */
+        .calculator-section {
+            background-color: var(--light-green);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .calculator-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .calculator-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .calculator-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calculator-btn:hover {
+            background-color: #155c33;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(29, 111, 66, 0.3);
+        }
+
+        .dark-theme .calculator-btn:hover {
+            background-color: #27ae60;
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+
+        /* Step 2 Styles - Payment Methods */
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .payment-method {
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .payment-method:last-child {
+            margin-bottom: 0;
+        }
+
+        .payment-method:hover {
+            border-color: var(--zakat-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-method.selected {
+            border-color: var(--zakat-green);
+            background-color: rgba(29, 111, 66, 0.05);
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.15);
+        }
+
+        .dark-theme .payment-method.selected {
+            background-color: rgba(46, 204, 113, 0.1);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.15);
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .payment-icon.paystack {
+            background: linear-gradient(135deg, var(--paystack-blue), #2979FF);
+        }
+
+        .payment-icon.nowpayments {
+            background: linear-gradient(135deg, var(--nowpayments-purple), #9C27B0);
+        }
+
+        .payment-content {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .payment-description {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .payment-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .payment-feature {
+            font-size: 11px;
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .paystack .payment-feature {
+            background-color: var(--paystack-blue);
+        }
+
+        .nowpayments .payment-feature {
+            background-color: var(--nowpayments-purple);
+        }
+
+        .payment-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .payment-method.selected .payment-radio {
+            border-color: var(--zakat-green);
+            background-color: var(--zakat-green);
+        }
+
+        .payment-radio-inner {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .payment-method.selected .payment-radio-inner {
+            opacity: 1;
+        }
+
+        /* Facilitator Info */
+        .facilitator-info {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .facilitator-info {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .facilitator-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .facilitator-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Step 3 Styles - Receipt */
+        .receipt-container {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .receipt-header {
+            background: linear-gradient(135deg, var(--zakat-green), #2E7D32);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .dark-theme .receipt-header {
+            background: linear-gradient(135deg, var(--zakat-green), #27ae60);
+        }
+
+        .receipt-header i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .receipt-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .receipt-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .receipt-body {
+            padding: 20px;
+        }
+
+        .receipt-info {
+            margin-bottom: 25px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .receipt-row:last-child {
+            border-bottom: none;
+        }
+
+        .receipt-label {
+            font-size: 14px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .receipt-value {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .receipt-amount {
+            font-size: 24px;
+            color: var(--zakat-green);
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            font-family: 'Amiri', serif;
+        }
+
+        .receipt-categories {
+            margin-top: 20px;
+        }
+
+        .categories-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .category-tag {
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--zakat-green);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .dark-theme .category-tag {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .receipt-footer {
+            background-color: var(--light-gray);
+            padding: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--dark-gray);
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .dark-theme .receipt-footer {
+            background-color: var(--light-gray);
+            border-top-color: var(--medium-gray);
+        }
+
+        /* Download Receipt Button */
+        .download-receipt-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .download-receipt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(29, 111, 66, 0.3);
+        }
+
+        .dark-theme .download-receipt-btn:hover {
+            box-shadow: 0 6px 16px rgba(46, 204, 113, 0.3);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--light-green);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .success-message {
+            background-color: var(--light-green);
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        .success-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .success-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 16px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .step-navigation {
+                padding: 0 30px;
+                max-width: 600px;
+                margin: 20px auto 0;
+            }
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-back {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-back:hover:not(:disabled) {
+            background-color: var(--medium-gray);
+        }
+
+        .btn-next {
+            background-color: var(--zakat-green);
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background-color: #155c33;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .dark-theme .btn-next:hover:not(:disabled) {
+            background-color: #27ae60;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-complete {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-complete:hover:not(:disabled) {
+            background-color: #155c33;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 111, 66, 0.3);
+        }
+
+        .dark-theme .btn-complete:hover:not(:disabled) {
+            background-color: #27ae60;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-hidden {
+            visibility: hidden;
+        }
+
+        /* Zakat Calculator Modal */
+        .zakat-calculator-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 10px;
+        }
+
+        .zakat-calculator-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .zakat-calculator-content {
+            background-color: var(--white);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .zakat-calculator-modal.active .zakat-calculator-content {
+            transform: translateY(0);
+        }
+
+        .zakat-calculator-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+        }
+
+        .zakat-calculator-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .zakat-calculator-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zakat-calculator-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* ============================================
+           ZAKAT CALCULATOR MODAL CONTENT STYLES
+           ============================================ */
+
+        /* Calculator Container */
+        .calculator-container {
+            padding: 20px 16px 40px;
+            min-height: auto;
+            position: relative;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-dark);
+            background-color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .dark-theme .form-input {
+            background-color: var(--light-gray);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--zakat-green);
+            box-shadow: 0 0 0 3px rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        /* Search Container */
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 14px 12px 36px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .search-input {
+            background-color: var(--light-gray);
+        }
+
+        /* Currency Grid */
+        .currency-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .currency-option-small {
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            background-color: var(--white);
+        }
+
+        .dark-theme .currency-option-small {
+            background-color: var(--white);
+        }
+
+        .currency-option-small:hover {
+            border-color: var(--zakat-green);
+        }
+
+        .currency-option-small.selected {
+            border-color: var(--zakat-green);
+            background-color: rgba(29, 111, 66, 0.1);
+            font-weight: 600;
+        }
+
+        .dark-theme .currency-option-small.selected {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .currency-code {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .currency-name {
+            font-size: 10px;
+            color: var(--dark-gray);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Price Info */
+        .price-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            background-color: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .price-item {
+            flex: 1;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 4px;
+        }
+
+        .price-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Nisab Info */
+        .nisab-info {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .nisab-info {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .nisab-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 12px;
+        }
+
+        .nisab-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .nisab-detail {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .data-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--dark-gray);
+            margin-top: 10px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .status-online {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #155c33;
+            transform: translateY(-2px);
+        }
+
+        .dark-theme .btn-primary:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .dark-theme .btn-secondary {
+            background-color: var(--light-gray);
+        }
+
+        .dark-theme .btn-secondary:hover {
+            background-color: var(--medium-gray);
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-card {
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            background-color: var(--white);
+        }
+
+        .dark-theme .option-card {
+            background-color: var(--white);
+        }
+
+        .option-card:hover {
+            border-color: var(--zakat-green);
+            transform: translateY(-2px);
+        }
+
+        .option-card.active {
+            border-color: var(--zakat-green);
+            background-color: rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .option-card.active {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .option-icon {
+            font-size: 24px;
+            color: var(--zakat-green);
+            margin-bottom: 8px;
+        }
+
+        .option-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 11px;
+            color: var(--dark-gray);
+            line-height: 1.3;
+        }
+
+        /* Asset Inputs */
+        .asset-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .asset-label {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .asset-input {
+            flex: 2;
+            padding: 8px 12px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .asset-input {
+            background-color: var(--light-gray);
+        }
+
+        /* Currency Group */
+        .currency-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .currency-group .form-input {
+            flex: 1;
+        }
+
+        /* Button Container */
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-container .btn {
+            flex: 1;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--light-gray);
+            border-top-color: var(--primary-green);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Card */
+        .results-card {
+            background-color: var(--light-green);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .results-card {
+            background-color: var(--light-green);
+        }
+
+        .results-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .zakat-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-align: center;
+            margin: 10px 0;
+            font-family: 'Amiri', serif;
+        }
+
+        .results-breakdown {
+            background-color: var(--white);
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .dark-theme .results-breakdown {
+            background-color: var(--white);
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .dark-theme .breakdown-row {
+            border-bottom-color: var(--medium-gray);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-row span:first-child {
+            color: var(--dark-gray);
+            font-size: 13px;
+        }
+
+        .breakdown-row span:last-child {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: var(--primary-green);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background-color: rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .refresh-btn:hover {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        /* Step Indicator for Calculator */
+        .step-indicator .step {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .step-indicator .step span {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .step-indicator .step.active span {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 10px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        /* Step Containers */
+        .step-container {
+            display: none;
+        }
+
+        .step-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsive Design - Fixed for mobile */
+        @media (max-width: 480px) {
+            .step-circle {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .step-line {
+                top: 16px;
+            }
+            
+            .step-content {
+                padding: 16px;
+            }
+            
+            .step-title {
+                font-size: 16px;
+            }
+            
+            .category-option {
+                padding: 14px;
+            }
+            
+            .payment-method {
+                padding: 16px;
+            }
+            
+            .payment-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            
+            .nav-btn {
+                padding: 10px 20px;
+                min-width: 100px;
+                font-size: 13px;
+            }
+            
+            .currency-dropdown {
+                flex: 0 0 100px;
+            }
+            
+            .currency-dropdown-toggle {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .currency-amount-input {
+                font-size: 15px;
+                padding: 10px 12px;
+                max-width: calc(100% - 110px);
+            }
+            
+            .currency-option {
+                padding: 8px 10px;
+            }
+            
+            .currency-option-code {
+                font-size: 12px;
+            }
+            
+            .currency-option-name {
+                font-size: 10px;
+            }
+            
+            .currency-option-symbol {
+                font-size: 12px;
+            }
+            
+            /* Calculator-specific responsive design */
+            .currency-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .price-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .zakat-amount {
+                font-size: 28px;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .currency-dropdown {
+                flex: 0 0 130px;
+            }
+            
+            .currency-dropdown-toggle {
+                padding: 14px 16px;
+                font-size: 16px;
+            }
+            
+            .currency-amount-input {
+                font-size: 18px;
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay with reduced transparency -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Processing Payment...</div>
+        </div>
+    </div>
+
+    <!-- Zakat Calculator Modal - Will contain EXACT calculator code -->
+    <div class="zakat-calculator-modal" id="zakatCalculatorModal">
+        <div class="zakat-calculator-content">
+            <!-- Calculator content will be loaded here -->
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-mosque"></i>
+                        <span>Zakat Payment</span>
+                    </div>
+                    <div style="width: 40px;"></div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Fulfill Your Zakat</h1>
+                    <p>Purify your wealth by fulfilling this important pillar of Islam</p>
+                </div>
+            </section>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1Indicator">
+                    <div class="step-circle">
+                        <span>1</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Details</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step2Indicator">
+                    <div class="step-circle">
+                        <span>2</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Payment</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step3Indicator">
+                    <div class="step-circle">
+                        <span>3</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Confirmation</div>
+                    <div class="step-line"></div>
+                </div>
+            </div>
+
+            <!-- Step Content Container -->
+            <div class="step-content-container">
+                <!-- Step 1: Zakat Details -->
+                <div class="step-content active" id="step1Content">
+                    <div class="step-title">
+                        <i class="fas fa-edit"></i>
+                        <span>Zakat Details</span>
+                    </div>
+                    
+                    <div class="zakat-info">
+                        <div class="zakat-info-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About Zakat</span>
+                        </div>
+                        <div class="zakat-info-text">
+                            Zakat is 2.5% of your wealth that has been held for one lunar year. It's an obligatory charity for eligible Muslims to purify wealth and help those in need.
+                        </div>
+                    </div>
+                    
+                    <div class="currency-selector">
+                        <div class="currency-selector-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Select Currency & Enter Amount</span>
+                        </div>
+                        <div class="currency-input-container">
+                            <div class="currency-input-wrapper">
+                                <div class="currency-dropdown" id="currencyDropdown">
+                                    <div class="currency-dropdown-toggle" id="currencyToggle">
+                                        <span id="selectedCurrencyCode">USD</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="currency-dropdown-menu" id="currencyMenu">
+                                        <div class="currency-search-container">
+                                            <div style="position: relative;">
+                                                <i class="fas fa-search currency-search-icon"></i>
+                                                <input type="text" class="currency-search-input" id="currencySearch" placeholder="Search currency...">
+                                            </div>
+                                        </div>
+                                        <div class="currency-options" id="currencyOptions">
+                                            <!-- Currency options will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" class="currency-amount-input" id="zakatAmount" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                            <div class="minimum-amount" id="minimumAmount">
+                                Minimum Zakat amount: $40.00 (2.5% of nisab)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-selection">
+                        <div class="category-label">
+                            <i class="fas fa-users"></i>
+                            <span>Select Recipient Category (Choose one or more)</span>
+                        </div>
+                        <div class="category-grid" id="categoryGrid">
+                            <!-- Categories will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Note Field -->
+                    <div class="note-field">
+                        <div class="note-label">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Additional Notes (Optional)</span>
+                        </div>
+                        <textarea class="note-textarea" id="zakatNote" placeholder="Add any special instructions or notes about your zakat payment..."></textarea>
+                    </div>
+                    
+                    <div class="calculator-section">
+                        <div class="calculator-title">
+                            <i class="fas fa-calculator"></i>
+                            <span>Don't know your zakatable amount?</span>
+                        </div>
+                        <div class="calculator-text">
+                            Calculate your exact Zakat obligation based on your wealth, assets, and liabilities.
+                        </div>
+                        <button class="calculator-btn" id="openCalculatorBtn">
+                            <i class="fas fa-calculator"></i>
+                            Calculate Your Zakat
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Payment Method -->
+                <div class="step-content" id="step2Content">
+                    <div class="step-title">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Choose Payment Method</span>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method paystack" data-method="paystack">
+                            <div class="payment-icon paystack">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="payment-content">
+                                <div class="payment-name">Paystack</div>
+                                <div class="payment-description">
+                                    Secure payment with cards, bank transfer, Apple Pay, Google Pay
+                                </div>
+                                <div class="payment-features">
+                                    <span class="payment-feature">Cards</span>
+                                    <span class="payment-feature">Bank Transfer</span>
+                                    <span class="payment-feature">Apple Pay</span>
+                                    <span class="payment-feature">Google Pay</span>
+                                </div>
+                            </div>
+                            <div class="payment-radio">
+                                <div class="payment-radio-inner"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method nowpayments" data-method="nowpayments">
+                            <div class="payment-icon nowpayments">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="payment-content">
+                                <div class="payment-name">NowPayments</div>
+                                <div class="payment-description">
+                                    Pay with cryptocurrency (BTC, USDT, ETH, and 100+ others)
+                                </div>
+                                <div class="payment-features">
+                                    <span class="payment-feature">Bitcoin</span>
+                                    <span class="payment-feature">USDT</span>
+                                    <span class="payment-feature">Ethereum</span>
+                                    <span class="payment-feature">100+ coins</span>
+                                </div>
+                            </div>
+                            <div class="payment-radio">
+                                <div class="payment-radio-inner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="facilitator-info">
+                        <div class="facilitator-title">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>About Our Zakat Distribution</span>
+                        </div>
+                        <div class="facilitator-text">
+                            DeenLink acts as a facilitator for zakat distribution. Zakat funds are handled according to Islamic principles and distributed via trusted partners or verified recipients. We ensure 100% of your Zakat reaches eligible recipients.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Confirmation & Receipt -->
+                <div class="step-content" id="step3Content">
+                    <div class="step-title">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Payment Successful!</span>
+                    </div>
+                    
+                    <div class="success-message">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="success-title">Zakat Payment Successful!</div>
+                        <div class="success-text">
+                            Your Zakat has been processed successfully. May Allah accept your charity and multiply your rewards. A receipt has been generated for your records.
+                        </div>
+                    </div>
+                    
+                    <div class="receipt-container" id="receiptForDownload">
+                        <div class="receipt-header">
+                            <i class="fas fa-mosque"></i>
+                            <div class="receipt-title">Zakat Receipt</div>
+                            <div class="receipt-subtitle">DeenLink Zakat Foundation</div>
+                        </div>
+                        
+                        <div class="receipt-body">
+                            <div class="receipt-info">
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Transaction ID</div>
+                                    <div class="receipt-value" id="receiptTransactionId">ZL-2023-001234</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Date & Time</div>
+                                    <div class="receipt-value" id="receiptDateTime">Loading...</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Donor Name</div>
+                                    <div class="receipt-value" id="receiptDonorName">Loading...</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Payment Method</div>
+                                    <div class="receipt-value" id="receiptPaymentMethod">Loading...</div>
+                                </div>
+                                <div class="receipt-row">
+                                    <div class="receipt-label">Currency</div>
+                                    <div class="receipt-value" id="receiptCurrency">Loading...</div>
+                                </div>
+                                
+                                <div class="receipt-categories">
+                                    <div class="receipt-row">
+                                        <div class="receipt-label">Recipient Categories</div>
+                                    </div>
+                                    <div class="categories-list" id="receiptCategories">
+                                        <!-- Categories will be populated -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="receipt-amount" id="receiptAmount">$0.00</div>
+                        </div>
+                        
+                        <div class="receipt-footer">
+                            <p>Thank you for fulfilling your Zakat obligation. This receipt is for your records.</p>
+                            <p>May Allah accept your charity and bless your wealth.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Download Receipt Button -->
+                    <button class="download-receipt-btn" id="downloadReceiptBtn">
+                        <i class="fas fa-download"></i>
+                        Download Receipt (PDF)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="step-navigation">
+                <button class="nav-btn btn-back btn-hidden" id="backBtnNav">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+                <button class="nav-btn btn-next" id="nextBtnNav">
+                    Proceed to Payment
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DARK/LIGHT THEME LOGIC - LISTENING ONLY
+        // ============================================
+
+        // Theme state
+        let isDarkMode = false;
+
+        // Function to check and apply theme
+        function checkAndApplyTheme() {
+            // Get theme preference from localStorage
+            const savedTheme = localStorage.getItem('isDarkMode');
+            const body = document.body;
+            
+            // Update state
+            isDarkMode = savedTheme === 'true';
+            
+            // Apply theme to body
+            if (isDarkMode) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+            
+            // Also update calculator modal if it exists
+            const calculatorModal = document.querySelector('.zakat-calculator-modal');
+            if (calculatorModal) {
+                if (isDarkMode) {
+                    calculatorModal.classList.add('dark-theme');
+                    calculatorModal.classList.remove('light-theme');
+                } else {
+                    calculatorModal.classList.add('light-theme');
+                    calculatorModal.classList.remove('dark-theme');
+                }
+            }
+        }
+
+        // Listen for theme changes
+        function setupThemeListener() {
+            // Apply theme on load
+            checkAndApplyTheme();
+            
+            // Listen for storage events (when other pages change theme)
+            window.addEventListener('storage', function(event) {
+                if (event.key === 'isDarkMode') {
+                    checkAndApplyTheme();
+                }
+            });
+            
+            // Also check periodically (in case localStorage is changed from same page)
+            setInterval(checkAndApplyTheme, 1000);
+        }
+
+        // Initialize theme listener
+        setupThemeListener();
+
+        // ============================================
+        // PAGE TRANSITION LOADER WITH REDUCED TRANSPARENCY
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(hidePageLoader, 100);
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Initial hide of loader
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+        });
+
+        // ============================================
+        // ZAKAT PAYMENT APPLICATION LOGIC
+        // ============================================
+
+        // Application State
+        const zakatState = {
+            currentStep: 1,
+            selectedCategories: [],
+            zakatAmount: 0,
+            paymentMethod: null,
+            donorName: "Muslim Donor",
+            transactionId: generateTransactionId(),
+            currency: 'USD',
+            currencySymbol: '$',
+            currencyData: {}, // Will store currency rates and nisab values
+            nisabValue: 40.00, // Minimum nisab value for USD
+            exchangeRates: {
+                'USD': { rate: 1, nisab: 40.00, symbol: '$' },
+                'EUR': { rate: 0.92, nisab: 36.80, symbol: '€' },
+                'GBP': { rate: 0.79, nisab: 31.60, symbol: '£' },
+                'NGN': { rate: 1300, nisab: 52000, symbol: '₦' },
+                'SAR': { rate: 3.75, nisab: 150.00, symbol: 'ر.س' },
+                'AED': { rate: 3.67, nisab: 146.80, symbol: 'د.إ' },
+                'PKR': { rate: 280, nisab: 11200, symbol: '₨' },
+                'INR': { rate: 83, nisab: 3320, symbol: '₹' },
+                'MYR': { rate: 4.75, nisab: 190.00, symbol: 'RM' }
+            },
+            note: ''
+        };
+
+        // Zakat Categories Data - None selected by default
+        const zakatCategories = [
+            {
+                id: 'poor',
+                name: 'Poor (Fuqarah)',
+                description: 'Those who don\'t have enough to meet basic needs',
+                selected: false
+            },
+            {
+                id: 'needy',
+                name: 'Needy (Masakin)',
+                description: 'Those in difficult circumstances but may not appear poor',
+                selected: false
+            },
+            {
+                id: 'debt',
+                name: 'Debt Relief',
+                description: 'Those burdened by debt who cannot repay',
+                selected: false
+            },
+            {
+                id: 'wayfarer',
+                name: 'Wayfarer (Ibn al-Sabil)',
+                description: 'Travelers stranded without resources',
+                selected: false
+            },
+            {
+                id: 'anyone',
+                name: 'Anyone (Priority Distribution)',
+                description: 'We distribute according to priority and need',
+                selected: false // Changed from true to false
+            }
+        ];
+
+        // Payment Methods Data
+        const paymentMethods = [
+            {
+                id: 'paystack',
+                name: 'Paystack',
+                description: 'Secure payment with cards, bank transfer, Apple Pay, Google Pay',
+                features: ['Cards', 'Bank Transfer', 'Apple Pay', 'Google Pay']
+            },
+            {
+                id: 'nowpayments',
+                name: 'NowPayments',
+                description: 'Pay with cryptocurrency (BTC, USDT, ETH, and 100+ others)',
+                features: ['Bitcoin', 'USDT', 'Ethereum', '100+ coins']
+            }
+        ];
+
+        // Available Currencies with Symbols
+        const currencies = [
+            { code: 'USD', name: 'US Dollar', symbol: '$' },
+            { code: 'EUR', name: 'Euro', symbol: '€' },
+            { code: 'GBP', name: 'British Pound', symbol: '£' },
+            { code: 'NGN', name: 'Nigerian Naira', symbol: '₦' },
+            { code: 'SAR', name: 'Saudi Riyal', symbol: 'ر.س' },
+            { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ' },
+            { code: 'PKR', name: 'Pakistani Rupee', symbol: '₨' },
+            { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
+            { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM' },
+            { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
+            { code: 'CAD', name: 'Canadian Dollar', symbol: 'CA$' },
+            { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
+            { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF' },
+            { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
+            { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'Rp' },
+            { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
+            { code: 'ZAR', name: 'South African Rand', symbol: 'R' },
+            { code: 'TRY', name: 'Turkish Lira', symbol: '₺' },
+            { code: 'RUB', name: 'Russian Ruble', symbol: '₽' }
+        ];
+
+        // DOM Elements
+        const step1Content = document.getElementById('step1Content');
+        const step2Content = document.getElementById('step2Content');
+        const step3Content = document.getElementById('step3Content');
+        const step1Indicator = document.getElementById('step1Indicator');
+        const step2Indicator = document.getElementById('step2Indicator');
+        const step3Indicator = document.getElementById('step3Indicator');
+        const backBtnNav = document.getElementById('backBtnNav');
+        const nextBtnNav = document.getElementById('nextBtnNav');
+        const categoryGrid = document.getElementById('categoryGrid');
+        const zakatAmountInput = document.getElementById('zakatAmount');
+        const receiptTransactionId = document.getElementById('receiptTransactionId');
+        const receiptDateTime = document.getElementById('receiptDateTime');
+        const receiptDonorName = document.getElementById('receiptDonorName');
+        const receiptPaymentMethod = document.getElementById('receiptPaymentMethod');
+        const receiptCategories = document.getElementById('receiptCategories');
+        const receiptAmount = document.getElementById('receiptAmount');
+        const receiptCurrency = document.getElementById('receiptCurrency');
+        const minimumAmount = document.getElementById('minimumAmount');
+        const currencyToggle = document.getElementById('currencyToggle');
+        const currencyMenu = document.getElementById('currencyMenu');
+        const currencySearch = document.getElementById('currencySearch');
+        const currencyOptions = document.getElementById('currencyOptions');
+        const selectedCurrencyCode = document.getElementById('selectedCurrencyCode');
+        const openCalculatorBtn = document.getElementById('openCalculatorBtn');
+        const zakatCalculatorModal = document.getElementById('zakatCalculatorModal');
+        const zakatCalculatorContent = document.querySelector('.zakat-calculator-content');
+        const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+        const zakatNote = document.getElementById('zakatNote');
+
+        // Initialize the page
+        function initZakatPage() {
+            renderCategories();
+            populateCurrencies();
+            setupEventListeners();
+            updateStepDisplay();
+            updateMinimumAmount();
+            generateReceiptData();
+            
+            // Initialize note field
+            zakatNote.addEventListener('input', function() {
+                zakatState.note = this.value;
+            });
+        }
+
+        // Populate currency dropdown
+        function populateCurrencies() {
+            currencyOptions.innerHTML = '';
+            
+            currencies.forEach(currency => {
+                const option = document.createElement('div');
+                option.className = `currency-option ${currency.code === zakatState.currency ? 'selected' : ''}`;
+                option.dataset.code = currency.code;
+                option.dataset.symbol = currency.symbol;
+                option.innerHTML = `
+                    <div>
+                        <span class="currency-option-code">${currency.code}</span>
+                        <span class="currency-option-name">${currency.name}</span>
+                    </div>
+                    <span class="currency-option-symbol">${currency.symbol}</span>
+                `;
+                
+                option.addEventListener('click', () => {
+                    selectCurrency(currency.code, currency.symbol);
+                    currencyMenu.classList.remove('active');
+                    currencyToggle.classList.remove('active');
+                });
+                
+                currencyOptions.appendChild(option);
+            });
+        }
+
+        // Select currency
+        function selectCurrency(code, symbol) {
+            zakatState.currency = code;
+            zakatState.currencySymbol = symbol;
+            
+            // Update UI
+            selectedCurrencyCode.textContent = code;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.currency-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to current option
+            const selectedOption = document.querySelector(`.currency-option[data-code="${code}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // Update minimum amount display
+            updateMinimumAmount();
+            
+            updateNextButtonState();
+        }
+
+        // Update minimum amount display
+        function updateMinimumAmount() {
+            const currencyData = zakatState.exchangeRates[zakatState.currency] || zakatState.exchangeRates.USD;
+            const minAmount = currencyData.nisab * 0.025; // 2.5% of nisab
+            
+            minimumAmount.textContent = `Minimum Zakat amount: ${zakatState.currencySymbol}${minAmount.toFixed(2)} (2.5% of nisab)`;
+        }
+
+        // Render Zakat Categories
+        function renderCategories() {
+            categoryGrid.innerHTML = '';
+            
+            zakatCategories.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = `category-option ${category.selected ? 'selected' : ''}`;
+                categoryElement.dataset.id = category.id;
+                
+                categoryElement.innerHTML = `
+                    <div class="category-checkbox">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-name">${category.name}</div>
+                        <div class="category-description">${category.description}</div>
+                    </div>
+                `;
+                
+                categoryGrid.appendChild(categoryElement);
+                
+                // Add click event
+                categoryElement.addEventListener('click', () => {
+                    toggleCategorySelection(category.id);
+                });
+            });
+        }
+
+        // Toggle category selection
+        function toggleCategorySelection(categoryId) {
+            const category = zakatCategories.find(c => c.id === categoryId);
+            
+            // Toggle the selected category
+            category.selected = !category.selected;
+            
+            // Update selected categories in state
+            zakatState.selectedCategories = zakatCategories
+                .filter(c => c.selected)
+                .map(c => c.name);
+            
+            renderCategories();
+            updateNextButtonState();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Amount input
+            zakatAmountInput.addEventListener('input', function() {
+                zakatState.zakatAmount = parseFloat(this.value) || 0;
+                updateNextButtonState();
+            });
+            
+            // Currency dropdown toggle
+            currencyToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currencyMenu.classList.toggle('active');
+                this.classList.toggle('active');
+                if (currencyMenu.classList.contains('active')) {
+                    currencySearch.focus();
+                }
+            });
+            
+            // Currency search
+            currencySearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('.currency-option').forEach(option => {
+                    const code = option.dataset.code.toLowerCase();
+                    const name = option.querySelector('.currency-option-name').textContent.toLowerCase();
+                    
+                    if (code.includes(searchTerm) || name.includes(searchTerm)) {
+                        option.style.display = 'flex';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Close currency dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!currencyToggle.contains(e.target) && !currencyMenu.contains(e.target)) {
+                    currencyMenu.classList.remove('active');
+                    currencyToggle.classList.remove('active');
+                }
+            });
+            
+            // Payment method selection
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    const methodId = this.dataset.method;
+                    selectPaymentMethod(methodId);
+                });
+            });
+            
+            // Navigation buttons
+            backBtnNav.addEventListener('click', goToPreviousStep);
+            nextBtnNav.addEventListener('click', goToNextStep);
+            
+            // Calculator modal
+            openCalculatorBtn.addEventListener('click', openCalculatorModal);
+            
+            // Close calculator modal when clicking outside
+            zakatCalculatorModal.addEventListener('click', function(e) {
+                if (e.target === zakatCalculatorModal) {
+                    closeCalculatorModal();
+                }
+            });
+            
+            // Download receipt button
+            downloadReceiptBtn.addEventListener('click', downloadReceiptAsPDF);
+        }
+
+        // Select payment method
+        function selectPaymentMethod(methodId) {
+            zakatState.paymentMethod = methodId;
+            
+            // Update UI
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.classList.remove('selected');
+            });
+            
+            document.querySelector(`.payment-method[data-method="${methodId}"]`).classList.add('selected');
+            
+            updateNextButtonState();
+        }
+
+        // Update step display
+        function updateStepDisplay() {
+            // Hide all step content
+            step1Content.classList.remove('active');
+            step2Content.classList.remove('active');
+            step3Content.classList.remove('active');
+            
+            // Remove active class from all indicators
+            step1Indicator.classList.remove('active', 'completed');
+            step2Indicator.classList.remove('active', 'completed');
+            step3Indicator.classList.remove('active', 'completed');
+            
+            // Show current step content
+            switch(zakatState.currentStep) {
+                case 1:
+                    step1Content.classList.add('active');
+                    step1Indicator.classList.add('active');
+                    backBtnNav.classList.add('btn-hidden');
+                    nextBtnNav.textContent = 'Proceed to Payment';
+                    nextBtnNav.classList.remove('btn-complete');
+                    nextBtnNav.classList.add('btn-next');
+                    break;
+                    
+                case 2:
+                    step2Content.classList.add('active');
+                    step1Indicator.classList.add('completed');
+                    step2Indicator.classList.add('active');
+                    backBtnNav.classList.remove('btn-hidden');
+                    nextBtnNav.textContent = 'Proceed to Payment';
+                    nextBtnNav.classList.remove('btn-complete');
+                    nextBtnNav.classList.add('btn-next');
+                    break;
+                    
+                case 3:
+                    step3Content.classList.add('active');
+                    step1Indicator.classList.add('completed');
+                    step2Indicator.classList.add('completed');
+                    step3Indicator.classList.add('active');
+                    backBtnNav.classList.remove('btn-hidden');
+                    nextBtnNav.textContent = 'Complete';
+                    nextBtnNav.classList.remove('btn-next');
+                    nextBtnNav.classList.add('btn-complete');
+                    
+                    // Generate receipt
+                    generateReceiptData();
+                    break;
+            }
+            
+            updateNextButtonState();
+        }
+
+        // Update next button state
+        function updateNextButtonState() {
+            let isEnabled = false;
+            
+            switch(zakatState.currentStep) {
+                case 1:
+                    // Need amount > 0 and at least one category selected
+                    const currencyData = zakatState.exchangeRates[zakatState.currency] || zakatState.exchangeRates.USD;
+                    const minAmount = currencyData.nisab * 0.025;
+                    isEnabled = zakatState.zakatAmount >= minAmount && zakatState.selectedCategories.length > 0;
+                    break;
+                    
+                case 2:
+                    // Need payment method selected
+                    isEnabled = zakatState.paymentMethod !== null;
+                    break;
+                    
+                case 3:
+                    // Always enabled on final step
+                    isEnabled = true;
+                    break;
+            }
+            
+            nextBtnNav.disabled = !isEnabled;
+        }
+
+        // Go to next step
+        function goToNextStep() {
+            if (zakatState.currentStep < 3) {
+                if (zakatState.currentStep === 2) {
+                    // If moving from step 2 to 3, simulate payment processing
+                    simulatePaymentProcessing();
+                } else {
+                    zakatState.currentStep++;
+                    updateStepDisplay();
+                }
+            } else {
+                // Final step - redirect to donations page
+                showPageLoader();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+        }
+
+        // Simulate payment processing with reduced transparency loader
+        function simulatePaymentProcessing() {
+            showPageLoader();
+            pageLoader.querySelector('.loader-text').textContent = 'Processing Payment...';
+            
+            setTimeout(() => {
+                hidePageLoader();
+                zakatState.currentStep++;
+                updateStepDisplay();
+            }, 2000);
+        }
+
+        // Go to previous step
+        function goToPreviousStep() {
+            if (zakatState.currentStep > 1) {
+                zakatState.currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        // Generate receipt data
+        function generateReceiptData() {
+            // Update transaction ID
+            receiptTransactionId.textContent = zakatState.transactionId;
+            
+            // Update date and time
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+            const formattedTime = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            receiptDateTime.textContent = `${formattedDate} at ${formattedTime}`;
+            
+            // Update donor name
+            receiptDonorName.textContent = zakatState.donorName;
+            
+            // Update payment method
+            if (zakatState.paymentMethod) {
+                const method = paymentMethods.find(m => m.id === zakatState.paymentMethod);
+                receiptPaymentMethod.textContent = method ? method.name : 'Not Selected';
+            } else {
+                receiptPaymentMethod.textContent = 'Not Selected';
+            }
+            
+            // Update currency
+            receiptCurrency.textContent = zakatState.currency;
+            
+            // Update categories
+            receiptCategories.innerHTML = '';
+            if (zakatState.selectedCategories.length > 0) {
+                zakatState.selectedCategories.forEach(category => {
+                    const tag = document.createElement('div');
+                    tag.className = 'category-tag';
+                    tag.textContent = category;
+                    receiptCategories.appendChild(tag);
+                });
+            } else {
+                const tag = document.createElement('div');
+                tag.className = 'category-tag';
+                tag.textContent = 'Priority Distribution';
+                receiptCategories.appendChild(tag);
+            }
+            
+            // Update amount with correct currency symbol
+            receiptAmount.textContent = `${zakatState.currencySymbol}${zakatState.zakatAmount.toFixed(2)}`;
+        }
+
+        // Generate transaction ID
+        function generateTransactionId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 10000);
+            return `ZL-${new Date().getFullYear()}-${random.toString().padStart(6, '0')}`;
+        }
+
+        // Download receipt as PDF
+        async function downloadReceiptAsPDF() {
+            try {
+                showPageLoader();
+                pageLoader.querySelector('.loader-text').textContent = 'Generating PDF Receipt...';
+                
+                const receiptElement = document.getElementById('receiptForDownload');
+                
+                // Create a temporary clone for better PDF rendering
+                const clone = receiptElement.cloneNode(true);
+                clone.style.width = '400px';
+                clone.style.margin = '0 auto';
+                
+                // Add note to receipt if exists
+                if (zakatState.note) {
+                    const noteDiv = document.createElement('div');
+                    noteDiv.className = 'receipt-row';
+                    noteDiv.innerHTML = `
+                        <div class="receipt-label">Note</div>
+                        <div class="receipt-value" style="font-size: 12px; font-style: italic;">${zakatState.note}</div>
+                    `;
+                    const receiptInfo = clone.querySelector('.receipt-info');
+                    if (receiptInfo) {
+                        receiptInfo.appendChild(noteDiv);
+                    }
+                }
+                
+                document.body.appendChild(clone);
+                
+                // Use html2canvas to capture the receipt
+                const canvas = await html2canvas(clone, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    useCORS: true,
+                    logging: false
+                });
+                
+                // Remove the clone
+                document.body.removeChild(clone);
+                
+                // Create PDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Calculate dimensions
+                const imgWidth = 190;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const margin = 10;
+                
+                // Add image to PDF
+                const imgData = canvas.toDataURL('image/png');
+                pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+                
+                // Add footer with timestamp
+                const today = new Date();
+                const downloadTime = today.toLocaleString();
+                pdf.setFontSize(10);
+                pdf.text(`Generated: ${downloadTime}`, margin, pdfHeight - 10);
+                pdf.text('DeenLink Zakat Foundation - Receipt', margin, pdfHeight - 5);
+                
+                // Save the PDF
+                const fileName = `Zakat_Receipt_${zakatState.transactionId}.pdf`;
+                pdf.save(fileName);
+                
+                hidePageLoader();
+                showNotification('Receipt downloaded successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                hidePageLoader();
+                showNotification('Failed to generate receipt. Please try again.', 'error');
+            }
+        }
+
+        // Open calculator modal with EXACT calculator code
+        function openCalculatorModal() {
+            zakatCalculatorModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Load the EXACT calculator code
+            loadExactCalculator();
+        }
+
+        // Close calculator modal
+        function closeCalculatorModal() {
+            zakatCalculatorModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Clear calculator content
+            zakatCalculatorContent.innerHTML = '';
+        }
+
+        // Load the exact calculator from your code
+        function loadExactCalculator() {
+            // Create the calculator structure exactly as in your code
+            zakatCalculatorContent.innerHTML = `
+                <div class="zakat-calculator-header">
+                    <div class="zakat-calculator-title">
+                        <i class="fas fa-calculator"></i>
+                        <span>Zakat Calculator</span>
+                    </div>
+                    <button class="zakat-calculator-close" id="zakatCalculatorClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="calculator-container">
+                    <!-- Step Indicator -->
+                    <div class="step-indicator" style="margin-bottom: 20px;">
+                        <div class="step active" id="calcStep1">
+                            <span>1</span>
+                            <div class="step-label">Currency</div>
+                        </div>
+                        <div class="step" id="calcStep2">
+                            <span>2</span>
+                            <div class="step-label">Assets</div>
+                        </div>
+                        <div class="step" id="calcStep3">
+                            <span>3</span>
+                            <div class="step-label">Results</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Currency Selection -->
+                    <div class="step-container active" id="calcStep1Container">
+                        <div class="card">
+                            <div class="card-title">
+                                <i class="fas fa-globe"></i>
+                                Select Your Currency
+                                <span class="status-badge status-online" id="calcApiStatus">
+                                    <i class="fas fa-circle" style="font-size: 8px;"></i> Live Data
+                                </span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Base Currency</label>
+                                <div class="search-container">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" class="search-input" id="calcCurrencySearch" placeholder="Search for a currency (e.g., USD, EUR, NGN)">
+                                </div>
+                                
+                                <div class="currency-grid" id="calcCurrencyGrid">
+                                    <!-- Currencies will be populated here -->
+                                </div>
+                            </div>
+
+                            <div class="price-info">
+                                <div class="price-item">
+                                    <div class="price-label">Gold (per gram)</div>
+                                    <div class="price-value" id="calcGoldPrice">₦ 48,950</div>
+                                </div>
+                                <div class="price-item">
+                                    <div class="price-label">Silver (per gram)</div>
+                                    <div class="price-value" id="calcSilverPrice">₦ 850</div>
+                                </div>
+                            </div>
+
+                            <div class="nisab-info">
+                                <div class="nisab-title">
+                                    <i class="fas fa-scale-balanced"></i>
+                                    Current Nisab Values
+                                </div>
+                                <div class="nisab-value" id="calcGoldNisabValue">₦ 4,280,000</div>
+                                <div class="nisab-detail">Based on 87.48g of gold at current market rate</div>
+                                <div class="nisab-value" id="calcSilverNisabValue">₦ 520,000</div>
+                                <div class="nisab-detail">Based on 612.36g of silver at current market rate</div>
+                                
+                                <div class="data-info">
+                                    <span id="calcLastUpdated">Last updated: Just now</span>
+                                    <button class="refresh-btn" id="calcRefreshPrices">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" id="calcNextStep1">
+                                Continue to Assets
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Asset Selection -->
+                    <div class="step-container" id="calcStep2Container">
+                        <div class="card">
+                            <div class="card-title">
+                                <i class="fas fa-coins"></i>
+                                What Assets Do You Have?
+                            </div>
+                            
+                            <div class="options-grid">
+                                <div class="option-card" data-asset="cash">
+                                    <div class="option-icon">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div class="option-name">Cash & Savings</div>
+                                    <div class="option-desc">Bank accounts, cash at hand</div>
+                                </div>
+                                
+                                <div class="option-card" data-asset="gold">
+                                    <div class="option-icon">
+                                        <i class="fas fa-gem"></i>
+                                    </div>
+                                    <div class="option-name">Gold</div>
+                                    <div class="option-desc">Jewelry, bullion, coins</div>
+                                </div>
+                                
+                                <div class="option-card" data-asset="silver">
+                                    <div class="option-icon">
+                                        <i class="fas fa-ring"></i>
+                                    </div>
+                                    <div class="option-name">Silver</div>
+                                    <div class="option-desc">Jewelry, utensils, coins</div>
+                                </div>
+                                
+                                <div class="option-card" data-asset="stocks">
+                                    <div class="option-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="option-name">Stocks</div>
+                                    <div class="option-desc">Investments, shares</div>
+                                </div>
+                                
+                                <div class="option-card" data-asset="business">
+                                    <div class="option-icon">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <div class="option-name">Business</div>
+                                    <div class="option-desc">Inventory, assets</div>
+                                </div>
+                                
+                                <div class="option-card" data-asset="property">
+                                    <div class="option-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="option-name">Property</div>
+                                    <div class="option-desc">Rental, investment</div>
+                                </div>
+                            </div>
+
+                            <div id="calcAssetInputsContainer">
+                                <!-- Asset inputs will be dynamically added here -->
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Liabilities (debts due within one year)</label>
+                                <div class="currency-group">
+                                    <input type="number" class="form-input" id="calcLiabilitiesInput" placeholder="0.00" min="0" step="0.01">
+                                    <span style="font-weight: 500; color: var(--text-dark);" id="calcLiabilitiesCurrency">NGN</span>
+                                </div>
+                            </div>
+
+                            <div class="btn-container">
+                                <button class="btn btn-secondary" id="calcPrevStep2">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Back
+                                </button>
+                                <button class="btn btn-primary" id="calcNextStep2">
+                                    Calculate Zakat
+                                    <i class="fas fa-calculator"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Results -->
+                    <div class="step-container" id="calcStep3Container">
+                        <div class="card">
+                            <div class="card-title">
+                                <i class="fas fa-file-invoice"></i>
+                                Your Zakat Calculation
+                            </div>
+                            
+                            <div class="loading" id="calcLoadingResults">
+                                <div class="loading-spinner"></div>
+                                <p>Calculating your Zakat...</p>
+                            </div>
+
+                            <div id="calcZakatResults" style="display: none;">
+                                <div class="nisab-info">
+                                    <div class="nisab-title">
+                                        <i class="fas fa-scale-balanced"></i>
+                                        Nisab Status
+                                    </div>
+                                    <div class="nisab-value" id="calcNisabStatusValue">Above Nisab</div>
+                                    <div class="nisab-detail" id="calcNisabStatusDetail">Your total assets exceed the nisab threshold</div>
+                                </div>
+
+                                <div class="results-card">
+                                    <div class="results-title">Your Zakat Payable</div>
+                                    <div class="zakat-amount" id="calcZakatAmount">₦ 0</div>
+                                    <div style="opacity: 0.9; margin-bottom: 10px;">2.5% of your zakatable wealth</div>
+                                    
+                                    <div class="results-breakdown">
+                                        <div class="breakdown-row">
+                                            <span>Total Assets Value</span>
+                                            <span id="calcTotalAssetsValue">₦ 0</span>
+                                        </div>
+                                        <div class="breakdown-row">
+                                            <span>Liabilities</span>
+                                            <span id="calcLiabilitiesValue">₦ 0</span>
+                                        </div>
+                                        <div class="breakdown-row">
+                                            <span>Net Wealth</span>
+                                            <span id="calcNetWealthValue">₦ 0</span>
+                                        </div>
+                                        <div class="breakdown-row">
+                                            <span>Nisab Threshold</span>
+                                            <span id="calcNisabThresholdValue">₦ 0</span>
+                                        </div>
+                                        <div class="breakdown-row">
+                                            <span>Zakatable Amount</span>
+                                            <span id="calcZakatableAmountValue">₦ 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 20px;">
+                                    <div class="nisab-info">
+                                        <div class="nisab-title">
+                                            <i class="fas fa-info-circle"></i>
+                                            Important Notes
+                                        </div>
+                                        <div style="font-size: 13px; color: var(--dark-gray); line-height: 1.5;">
+                                            <p>• Zakat is payable at 2.5% of wealth exceeding nisab held for one lunar year</p>
+                                            <p>• Most scholars use the silver nisab value as it makes Zakat accessible to more people</p>
+                                            <p>• Consult with a local Islamic scholar for precise rulings</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="btn-container">
+                                <button class="btn btn-secondary" id="calcPrevStep3">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Back to Assets
+                                </button>
+                                <button class="btn btn-primary" id="calcNewCalculation">
+                                    <i class="fas fa-redo"></i>
+                                    New Calculation
+                                </button>
+                                <button class="btn btn-primary" id="calcUseAmount" style="background: linear-gradient(135deg, var(--primary-green), #4CAF50);">
+                                    <i class="fas fa-check-circle"></i>
+                                    Use This Amount
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Initialize the calculator
+            initializeCalculatorInModal();
+            
+            // Add close button event
+            document.getElementById('zakatCalculatorClose').addEventListener('click', closeCalculatorModal);
+        }
+
+        // =============== DIRECT ISLAMICAPI INTEGRATION ===============
+        const CONFIG = {
+            apiKey: '1HmsIFcy3PEAdEWx7Jsk67j5jSxSnP6S0H5mXU2qVKL3Ssdq',
+            cacheDuration: 2 * 60 * 60 * 1000, // 2 hours
+            standard: 'classical', // classical or common
+            debugMode: true
+        };
+
+        // Available currencies from the API
+        const ALL_CURRENCIES = {
+            "USD": "US Dollar",
+            "AED": "UAE Dirham",
+            "AFN": "Afghan Afghani",
+            "ALL": "Albanian Lek",
+            "AMD": "Armenian Dram",
+            "ANG": "Netherlands Antillean Guilder",
+            "AOA": "Angolan Kwanza",
+            "ARS": "Argentine Peso",
+            "AUD": "Australian Dollar",
+            "AWG": "Aruban Florin",
+            "AZN": "Azerbaijani Manat",
+            "BAM": "Bosnia-Herzegovina Convertible Mark",
+            "BBD": "Barbadian Dollar",
+            "BDT": "Bangladeshi Taka",
+            "BGN": "Bulgarian Lev",
+            "BHD": "Bahraini Dinar",
+            "BIF": "Burundian Franc",
+            "BMD": "Bermudian Dollar",
+            "BND": "Brunei Dollar",
+            "BOB": "Bolivian Boliviano",
+            "BRL": "Brazilian Real",
+            "BSD": "Bahamian Dollar",
+            "BTN": "Bhutanese Ngultrum",
+            "BWP": "Botswanan Pula",
+            "BYN": "Belarusian Ruble",
+            "BZD": "Belize Dollar",
+            "CAD": "Canadian Dollar",
+            "CDF": "Congolese Franc",
+            "CHF": "Swiss Franc",
+            "CLF": "Chilean Unit of Account",
+            "CLP": "Chilean Peso",
+            "CNH": "Chinese Yuan (Offshore)",
+            "CNY": "Chinese Yuan",
+            "COP": "Colombian Peso",
+            "CRC": "Costa Rican Colón",
+            "CUP": "Cuban Peso",
+            "CVE": "Cape Verdean Escudo",
+            "CZK": "Czech Koruna",
+            "DJF": "Djiboutian Franc",
+            "DKK": "Danish Krone",
+            "DOP": "Dominican Peso",
+            "DZD": "Algerian Dinar",
+            "EGP": "Egyptian Pound",
+            "ERN": "Eritrean Nakfa",
+            "ETB": "Ethiopian Birr",
+            "EUR": "Euro",
+            "FJD": "Fijian Dollar",
+            "FKP": "Falkland Islands Pound",
+            "FOK": "Faroese Króna",
+            "GBP": "British Pound",
+            "GEL": "Georgian Lari",
+            "GGP": "Guernsey Pound",
+            "GHS": "Ghanaian Cedi",
+            "GIP": "Gibraltar Pound",
+            "GMD": "Gambian Dalasi",
+            "GNF": "Guinean Franc",
+            "GTQ": "Guatemalan Quetzal",
+            "GYD": "Guyanese Dollar",
+            "HKD": "Hong Kong Dollar",
+            "HNL": "Honduran Lempira",
+            "HRK": "Croatian Kuna",
+            "HTG": "Haitian Gourde",
+            "HUF": "Hungarian Forint",
+            "IDR": "Indonesian Rupiah",
+            "ILS": "Israeli New Shekel",
+            "IMP": "Manx Pound",
+            "INR": "Indian Rupee",
+            "IQD": "Iraqi Dinar",
+            "IRR": "Iranian Rial",
+            "ISK": "Icelandic Króna",
+            "JEP": "Jersey Pound",
+            "JMD": "Jamaican Dollar",
+            "JOD": "Jordanian Dinar",
+            "JPY": "Japanese Yen",
+            "KES": "Kenyan Shilling",
+            "KGS": "Kyrgystani Som",
+            "KHR": "Cambodian Riel",
+            "KID": "Kiribati Dollar",
+            "KMF": "Comorian Franc",
+            "KRW": "South Korean Won",
+            "KWD": "Kuwaiti Dinar",
+            "KYD": "Cayman Islands Dollar",
+            "KZT": "Kazakhstani Tenge",
+            "LAK": "Laotian Kip",
+            "LBP": "Lebanese Pound",
+            "LKR": "Sri Lankan Rupee",
+            "LRD": "Liberian Dollar",
+            "LSL": "Lesotho Loti",
+            "LYD": "Libyan Dinar",
+            "MAD": "Moroccan Dirham",
+            "MDL": "Moldovan Leu",
+            "MGA": "Malagasy Ariary",
+            "MKD": "Macedonian Denar",
+            "MMK": "Myanmar Kyat",
+            "MNT": "Mongolian Tugrik",
+            "MOP": "Macanese Pataca",
+            "MRU": "Mauritanian Ouguiya",
+            "MUR": "Mauritian Rupee",
+            "MVR": "Maldivian Rufiyaa",
+            "MWK": "Malawian Kwacha",
+            "MXN": "Mexican Peso",
+            "MYR": "Malaysian Ringgit",
+            "MZN": "Mozambican Metical",
+            "NAD": "Namibian Dollar",
+            "NGN": "Nigerian Naira",
+            "NIO": "Nicaraguan Córdoba",
+            "NOK": "Norwegian Krone",
+            "NPR": "Nepalese Rupee",
+            "NZD": "New Zealand Dollar",
+            "OMR": "Omani Rial",
+            "PAB": "Panamanian Balboa",
+            "PEN": "Peruvian Sol",
+            "PGK": "Papua New Guinean Kina",
+            "PHP": "Philippine Peso",
+            "PKR": "Pakistani Rupee",
+            "PLN": "Polish Złoty",
+            "PYG": "Paraguayan Guarani",
+            "QAR": "Qatari Riyal",
+            "RON": "Romanian Leu",
+            "RSD": "Serbian Dinar",
+            "RUB": "Russian Ruble",
+            "RWF": "Rwandan Franc",
+            "SAR": "Saudi Riyal",
+            "SBD": "Solomon Islands Dollar",
+            "SCR": "Seychellois Rupee",
+            "SDG": "Sudanese Pound",
+            "SEK": "Swedish Krona",
+            "SGD": "Singapore Dollar",
+            "SHP": "Saint Helena Pound",
+            "SLE": "Sierra Leonean Leone",
+            "SLL": "Sierra Leonean Leone (old)",
+            "SOS": "Somali Shilling",
+            "SRD": "Surinamese Dollar",
+            "SSP": "South Sudanese Pound",
+            "STN": "São Tomé and Príncipe Dobra",
+            "SYP": "Syrian Pound",
+            "SZL": "Swazi Lilangeni",
+            "THB": "Thai Baht",
+            "TJS": "Tajikistani Somoni",
+            "TMT": "Turkmenistani Manat",
+            "TND": "Tunisian Dinar",
+            "TOP": "Tongan Paʻanga",
+            "TRY": "Turkish Lira",
+            "TTD": "Trinidad and Tobago Dollar",
+            "TVD": "Tuvaluan Dollar",
+            "TWD": "New Taiwan Dollar",
+            "TZS": "Tanzanian Shilling",
+            "UAH": "Ukrainian Hryvnia",
+            "UGX": "Ugandan Shilling",
+            "UYU": "Uruguayan Peso",
+            "UZS": "Uzbekistani Som",
+            "VES": "Venezuelan Bolívar",
+            "VND": "Vietnamese Dong",
+            "VUV": "Vanuatu Vatu",
+            "WST": "Samoan Tala",
+            "XAF": "CFA Franc BEAC",
+            "XCD": "East Caribbean Dollar",
+            "XCG": "Central African CFA Franc",
+            "XDR": "Special Drawing Rights",
+            "XOF": "CFA Franc BCEAO",
+            "XPF": "CFP Franc",
+            "YER": "Yemeni Rial",
+            "ZAR": "South African Rand",
+            "ZMW": "Zambian Kwacha",
+            "ZWL": "Zimbabwean Dollar"
+        };
+
+        // Calculator State
+        const calcState = {
+            currentStep: 1,
+            currency: 'NGN',
+            selectedAssets: [],
+            assets: {
+                cash: 0, gold: 0, silver: 0,
+                stocks: 0, business: 0, property: 0
+            },
+            liabilities: 0,
+            nisabData: null,
+            isLoading: false
+        };
+
+        // Initialize calculator in modal (FIXED version)
+        function initializeCalculatorInModal() {
+            // Step navigation
+            document.getElementById('calcNextStep1').addEventListener('click', () => {
+                document.getElementById('calcStep1Container').classList.remove('active');
+                document.getElementById('calcStep2Container').classList.add('active');
+                document.getElementById('calcStep1').classList.remove('active');
+                document.getElementById('calcStep2').classList.add('active');
+                calcState.currentStep = 2;
+            });
+            
+            document.getElementById('calcPrevStep2').addEventListener('click', () => {
+                document.getElementById('calcStep2Container').classList.remove('active');
+                document.getElementById('calcStep1Container').classList.add('active');
+                document.getElementById('calcStep2').classList.remove('active');
+                document.getElementById('calcStep1').classList.add('active');
+                calcState.currentStep = 1;
+            });
+            
+            document.getElementById('calcPrevStep3').addEventListener('click', () => {
+                document.getElementById('calcStep3Container').classList.remove('active');
+                document.getElementById('calcStep2Container').classList.add('active');
+                document.getElementById('calcStep3').classList.remove('active');
+                document.getElementById('calcStep2').classList.add('active');
+                calcState.currentStep = 2;
+            });
+            
+            // Currency selection
+            populateCalculatorCurrencyGrid();
+            
+            // Asset selection
+            setupCalculatorAssetSelection();
+            
+            // Refresh prices button
+            document.getElementById('calcRefreshPrices').addEventListener('click', async () => {
+                await fetchNisabDataForCalculator(calcState.currency);
+                showNotification('Prices refreshed successfully!', 'success');
+            });
+            
+            // Calculate button
+            document.getElementById('calcNextStep2').addEventListener('click', async () => {
+                await calculateZakatForCalculator();
+            });
+            
+            // Use this amount button
+            document.getElementById('calcUseAmount').addEventListener('click', () => {
+                const zakatAmountEl = document.getElementById('calcZakatAmount');
+                const amountText = zakatAmountEl.textContent;
+                const amount = parseFloat(amountText.replace(/[^\d.]/g, ''));
+                
+                if (!isNaN(amount) && amount > 0) {
+                    zakatState.zakatAmount = amount;
+                    zakatAmountInput.value = amount.toFixed(2);
+                    updateNextButtonState();
+                    closeCalculatorModal();
+                    showNotification('Zakat amount updated successfully!', 'success');
+                }
+            });
+            
+            // New calculation button
+            document.getElementById('calcNewCalculation').addEventListener('click', () => {
+                resetCalculatorModal();
+            });
+            
+            // Currency search
+            const currencySearch = document.getElementById('calcCurrencySearch');
+            if (currencySearch) {
+                currencySearch.addEventListener('input', function() {
+                    filterCalculatorCurrencies(this.value);
+                });
+            }
+            
+            // Load initial data
+            fetchNisabDataForCalculator(calcState.currency);
+        }
+
+        function populateCalculatorCurrencyGrid() {
+            const currencyGrid = document.getElementById('calcCurrencyGrid');
+            if (!currencyGrid) return;
+            
+            currencyGrid.innerHTML = '';
+            
+            // Limit to popular currencies for better UX
+            const popularCurrencies = {
+                'USD': 'US Dollar',
+                'EUR': 'Euro',
+                'GBP': 'British Pound',
+                'NGN': 'Nigerian Naira',
+                'SAR': 'Saudi Riyal',
+                'AED': 'UAE Dirham',
+                'PKR': 'Pakistani Rupee',
+                'INR': 'Indian Rupee',
+                'MYR': 'Malaysian Ringgit',
+                'JPY': 'Japanese Yen',
+                'CAD': 'Canadian Dollar',
+                'AUD': 'Australian Dollar'
+            };
+            
+            Object.entries(popularCurrencies).forEach(([code, name]) => {
+                const option = document.createElement('div');
+                option.className = `currency-option-small ${code === calcState.currency ? 'selected' : ''}`;
+                option.dataset.code = code;
+                option.dataset.name = name;
+                
+                option.innerHTML = `
+                    <div class="currency-code">${code}</div>
+                    <div class="currency-name" title="${name}">${name}</div>
+                `;
+                
+                option.addEventListener('click', () => {
+                    // Remove selected class from all
+                    document.querySelectorAll('.currency-option-small').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    // Add selected class to clicked
+                    option.classList.add('selected');
+                    
+                    calcState.currency = code;
+                    document.getElementById('calcLiabilitiesCurrency').textContent = code;
+                    fetchNisabDataForCalculator(code);
+                });
+                
+                currencyGrid.appendChild(option);
+            });
+        }
+
+        function filterCalculatorCurrencies(searchTerm) {
+            const searchLower = searchTerm.toLowerCase();
+            document.querySelectorAll('.currency-option-small').forEach(option => {
+                const code = option.dataset.code.toLowerCase();
+                const name = option.dataset.name.toLowerCase();
+                
+                if (code.includes(searchLower) || name.includes(searchLower)) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        async function fetchNisabDataForCalculator(currency = 'NGN') {
+            try {
+                // Show loading state
+                const apiStatus = document.getElementById('calcApiStatus');
+                apiStatus.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Loading...';
+                apiStatus.className = 'status-badge';
+                
+                // Check cache first
+                const cached = getCachedNisab(currency);
+                if (cached && isCacheValid(cached.timestamp)) {
+                    updateCalculatorUIWithNisabData(cached.data);
+                    apiStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px; color: #2E7D32;"></i> Live Data';
+                    apiStatus.className = 'status-badge status-online';
+                    return;
+                }
+                
+                // Direct API call to IslamicAPI.com
+                const apiUrl = `https://islamicapi.com/api/v1/zakat-nisab/?standard=${CONFIG.standard}&currency=${currency.toLowerCase()}&unit=g&api_key=${CONFIG.apiKey}`;
+                
+                console.log('Fetching from IslamicAPI:', apiUrl.replace(CONFIG.apiKey, '***HIDDEN***'));
+                
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.code === 200) {
+                    // Cache the response
+                    cacheNisabDataForCalculator(currency, data);
+                    updateCalculatorUIWithNisabData(data);
+                    apiStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px; color: #2E7D32;"></i> Live Data';
+                    apiStatus.className = 'status-badge status-online';
+                } else {
+                    throw new Error(data.message || 'API error');
+                }
+                
+            } catch (error) {
+                console.error('Failed to fetch from IslamicAPI:', error);
+                // Use fallback
+                useFallbackNisabForCalculator(currency);
+                const apiStatus = document.getElementById('calcApiStatus');
+                apiStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px; color: #FF9800;"></i> Offline Mode';
+                apiStatus.className = 'status-badge status-offline';
+            }
+        }
+
+        function updateCalculatorUIWithNisabData(data) {
+            if (!data || data.code !== 200) {
+                console.error('Invalid data received:', data);
+                return;
+            }
+            
+            const { nisab_thresholds } = data.data;
+            const { gold, silver } = nisab_thresholds;
+            
+            // Update price displays
+            document.getElementById('calcGoldPrice').textContent = formatCurrencyForCalculator(gold.unit_price, data.currency.toUpperCase(), false);
+            document.getElementById('calcSilverPrice').textContent = formatCurrencyForCalculator(silver.unit_price, data.currency.toUpperCase(), false);
+            
+            // Update nisab values
+            document.getElementById('calcGoldNisabValue').textContent = formatCurrencyForCalculator(gold.nisab_amount, data.currency.toUpperCase());
+            document.getElementById('calcSilverNisabValue').textContent = formatCurrencyForCalculator(silver.nisab_amount, data.currency.toUpperCase());
+            
+            // Update last updated time
+            const updatedTime = new Date(data.updated_at || Date.now());
+            document.getElementById('calcLastUpdated').textContent = `Updated: ${updatedTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            
+            // Store in state for calculations
+            calcState.nisabData = data;
+            calcState.currentGoldPricePerGram = gold.unit_price;
+            calcState.currentSilverPricePerGram = silver.unit_price;
+            calcState.nisabValue = silver.nisab_amount; // Use silver nisab
+        }
+
+        function formatCurrencyForCalculator(amount, currency, showDecimals = true) {
+            const symbols = {
+                'NGN': '₦', 'USD': '$', 'EUR': '€', 'GBP': '£',
+                'SAR': 'ر.س', 'AED': 'د.إ', 'PKR': '₨', 'INR': '₹',
+                'MYR': 'RM', 'IDR': 'Rp', 'JPY': '¥', 'CNY': '¥',
+                'CHF': 'CHF', 'CAD': 'CA$', 'AUD': 'A$'
+            };
+            
+            const symbol = symbols[currency] || currency;
+            
+            // Format based on amount size
+            let formatted;
+            if (amount >= 1000000) {
+                formatted = (amount / 1000000).toFixed(2) + 'M';
+            } else if (amount >= 1000) {
+                formatted = (amount / 1000).toFixed(2) + 'K';
+            } else {
+                formatted = showDecimals 
+                    ? parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+                    : parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+            }
+            
+            return `${symbol} ${formatted}`.trim();
+        }
+
+        function useFallbackNisabForCalculator(currency) {
+            // Simple fallback calculation
+            const exchangeRates = {
+                'NGN': 1300, 'USD': 1, 'EUR': 0.92, 'GBP': 0.79,
+                'SAR': 3.75, 'AED': 3.67, 'PKR': 280, 'INR': 83,
+                'MYR': 4.75, 'IDR': 15500
+            };
+            
+            const rate = exchangeRates[currency] || 1;
+            const goldPerGram = 62.75 * rate;
+            const silverPerGram = 0.85 * rate;
+            
+            const fallbackData = {
+                code: 200,
+                currency: currency,
+                weight_unit: 'gram',
+                updated_at: new Date().toISOString(),
+                data: {
+                    nisab_thresholds: {
+                        gold: {
+                            weight: CONFIG.standard === 'classical' ? 87.48 : 85,
+                            unit_price: goldPerGram,
+                            nisab_amount: goldPerGram * (CONFIG.standard === 'classical' ? 87.48 : 85)
+                        },
+                        silver: {
+                            weight: CONFIG.standard === 'classical' ? 612.36 : 595,
+                            unit_price: silverPerGram,
+                            nisab_amount: silverPerGram * (CONFIG.standard === 'classical' ? 612.36 : 595)
+                        }
+                    }
+                }
+            };
+            
+            updateCalculatorUIWithNisabData(fallbackData);
+        }
+
+        function cacheNisabDataForCalculator(currency, data) {
+            const key = `islamicapi_calculator_${currency}_${CONFIG.standard}`;
+            const cacheItem = {
+                data: data,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(key, JSON.stringify(cacheItem));
+        }
+
+        function getCachedNisab(currency) {
+            const key = `islamicapi_calculator_${currency}_${CONFIG.standard}`;
+            const cached = localStorage.getItem(key);
+            return cached ? JSON.parse(cached) : null;
+        }
+
+        function isCacheValid(timestamp) {
+            return Date.now() - timestamp < CONFIG.cacheDuration;
+        }
+
+        function setupCalculatorAssetSelection() {
+            const optionCards = document.querySelectorAll('.option-card');
+            
+            optionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const assetType = this.getAttribute('data-asset');
+                    
+                    this.classList.toggle('active');
+                    
+                    if (this.classList.contains('active')) {
+                        if (!calcState.selectedAssets.includes(assetType)) {
+                            calcState.selectedAssets.push(assetType);
+                        }
+                    } else {
+                        const index = calcState.selectedAssets.indexOf(assetType);
+                        if (index > -1) {
+                            calcState.selectedAssets.splice(index, 1);
+                        }
+                    }
+                    
+                    renderCalculatorAssetInputs();
+                });
+            });
+        }
+
+        function renderCalculatorAssetInputs() {
+            const container = document.getElementById('calcAssetInputsContainer');
+            container.innerHTML = '';
+            
+            if (calcState.selectedAssets.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.textAlign = 'center';
+                emptyMessage.style.padding = '20px';
+                emptyMessage.style.color = 'var(--dark-gray)';
+                emptyMessage.innerHTML = `
+                    <i class="fas fa-coins" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>
+                    <p>Select assets above to add their values</p>
+                `;
+                container.appendChild(emptyMessage);
+                return;
+            }
+            
+            calcState.selectedAssets.forEach(asset => {
+                const assetRow = document.createElement('div');
+                assetRow.className = 'asset-row';
+                
+                let description = '';
+                if (asset === 'property') {
+                    description = ' (Rental, investment, etc.)';
+                }
+                
+                let unit = calcState.currency;
+                if (asset === 'gold' || asset === 'silver') {
+                    unit = 'g';
+                }
+                
+                assetRow.innerHTML = `
+                    <div class="asset-label">${getCalculatorAssetLabel(asset)}${description}</div>
+                    <input type="number" 
+                           class="asset-input" 
+                           id="calc${asset}Input" 
+                           placeholder="0.00" 
+                           min="0" 
+                           step="0.01"
+                           value="${calcState.assets[asset] || 0}">
+                    <span>${unit}</span>
+                `;
+                container.appendChild(assetRow);
+            });
+        }
+
+        function getCalculatorAssetLabel(asset) {
+            const labels = {
+                'cash': 'Cash & Savings',
+                'gold': 'Gold',
+                'silver': 'Silver',
+                'stocks': 'Stocks',
+                'business': 'Business',
+                'property': 'Property'
+            };
+            return labels[asset] || asset;
+        }
+
+        async function calculateZakatForCalculator() {
+            const loadingResults = document.getElementById('calcLoadingResults');
+            const zakatResults = document.getElementById('calcZakatResults');
+            
+            loadingResults.style.display = 'block';
+            zakatResults.style.display = 'none';
+            
+            // Collect values
+            Object.keys(calcState.assets).forEach(key => {
+                calcState.assets[key] = 0;
+            });
+            
+            calcState.selectedAssets.forEach(asset => {
+                const input = document.getElementById(`calc${asset}Input`);
+                if (input) {
+                    calcState.assets[asset] = parseFloat(input.value) || 0;
+                }
+            });
+            
+            const liabilitiesInput = document.getElementById('calcLiabilitiesInput');
+            if (liabilitiesInput) {
+                calcState.liabilities = parseFloat(liabilitiesInput.value) || 0;
+            }
+            
+            // Simulate calculation delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            let totalAssetsValue = 0;
+            
+            totalAssetsValue += calcState.assets.cash;
+            totalAssetsValue += calcState.assets.stocks;
+            totalAssetsValue += calcState.assets.business;
+            totalAssetsValue += calcState.assets.property;
+            
+            if (calcState.assets.gold > 0 && calcState.currentGoldPricePerGram) {
+                totalAssetsValue += calcState.assets.gold * calcState.currentGoldPricePerGram;
+            }
+            
+            if (calcState.assets.silver > 0 && calcState.currentSilverPricePerGram) {
+                totalAssetsValue += calcState.assets.silver * calcState.currentSilverPricePerGram;
+            }
+            
+            const netWealth = Math.max(0, totalAssetsValue - calcState.liabilities);
+            const isAboveNisab = netWealth >= (calcState.nisabValue || 0);
+            const zakatableAmount = isAboveNisab ? netWealth : 0;
+            const zakatAmount = zakatableAmount * 0.025;
+            
+            // Update results UI
+            document.getElementById('calcNisabStatusValue').textContent = 
+                isAboveNisab ? 'Above Nisab' : 'Below Nisab';
+            document.getElementById('calcNisabStatusDetail').textContent = 
+                isAboveNisab ? 'Zakat is due on your wealth' : 'Your wealth is below the nisab threshold';
+            
+            document.getElementById('calcZakatAmount').textContent = 
+                formatCurrencyForCalculator(zakatAmount, calcState.currency);
+            document.getElementById('calcTotalAssetsValue').textContent = 
+                formatCurrencyForCalculator(totalAssetsValue, calcState.currency);
+            document.getElementById('calcLiabilitiesValue').textContent = 
+                formatCurrencyForCalculator(calcState.liabilities, calcState.currency);
+            document.getElementById('calcNetWealthValue').textContent = 
+                formatCurrencyForCalculator(netWealth, calcState.currency);
+            document.getElementById('calcNisabThresholdValue').textContent = 
+                formatCurrencyForCalculator(calcState.nisabValue || 0, calcState.currency);
+            document.getElementById('calcZakatableAmountValue').textContent = 
+                formatCurrencyForCalculator(zakatableAmount, calcState.currency);
+            
+            // Go to step 3
+            document.getElementById('calcStep2Container').classList.remove('active');
+            document.getElementById('calcStep3Container').classList.add('active');
+            document.getElementById('calcStep2').classList.remove('active');
+            document.getElementById('calcStep3').classList.add('active');
+            calcState.currentStep = 3;
+            
+            // Show results
+            loadingResults.style.display = 'none';
+            zakatResults.style.display = 'block';
+        }
+
+        function resetCalculatorModal() {
+            calcState.selectedAssets = [];
+            Object.keys(calcState.assets).forEach(key => {
+                calcState.assets[key] = 0;
+            });
+            calcState.liabilities = 0;
+            
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            document.getElementById('calcLiabilitiesInput').value = '';
+            const container = document.getElementById('calcAssetInputsContainer');
+            if (container) container.innerHTML = '';
+            
+            // Go back to step 1
+            document.getElementById('calcStep3Container').classList.remove('active');
+            document.getElementById('calcStep1Container').classList.add('active');
+            document.getElementById('calcStep3').classList.remove('active');
+            document.getElementById('calcStep1').classList.add('active');
+            calcState.currentStep = 1;
+            
+            const zakatResults = document.getElementById('calcZakatResults');
+            if (zakatResults) zakatResults.style.display = 'none';
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: ${type === 'success' ? 'var(--success-green)' : 'var(--error-red)'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 3000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease, slideOut 0.3s ease 2s forwards;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2500);
+        }
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initZakatPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic App | Worship & Daily Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --quran-blue: #1A5F7A;
+            --mecca-red: #C62828;
+            --medina-green: #2E7D32;
+            --prayer-blue: #1976D2;
+            --calendar-purple: #7B1FA2;
+            --names-of-allah-teal: #00838F; /* New color for 99 Names */
+            --dua-teal: #00796B;
+            --zakat-orange: #E65100;
+            --fasting-cyan: #0097A7;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --quran-blue: #3498db;
+            --mecca-red: #e74c3c;
+            --medina-green: #27ae60;
+            --prayer-blue: #3498db;
+            --calendar-purple: #9b59b6;
+            --names-of-allah-teal: #1abc9c; /* Dark theme color */
+            --dua-teal: #1abc9c;
+            --zakat-orange: #e67e22;
+            --fasting-cyan: #1abc9c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay - Fixed to cover entire screen */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Fade in animation for page content */
+        .page-content {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Top Section - Consistent with other pages */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Tools List - Card Style */
+        .tools-list-container {
+            padding: 20px 16px 100px;
+        }
+
+        @media (min-width: 768px) {
+            .tools-list-container {
+                padding: 25px 30px 120px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tool-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border-color: var(--medium-gray);
+        }
+
+        .dark-theme .tool-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .tool-card.prayer::before {
+            background-color: var(--prayer-blue);
+        }
+
+        .tool-card.qibla::before {
+            background-color: var(--primary-green);
+        }
+
+        .tool-card.calendar::before {
+            background-color: var(--calendar-purple);
+        }
+
+        .tool-card.names-of-allah::before {
+            background-color: var(--names-of-allah-teal);
+        }
+
+        .tool-card.duas::before {
+            background-color: var(--dua-teal);
+        }
+
+        .tool-card.tasbeeh::before {
+            background-color: var(--accent-gold);
+        }
+
+        .tool-card.zakat::before {
+            background-color: var(--zakat-orange);
+        }
+
+        .tool-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: scale(1.05);
+        }
+
+        .tool-icon.prayer {
+            background: linear-gradient(135deg, var(--prayer-blue), #64B5F6);
+        }
+
+        .tool-icon.qibla {
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+        }
+
+        .tool-icon.calendar {
+            background: linear-gradient(135deg, var(--calendar-purple), #BA68C8);
+        }
+
+        .tool-icon.names-of-allah {
+            background: linear-gradient(135deg, var(--names-of-allah-teal), #26C6DA);
+        }
+
+        .tool-icon.duas {
+            background: linear-gradient(135deg, var(--dua-teal), #26A69A);
+        }
+
+        /* FIXED: Digital Tasbeeh Icon - Changed to Kaaba icon */
+        .tool-icon.tasbeeh {
+            background: linear-gradient(135deg, var(--accent-gold), #FFD54F);
+        }
+
+        .tool-icon.tasbeeh i {
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tool-icon.zakat {
+            background: linear-gradient(135deg, var(--zakat-orange), #FF9800);
+        }
+
+        .tool-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 10px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .tool-badge {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .dark-theme .tool-badge {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        /* Special badge color for 99 Names */
+        .tool-badge.names {
+            background-color: rgba(0, 131, 143, 0.1);
+            color: var(--names-of-allah-teal);
+        }
+
+        .dark-theme .tool-badge.names {
+            background-color: rgba(26, 188, 156, 0.2);
+        }
+
+        .tool-description {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .tool-arrow {
+            color: var(--dark-gray);
+            font-size: 14px;
+            opacity: 0.7;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .tool-card:hover .tool-arrow {
+            opacity: 1;
+            transform: translateX(3px);
+        }
+
+        /* Tasbeeh Popup Modal */
+        .tasbeeh-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .tasbeeh-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tasbeeh-modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .tasbeeh-modal-overlay.active .tasbeeh-modal-content {
+            transform: translateY(0);
+        }
+
+        .tasbeeh-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tasbeeh-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .tasbeeh-modal-title i {
+            font-size: 20px;
+            color: var(--accent-gold);
+        }
+
+        .tasbeeh-modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--dark-gray);
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .tasbeeh-modal-close:hover {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .tasbeeh-modal-body {
+            padding: 20px;
+        }
+
+        /* Enhanced Tasbeeh Styles */
+
+        /* Counter Style Selector - Enhanced */
+        .counter-style-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+            background: var(--light-gray);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .counter-style-btn {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .counter-style-btn {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .counter-style-btn i {
+                font-size: 14px;
+            }
+        }
+
+        .counter-style-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold), #FFD54F);
+            color: white;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .counter-style-btn i {
+            font-size: 16px;
+        }
+
+        /* Modern Counter - Completely Redesigned */
+        .modern-counter {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .counter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .counter-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .counter-target {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        #targetSelect {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-gray);
+            background: var(--white);
+            color: var(--text-dark);
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        /* Custom target input */
+        .custom-target-input {
+            display: none;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .custom-target-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #customTargetInput {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #setCustomTarget {
+            padding: 8px 16px;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .counter-visual {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .counter-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 480px) {
+            .counter-circle {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .counter-circle {
+                width: 160px;
+                height: 160px;
+            }
+        }
+
+        /* FIXED: Counter Display - Always centered */
+        .counter-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-family: 'Amiri', serif;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            /* Prevent transform changes from breaking centering */
+            transition: transform 0.2s ease;
+            /* Ensure text doesn't affect positioning */
+            line-height: 1;
+            padding: 0;
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            .counter-display {
+                font-size: 50px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .counter-display {
+                font-size: 42px;
+            }
+        }
+
+        .counter-progress {
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring {
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-circle {
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 565.48;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-circle.unlimited {
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 0;
+        }
+
+        .counter-message {
+            font-size: 14px;
+            color: var(--dark-gray);
+            font-style: italic;
+            min-height: 20px;
+            margin-top: 10px;
+        }
+
+        /* Modern Counter Controls - Enhanced */
+        .modern-counter-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .count-btn {
+            padding: 18px;
+            font-size: 18px;
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(29, 111, 66, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .count-btn {
+                padding: 16px;
+                font-size: 16px;
+            }
+        }
+
+        .count-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(29, 111, 66, 0.4);
+        }
+
+        .count-btn:active {
+            transform: translateY(0);
+        }
+
+        .secondary-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .secondary-controls .modern-counter-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .secondary-controls .reset {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .secondary-controls .sound-toggle {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .secondary-controls .sound-toggle.active {
+            background: linear-gradient(135deg, var(--prayer-blue), #64B5F6);
+            color: white;
+        }
+
+        /* Tasbeeh Beads - Fixed and Responsive */
+        .tasbeeh-beads {
+            display: none;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .beads-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .beads-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .beads-count {
+            font-size: 14px;
+            color: var(--dark-gray);
+            background: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .beads-container {
+            position: relative;
+            height: 220px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 480px) {
+            .beads-container {
+                height: 200px;
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .beads-container {
+                height: 180px;
+                max-width: 250px;
+            }
+        }
+
+        .beads-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .bead {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent-gold), #f1c40f);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        @media (max-width: 480px) {
+            .bead {
+                width: 22px;
+                height: 22px;
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .bead {
+                width: 20px;
+                height: 20px;
+                font-size: 8px;
+            }
+        }
+
+        .bead.active {
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            transform: translate(-50%, -50%) scale(1.2);
+            box-shadow: 0 4px 10px rgba(29, 111, 66, 0.4);
+            z-index: 2;
+        }
+
+        .beads-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 3;
+            width: 80px;
+        }
+
+        .beads-counter {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-family: 'Amiri', serif;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        @media (max-width: 480px) {
+            .beads-counter {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .beads-counter {
+                font-size: 28px;
+            }
+        }
+
+        .beads-dhikr {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 600;
+            background: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .beads-dhikr {
+                font-size: 13px;
+                padding: 5px 10px;
+            }
+        }
+
+        /* Beads Controls */
+        .beads-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .bead-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        @media (max-width: 480px) {
+            .bead-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+                min-width: 90px;
+            }
+        }
+
+        .bead-btn.count-bead {
+            background: linear-gradient(135deg, var(--accent-gold), #FFD54F);
+            color: white;
+            padding: 12px 24px;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .bead-btn.count-bead {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        .bead-btn.prev-dhikr,
+        .bead-btn.next-dhikr {
+            background: var(--light-gray);
+            color: var(--text-dark);
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            justify-content: center;
+            border-radius: 50%;
+            min-width: auto;
+        }
+
+        @media (max-width: 480px) {
+            .bead-btn.prev-dhikr,
+            .bead-btn.next-dhikr {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* Dhikr Selector */
+        .dhikr-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .dhikr-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: var(--light-gray);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+
+        @media (max-width: 480px) {
+            .dhikr-option {
+                font-size: 12px;
+                padding: 8px;
+                min-width: 80px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .dhikr-option {
+                min-width: 70px;
+                font-size: 11px;
+            }
+        }
+
+        .dhikr-option.active {
+            background: linear-gradient(135deg, var(--primary-green), #4CAF50);
+            color: white;
+            box-shadow: 0 4px 10px rgba(29, 111, 66, 0.3);
+        }
+
+        /* Enhanced Presets */
+        .tasbeeh-presets-section {
+            margin-top: 30px;
+        }
+
+        .presets-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .presets-title {
+                font-size: 15px;
+            }
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .presets-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .presets-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+        }
+
+        .preset-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .preset-card {
+                padding: 10px;
+                border-radius: 12px;
+            }
+        }
+
+        .preset-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 8px 16px rgba(212, 175, 55, 0.15);
+        }
+
+        .preset-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 480px) {
+            .preset-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .preset-content {
+            width: 100%;
+        }
+
+        .preset-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 480px) {
+            .preset-name {
+                font-size: 12px;
+            }
+        }
+
+        .preset-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .stat {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--primary-green);
+        }
+
+        @media (max-width: 480px) {
+            .stat {
+                font-size: 10px;
+            }
+        }
+
+        .stat-total {
+            font-size: 10px;
+            color: var(--dark-gray);
+        }
+
+        @media (max-width: 480px) {
+            .stat-total {
+                font-size: 9px;
+            }
+        }
+
+        /* Counter Info */
+        .counter-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .counter-info-text {
+            font-size: 13px;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+
+        .counter-reset-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--accent-gold), #f1c40f);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .counter-reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            background-color: var(--white);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            z-index: 100;
+            border-radius: 0;
+        }
+
+        @media (min-width: 768px) {
+            .bottom-nav {
+                max-width: 768px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                max-width: 480px;
+            }
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .nav-item.active i,
+        .nav-item.active .nav-label {
+            color: var(--primary-green);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        /* Nav Loader Animation */
+        .nav-loader {
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item.loading .nav-loader {
+            opacity: 1;
+            animation: pulseLoader 1s infinite;
+        }
+
+        @keyframes pulseLoader {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0.7;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tool-card {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .tool-card {
+                padding: 16px;
+            }
+            
+            .tool-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            
+            .tool-name {
+                font-size: 15px;
+            }
+            
+            .tool-description {
+                font-size: 12px;
+            }
+            
+            .counter-display {
+                font-size: 48px;
+            }
+            
+            .beads-counter {
+                font-size: 36px;
+            }
+            
+            .count-btn {
+                padding: 15px;
+                font-size: 16px;
+            }
+            
+            .presets-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .preset-card {
+                padding: 12px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .tools-list-container {
+                max-width: 700px;
+            }
+            
+            .tool-card {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .tools-list-container {
+                max-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Tasbeeh Modal Popup -->
+    <div class="tasbeeh-modal-overlay" id="tasbeehModalOverlay">
+        <div class="tasbeeh-modal-content">
+            <div class="tasbeeh-modal-header">
+                <div class="tasbeeh-modal-title">
+                    <i class="fas fa-kaaba"></i> <!-- Changed to Kaaba icon -->
+                    <span>Digital Tasbeeh</span>
+                </div>
+                <button class="tasbeeh-modal-close" id="tasbeehModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="tasbeeh-modal-body">
+                <!-- Counter Style Selector -->
+                <div class="counter-style-selector">
+                    <button class="counter-style-btn active" data-style="modern">
+                        <i class="fas fa-digital-tachograph"></i>
+                        <span>Modern Counter</span>
+                    </button>
+                    <button class="counter-style-btn" data-style="beads">
+                        <i class="fas fa-kaaba"></i> <!-- Same Kaaba icon -->
+                        <span>Tasbeeh Beads</span>
+                    </button>
+                </div>
+
+                <!-- Modern Counter Style - FIXED -->
+                <div class="modern-counter" id="modernCounter">
+                    <div class="counter-header">
+                        <div class="counter-label">Count Your Dhikr</div>
+                        <div class="counter-target">
+                            <span>Target: </span>
+                            <select id="targetSelect">
+                                <option value="33">33 (Daily Dhikr)</option>
+                                <option value="100">100 (Astaghfirullah)</option>
+                                <option value="11">11 (Salawat)</option>
+                                <option value="0">Unlimited</option>
+                                <option value="custom">Custom...</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Custom Target Input -->
+                    <div class="custom-target-input" id="customTargetInputContainer">
+                        <div class="custom-target-wrapper">
+                            <input type="number" id="customTargetInput" placeholder="Enter target number" min="1" max="9999">
+                            <button id="setCustomTarget">Set</button>
+                        </div>
+                    </div>
+                    
+                    <div class="counter-visual">
+                        <div class="counter-circle">
+                            <div class="counter-display" id="counterDisplay">0</div>
+                            <div class="counter-progress">
+                                <div class="progress-ring">
+                                    <svg width="200" height="200">
+                                        <circle cx="100" cy="100" r="90" stroke="var(--light-gray)" stroke-width="10" fill="none"></circle>
+                                        <circle class="progress-circle" id="progressCircle" cx="100" cy="100" r="90" stroke="var(--accent-gold)" stroke-width="10" fill="none" stroke-linecap="round"></circle>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="counter-message" id="counterMessage">Start your dhikr</div>
+                    </div>
+                    
+                    <div class="modern-counter-controls">
+                        <button class="count-btn" id="incrementBtn">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Tap to Count</span>
+                        </button>
+                        <div class="secondary-controls">
+                            <button class="modern-counter-btn reset" id="resetBtn">
+                                <i class="fas fa-redo"></i>
+                                Reset
+                            </button>
+                            <button class="modern-counter-btn sound-toggle" id="soundToggle">
+                                <i class="fas fa-volume-up"></i>
+                                Sound
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasbeeh Beads Style - FIXED AND RESPONSIVE -->
+                <div class="tasbeeh-beads" id="tasbeehBeads">
+                    <div class="beads-header">
+                        <div class="beads-label">Traditional Tasbeeh</div>
+                        <div class="beads-count">Beads: <span id="beadsCount">0</span>/33</div>
+                    </div>
+                    
+                    <div class="beads-container">
+                        <div class="beads-circle" id="beadsCircle">
+                            <!-- Beads will be generated dynamically -->
+                        </div>
+                        <div class="beads-center">
+                            <div class="beads-counter" id="beadCounter">0</div>
+                            <div class="beads-dhikr" id="currentDhikr">Subhanallah</div>
+                        </div>
+                    </div>
+                    
+                    <div class="beads-controls">
+                        <button class="bead-btn prev-dhikr" id="prevDhikr">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        
+                        <button class="bead-btn count-bead" id="beadIncrement">
+                            <i class="fas fa-hand-point-up"></i>
+                            Tap Bead
+                        </button>
+                        
+                        <button class="bead-btn next-dhikr" id="nextDhikr">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="dhikr-selector">
+                        <div class="dhikr-option active" data-dhikr="subhanallah">Subhanallah</div>
+                        <div class="dhikr-option" data-dhikr="alhamdulillah">Alhamdulillah</div>
+                        <div class="dhikr-option" data-dhikr="allahuakbar">Allahu Akbar</div>
+                    </div>
+                </div>
+
+                <!-- Quick Presets Section -->
+                <div class="tasbeeh-presets-section">
+                    <div class="presets-title">
+                        <i class="fas fa-bolt"></i>
+                        <span>Quick Dhikr Sets</span>
+                    </div>
+                    <div class="presets-grid" id="presetsGrid">
+                        <div class="preset-card" data-preset="daily" data-count="33">
+                            <div class="preset-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="preset-content">
+                                <div class="preset-name">Daily Dhikr</div>
+                                <div class="preset-stats">
+                                    <span class="stat">33 × 3</span>
+                                    <span class="stat-total">99 total</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="preset-card" data-preset="astaghfirullah" data-count="100">
+                            <div class="preset-icon">
+                                <i class="fas fa-hands-praying"></i>
+                            </div>
+                            <div class="preset-content">
+                                <div class="preset-name">Seek Forgiveness</div>
+                                <div class="preset-stats">
+                                    <span class="stat">100 times</span>
+                                    <span class="stat-total">Astaghfirullah</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="preset-card" data-preset="salawat" data-count="11">
+                            <div class="preset-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="preset-content">
+                                <div class="preset-name">Send Salawat</div>
+                                <div class="preset-stats">
+                                    <span class="stat">11 times</span>
+                                    <span class="stat-total">Salawat</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Counter Info -->
+                <div class="counter-info">
+                    <div class="counter-info-text">Current Count: <span id="currentCount">0</span></div>
+                    <button class="counter-reset-btn" id="fullResetBtn">
+                        <i class="fas fa-history"></i> Reset All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-pray"></i>
+                        <span>Worship Tools</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Daily Spiritual Tools</h1>
+                    <p>Essential tools for every Muslim's daily worship</p>
+                </div>
+            </section>
+
+            <!-- Tools List -->
+            <div class="tools-list-container">
+                <div class="tools-list" id="toolsList">
+                    <!-- Prayer Times -->
+                    <a href="prayer-times.html" class="tool-card prayer">
+                        <div class="tool-icon prayer">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">Prayer Times</div>
+                                <div class="tool-badge">Live</div>
+                            </div>
+                            <div class="tool-description">Accurate prayer times for your location with notifications</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Qibla Direction -->
+                    <a href="qibla.html" class="tool-card qibla">
+                        <div class="tool-icon qibla">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">Qibla Direction</div>
+                            </div>
+                            <div class="tool-description">Find the direction to Kaaba from anywhere in the world</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Hijri Calendar -->
+                    <a href="calendar.html" class="tool-card calendar">
+                        <div class="tool-icon calendar">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">Hijri Calendar</div>
+                                <div class="tool-badge">Updated</div>
+                            </div>
+                            <div class="tool-description">Islamic calendar with important dates & events</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- NEW: 99 Names of Allah -->
+                    <a href="99names.html" class="tool-card names-of-allah">
+                        <div class="tool-icon names-of-allah">
+                            <i class="fas fa-star-and-crescent"></i>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">99 Names of Allah</div>
+                                <div class="tool-badge names">Complete</div>
+                            </div>
+                            <div class="tool-description">Learn and memorize the beautiful names of Allah with meanings</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Daily Duas & Adhkar -->
+                    <a href="dua.html" class="tool-card duas">
+                        <div class="tool-icon duas">
+                            <i class="fas fa-hands-praying"></i>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">Daily Duas & Adhkar</div>
+                                <div class="tool-badge">Complete</div>
+                            </div>
+                            <div class="tool-description">Morning & evening remembrances with audio</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Digital Tasbeeh - FIXED ICON: Changed to Kaaba icon -->
+                    <div class="tool-card tasbeeh" id="openTasbeeh">
+                        <div class="tool-icon tasbeeh">
+                            <i class="fas fa-kaaba"></i> <!-- Changed to Kaaba icon -->
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">Digital Tasbeeh</div>
+                                <div class="tool-badge">Counter</div>
+                            </div>
+                            <div class="tool-description">Digital prayer counter with multiple styles</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Zakat Calculator -->
+                    <a href="zakat-calculator.html" class="tool-card zakat">
+                        <div class="tool-icon zakat">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-header">
+                                <div class="tool-name">Zakat Calculator</div>
+                            </div>
+                            <div class="tool-description">Calculate your Zakat based on wealth & assets</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation with Links and Loader -->
+            <nav class="bottom-nav">
+                <a href="../index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-home"></i>
+                    <span class="nav-label">Home</span>
+                </a>
+                <a href="../quranHadith/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-quran"></i>
+                    <span class="nav-label">Quran &<br>Hadith</span>
+                </a>
+                <a href="index.html" class="nav-item active">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-pray"></i>
+                    <span class="nav-label">Worship<br>Tools</span>
+                </a>
+                <a href="../learning/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="nav-label">Learning</span>
+                </a>
+                <a href="../profile/index.html" class="nav-item">
+                    <div class="nav-loader"></div>
+                    <i class="fas fa-user"></i>
+                    <span class="nav-label">Profile</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                // Don't show loader for same page
+                // Just update active state if it's a nav item
+                if (anchor.classList.contains('nav-item')) {
+                    // Update active nav item
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    anchor.classList.add('active');
+                }
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after 1 second delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+            
+            // Set active nav item based on current page
+            const currentPath = window.location.pathname;
+            
+            // Reset all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Check which page we're on and set active nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (isSamePage(href, window.location.href)) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Special case: if we're on worship tools page (this page)
+            if (currentPath.includes('tools') || currentPath.includes('worship')) {
+                document.querySelector('.nav-item[href="index.html"]').classList.add('active');
+            }
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // ============================================
+        // DIGITAL TASBEEH ICON FIX
+        // ============================================
+
+        // Check if Font Awesome icons are loading properly
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking icons...');
+            
+            // Debug: Check if the Digital Tasbeeh icon element exists
+            const tasbeehIcon = document.querySelector('.tool-icon.tasbeeh i');
+            console.log('Digital Tasbeeh icon element:', tasbeehIcon);
+            
+            if (tasbeehIcon) {
+                console.log('Digital Tasbeeh icon class:', tasbeehIcon.className);
+                
+                // Force icon to be visible with inline styles
+                tasbeehIcon.style.opacity = '1';
+                tasbeehIcon.style.visibility = 'visible';
+                tasbeehIcon.style.display = 'block';
+            }
+            
+            // Animate tool cards on load
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+            
+            // Make sure Worship Tools menu is active
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.getAttribute('href') === 'index.html') {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // ============================================
+        // ENHANCED DIGITAL TASBEEH FUNCTIONALITY
+        // ============================================
+
+        // State for tasbeeh
+        let tasbeehCount = 0;
+        let currentStyle = 'modern';
+        let soundEnabled = true;
+        let currentDhikr = 'subhanallah';
+        let currentTarget = 33;
+        let dhikrList = ['subhanallah', 'alhamdulillah', 'allahuakbar'];
+        let dhikrNames = {
+            subhanallah: 'Subhanallah',
+            alhamdulillah: 'Alhamdulillah',
+            allahuakbar: 'Allahu Akbar'
+        };
+
+        // DOM Elements for tasbeeh modal
+        const tasbeehModalOverlay = document.getElementById('tasbeehModalOverlay');
+        const tasbeehModalClose = document.getElementById('tasbeehModalClose');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const beadCounter = document.getElementById('beadCounter');
+        const currentCount = document.getElementById('currentCount');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const beadIncrement = document.getElementById('beadIncrement');
+        const beadReset = document.getElementById('beadReset');
+        const fullResetBtn = document.getElementById('fullResetBtn');
+        const modernCounter = document.getElementById('modernCounter');
+        const tasbeehBeads = document.getElementById('tasbeehBeads');
+        const counterStyleBtns = document.querySelectorAll('.counter-style-btn');
+        const openTasbeehBtn = document.getElementById('openTasbeeh');
+        const soundToggle = document.getElementById('soundToggle');
+        const targetSelect = document.getElementById('targetSelect');
+        const customTargetInputContainer = document.getElementById('customTargetInputContainer');
+        const customTargetInput = document.getElementById('customTargetInput');
+        const setCustomTargetBtn = document.getElementById('setCustomTarget');
+        const counterMessage = document.getElementById('counterMessage');
+        const currentDhikrElement = document.getElementById('currentDhikr');
+        const beadsCount = document.getElementById('beadsCount');
+        const prevDhikrBtn = document.getElementById('prevDhikr');
+        const nextDhikrBtn = document.getElementById('nextDhikr');
+        const progressCircle = document.getElementById('progressCircle');
+        const beadsCircle = document.getElementById('beadsCircle');
+
+        // Initialize tasbeeh on modal open
+        function initializeTasbeeh() {
+            updateAllCounters();
+            updateProgress();
+            createBeads();
+            updateDhikrDisplay();
+        }
+
+        // Create beads for traditional tasbeeh
+        function createBeads() {
+            if (!beadsCircle) return;
+            
+            beadsCircle.innerHTML = '';
+            
+            const containerWidth = beadsCircle.clientWidth;
+            const containerHeight = beadsCircle.clientHeight;
+            const centerX = containerWidth / 2;
+            const centerY = containerHeight / 2;
+            
+            // Calculate radius based on container size (80% of smallest dimension)
+            const radius = Math.min(centerX, centerY) * 0.8;
+            const totalBeads = 33;
+            
+            for (let i = 1; i <= totalBeads; i++) {
+                const angle = (i / totalBeads) * 2 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                const bead = document.createElement('div');
+                bead.className = 'bead';
+                bead.dataset.index = i;
+                bead.style.left = `${x}px`;
+                bead.style.top = `${y}px`;
+                bead.textContent = i;
+                
+                if (i <= tasbeehCount) {
+                    bead.classList.add('active');
+                }
+                
+                bead.addEventListener('click', () => {
+                    if (i <= tasbeehCount) {
+                        tasbeehCount = i;
+                        updateAllCounters();
+                        updateProgress();
+                        updateBeads();
+                    }
+                });
+                
+                beadsCircle.appendChild(bead);
+            }
+        }
+
+        // Update beads display
+        function updateBeads() {
+            const beads = document.querySelectorAll('.bead');
+            beads.forEach((bead, index) => {
+                if (index + 1 <= tasbeehCount) {
+                    bead.classList.add('active');
+                } else {
+                    bead.classList.remove('active');
+                }
+            });
+        }
+
+        // Update progress circle
+        function updateProgress() {
+            const progressCircle = document.querySelector('.progress-circle');
+            
+            if (!progressCircle) return;
+            
+            // Handle unlimited mode (value 0)
+            if (currentTarget === 0) {
+                // For unlimited mode, always show full circle
+                progressCircle.style.strokeDashoffset = '0';
+                progressCircle.classList.add('unlimited');
+                
+                if (counterMessage) {
+                    counterMessage.textContent = tasbeehCount === 0 ? 'Start your dhikr' : `${tasbeehCount} counted`;
+                }
+            } else {
+                // Normal mode with target
+                const progress = (tasbeehCount / currentTarget) * 565.48;
+                progressCircle.style.strokeDashoffset = 565.48 - progress;
+                progressCircle.classList.remove('unlimited');
+                
+                if (counterMessage) {
+                    if (tasbeehCount === 0) {
+                        counterMessage.textContent = 'Start your dhikr';
+                    } else if (tasbeehCount < currentTarget) {
+                        counterMessage.textContent = `${tasbeehCount}/${currentTarget}`;
+                    } else {
+                        counterMessage.textContent = '✓ Completed!';
+                    }
+                }
+            }
+        }
+
+        // Update dhikr display
+        function updateDhikrDisplay() {
+            if (currentDhikrElement) {
+                currentDhikrElement.textContent = dhikrNames[currentDhikr];
+            }
+            if (beadsCount) {
+                beadsCount.textContent = tasbeehCount;
+            }
+            
+            // Update active dhikr option
+            document.querySelectorAll('.dhikr-option').forEach(option => {
+                if (option.dataset.dhikr === currentDhikr) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+        }
+
+        // Play sound on count
+        function playCountSound() {
+            if (!soundEnabled) return;
+            
+            // Create audio context for beep sound
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        // Update all counters
+        function updateAllCounters() {
+            if (counterDisplay) {
+                counterDisplay.textContent = tasbeehCount;
+                // Keep it centered
+                counterDisplay.style.transform = 'translate(-50%, -50%)';
+            }
+            if (beadCounter) beadCounter.textContent = tasbeehCount;
+            if (currentCount) currentCount.textContent = tasbeehCount;
+            
+            updateProgress();
+            updateBeads();
+            updateDhikrDisplay();
+        }
+
+        // Switch counter style
+        function switchCounterStyle(style) {
+            currentStyle = style;
+            
+            // Update button states
+            counterStyleBtns.forEach(btn => {
+                if (btn.dataset.style === style) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Show/hide counter styles
+            if (style === 'modern') {
+                if (modernCounter) modernCounter.style.display = 'block';
+                if (tasbeehBeads) tasbeehBeads.style.display = 'none';
+            } else {
+                if (modernCounter) modernCounter.style.display = 'none';
+                if (tasbeehBeads) {
+                    tasbeehBeads.style.display = 'block';
+                    // Recreate beads to ensure proper positioning
+                    setTimeout(createBeads, 50);
+                }
+            }
+        }
+
+        // Handle target selection change
+        function handleTargetChange() {
+            const selectedValue = targetSelect.value;
+            
+            if (selectedValue === 'custom') {
+                // Show custom input
+                customTargetInputContainer.style.display = 'block';
+                // Reset to 0 while waiting for custom input
+                currentTarget = 0;
+                updateProgress();
+            } else if (selectedValue === '0') {
+                // Unlimited mode
+                customTargetInputContainer.style.display = 'none';
+                currentTarget = 0;
+                updateProgress();
+            } else {
+                // Normal target
+                customTargetInputContainer.style.display = 'none';
+                currentTarget = parseInt(selectedValue);
+                updateProgress();
+            }
+        }
+
+        // Set custom target
+        function setCustomTarget() {
+            const value = parseInt(customTargetInput.value);
+            if (value && value > 0) {
+                currentTarget = value;
+                targetSelect.value = value;
+                customTargetInputContainer.style.display = 'none';
+                updateProgress();
+                customTargetInput.value = '';
+            } else {
+                alert('Please enter a valid number greater than 0');
+            }
+        }
+
+        // Switch dhikr type
+        function switchDhikr(dhikr) {
+            currentDhikr = dhikr;
+            tasbeehCount = 0;
+            updateAllCounters();
+            updateDhikrDisplay();
+        }
+
+        // Apply preset
+        function applyPreset(presetType, count) {
+            switch(presetType) {
+                case 'daily':
+                    currentTarget = 33;
+                    targetSelect.value = '33';
+                    break;
+                case 'astaghfirullah':
+                    currentTarget = 100;
+                    targetSelect.value = '100';
+                    break;
+                case 'salawat':
+                    currentTarget = 11;
+                    targetSelect.value = '11';
+                    break;
+            }
+            
+            // Hide custom input if showing
+            customTargetInputContainer.style.display = 'none';
+            
+            // Set count from preset
+            tasbeehCount = parseInt(count) || 0;
+            updateAllCounters();
+        }
+
+        // Open tasbeeh modal
+        function openTasbeehModal() {
+            tasbeehModalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(initializeTasbeeh, 100);
+        }
+
+        // Close tasbeeh modal
+        function closeTasbeehModal() {
+            tasbeehModalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Increment counter
+        function incrementCounter() {
+            tasbeehCount++;
+            playCountSound();
+            updateAllCounters();
+            
+            // Haptic feedback if available
+            if ('vibrate' in navigator) {
+                navigator.vibrate(10);
+            }
+            
+            // Visual feedback without breaking centering
+            if (currentStyle === 'modern' && counterDisplay) {
+                // Use color animation instead of transform
+                counterDisplay.style.color = '#FFD700'; // Gold color
+                setTimeout(() => {
+                    counterDisplay.style.color = 'var(--accent-gold)';
+                }, 200);
+            }
+        }
+
+        // Reset counter
+        function resetCounter() {
+            tasbeehCount = 0;
+            updateAllCounters();
+        }
+
+        // Event Listeners for tasbeeh
+        openTasbeehBtn.addEventListener('click', openTasbeehModal);
+        tasbeehModalClose.addEventListener('click', closeTasbeehModal);
+        tasbeehModalOverlay.addEventListener('click', (e) => {
+            if (e.target === tasbeehModalOverlay) {
+                closeTasbeehModal();
+            }
+        });
+
+        // Counter buttons
+        if (incrementBtn) {
+            incrementBtn.addEventListener('click', incrementCounter);
+        }
+        if (resetBtn) {
+            resetBtn.addEventListener('click', resetCounter);
+        }
+        if (beadIncrement) {
+            beadIncrement.addEventListener('click', incrementCounter);
+        }
+        if (beadReset) {
+            beadReset.addEventListener('click', resetCounter);
+        }
+        if (fullResetBtn) {
+            fullResetBtn.addEventListener('click', resetCounter);
+        }
+
+        // Counter style switcher
+        counterStyleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchCounterStyle(btn.dataset.style);
+            });
+        });
+
+        // Sound toggle
+        if (soundToggle) {
+            soundToggle.addEventListener('click', function() {
+                soundEnabled = !soundEnabled;
+                this.classList.toggle('active');
+                this.innerHTML = soundEnabled ? 
+                    '<i class="fas fa-volume-up"></i> Sound' : 
+                    '<i class="fas fa-volume-mute"></i> Muted';
+            });
+        }
+
+        // Target select
+        if (targetSelect) {
+            targetSelect.addEventListener('change', handleTargetChange);
+        }
+
+        // Custom target
+        if (setCustomTargetBtn) {
+            setCustomTargetBtn.addEventListener('click', setCustomTarget);
+        }
+
+        if (customTargetInput) {
+            customTargetInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    setCustomTarget();
+                }
+            });
+        }
+
+        // Dhikr navigation
+        if (prevDhikrBtn) {
+            prevDhikrBtn.addEventListener('click', function() {
+                const currentIndex = dhikrList.indexOf(currentDhikr);
+                const prevIndex = (currentIndex - 1 + dhikrList.length) % dhikrList.length;
+                switchDhikr(dhikrList[prevIndex]);
+            });
+        }
+
+        if (nextDhikrBtn) {
+            nextDhikrBtn.addEventListener('click', function() {
+                const currentIndex = dhikrList.indexOf(currentDhikr);
+                const nextIndex = (currentIndex + 1) % dhikrList.length;
+                switchDhikr(dhikrList[nextIndex]);
+            });
+        }
+
+        // Dhikr options
+        document.querySelectorAll('.dhikr-option').forEach(option => {
+            option.addEventListener('click', function() {
+                switchDhikr(this.dataset.dhikr);
+            });
+        });
+
+        // Preset cards
+        document.querySelectorAll('.preset-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const presetType = this.dataset.preset;
+                const count = this.dataset.count || '0';
+                applyPreset(presetType, count);
+            });
+        });
+
+        // Keyboard shortcuts for tasbeeh
+        document.addEventListener('keydown', (e) => {
+            if (tasbeehModalOverlay.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeTasbeehModal();
+                } else if (e.key === ' ' || e.key === 'Enter') {
+                    incrementCounter();
+                    e.preventDefault();
+                } else if (e.key === 'r' || e.key === 'R') {
+                    resetCounter();
+                }
+            }
+        });
+
+        // Touch/swipe support for beads
+        let touchStartY = 0;
+        if (tasbeehBeads) {
+            tasbeehBeads.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            });
+
+            tasbeehBeads.addEventListener('touchend', (e) => {
+                const touchEndY = e.changedTouches[0].clientY;
+                const diff = touchStartY - touchEndY;
+                
+                // If swipe up more than 50px, count
+                if (diff > 50) {
+                    incrementCounter();
+                }
+                
+                // If swipe down more than 50px, reset
+                if (diff < -50) {
+                    resetCounter();
+                }
+            });
+        }
+
+        // Handle window resize for beads positioning
+        window.addEventListener('resize', () => {
+            if (currentStyle === 'beads') {
+                createBeads();
+            }
+        });
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 300);
+        });
+    </script>
+</body>
+</html>

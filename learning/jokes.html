@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Jokes | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --joke-orange: #E65100;
+            --joke-blue: #0D47A1;
+            --joke-purple: #6A1B9A;
+            --joke-teal: #00695C;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --joke-orange: #e67e22;
+            --joke-blue: #3498db;
+            --joke-purple: #9b59b6;
+            --joke-teal: #1abc9c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - Jokes Theme */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(212, 175, 55, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(243, 156, 18, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.7;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 20;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Jokes Cards Container */
+        .jokes-container {
+            padding: 20px 16px 80px;
+        }
+
+        @media (min-width: 768px) {
+            .jokes-container {
+                padding: 25px 30px 90px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .jokes-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .joke-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .joke-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .dark-theme .joke-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .joke-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .joke-card.joke-1::before {
+            background-color: var(--joke-teal);
+        }
+
+        .joke-card.joke-2::before {
+            background-color: var(--joke-orange);
+        }
+
+        .joke-card.joke-3::before {
+            background-color: var(--joke-blue);
+        }
+
+        .joke-card.joke-4::before {
+            background-color: var(--joke-purple);
+        }
+
+        .joke-card.joke-5::before {
+            background-color: var(--joke-teal);
+        }
+
+        .joke-card.joke-6::before {
+            background-color: var(--joke-orange);
+        }
+
+        .joke-card.joke-7::before {
+            background-color: var(--joke-blue);
+        }
+
+        .joke-card.joke-8::before {
+            background-color: var(--joke-purple);
+        }
+
+        .joke-card.joke-9::before {
+            background-color: var(--joke-teal);
+        }
+
+        .joke-card.joke-10::before {
+            background-color: var(--joke-orange);
+        }
+
+        .joke-card.joke-11::before {
+            background-color: var(--joke-blue);
+        }
+
+        .joke-number {
+            display: inline-block;
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .dark-theme .joke-number {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .joke-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .joke-preview {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .joke-readmore {
+            font-size: 13px;
+            color: var(--primary-green);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: auto;
+        }
+
+        .joke-readmore i {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .joke-card:hover .joke-readmore i {
+            transform: translateX(3px);
+        }
+
+        /* Joke Detail View */
+        .joke-detail-container {
+            padding: 20px 16px 80px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .joke-detail-container {
+                padding: 25px 30px 90px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .joke-detail {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .joke-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .joke-detail-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .joke-detail-back {
+            background-color: var(--light-green);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: var(--primary-green);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .joke-detail-back:hover {
+            background-color: var(--primary-green);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .joke-detail-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .joke-detail-content p {
+            margin-bottom: 20px;
+        }
+
+        .joke-detail-content .arabic {
+            font-family: 'Amiri', serif;
+            font-size: 18px;
+            text-align: right;
+            direction: rtl;
+            margin: 15px 0;
+            color: var(--primary-green);
+        }
+
+        .joke-detail-content .quote {
+            padding-left: 20px;
+            border-left: 4px solid var(--primary-green);
+            font-style: italic;
+            margin: 20px 0;
+            color: var(--dark-gray);
+        }
+
+        .joke-detail-content .hadith {
+            background-color: rgba(29, 111, 66, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .dark-theme .joke-detail-content .hadith {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        /* Info Box */
+        .info-box {
+            margin-top: 10px;
+            padding: 16px;
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .info-box {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .joke-card {
+                padding: 16px;
+                min-height: 130px;
+            }
+            
+            .joke-title {
+                font-size: 16px;
+            }
+            
+            .joke-preview {
+                font-size: 13px;
+            }
+            
+            .joke-detail {
+                padding: 20px;
+            }
+            
+            .joke-detail-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .jokes-container, .joke-detail-container {
+                max-width: 700px;
+            }
+            
+            .joke-card, .joke-detail {
+                padding: 22px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .jokes-container, .joke-detail-container {
+                max-width: 800px;
+            }
+        }
+
+        /* Active State for Detail View */
+        .jokes-view-active .jokes-container {
+            display: none;
+        }
+
+        .jokes-view-active .joke-detail-container {
+            display: block;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background-color: var(--accent-gold);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-smile-beam"></i>
+                        <span>Islamic Jokes</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>A Collection of Islamic Jokes</h1>
+                    <p>Light-hearted humor with Islamic themes and lessons</p>
+                </div>
+            </section>
+
+            <!-- Jokes Cards -->
+            <div class="jokes-container" id="jokesContainer">
+                <div class="jokes-cards" id="jokesCards">
+                    <!-- Joke 1: Conditions of Joking -->
+                    <div class="joke-card joke-1" data-joke-id="1">
+                        <div>
+                            <div class="joke-number">1</div>
+                            <div class="joke-title">Conditions of Joking in Islam</div>
+                            <div class="joke-preview">Before you read these jokes, you might want to read a little bit about the conditions of joking in Islam. Some people joke too much and it becomes a habit for them...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read about joking in Islam</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 2: The Imam's News -->
+                    <div class="joke-card joke-2" data-joke-id="2">
+                        <div>
+                            <div class="joke-number">2</div>
+                            <div class="joke-title">The Imam's News</div>
+                            <div class="joke-preview">Here is the story of an Imam who got up after Friday prayers and announced to the people: "I have good news and bad news..."</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this joke</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 3: The Imam's Departure -->
+                    <div class="joke-card joke-3" data-joke-id="3">
+                        <div>
+                            <div class="joke-number">3</div>
+                            <div class="joke-title">The Imam's Departure</div>
+                            <div class="joke-preview">An Imam shocked his community when he announced that he was resigning from that particular Masjid and moving to a drier climate...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this joke</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 4: Importance of Saying Insha Allah -->
+                    <div class="joke-card joke-4" data-joke-id="4">
+                        <div>
+                            <div class="joke-number">4</div>
+                            <div class="joke-title">Importance of Saying Insha Allah</div>
+                            <div class="joke-preview">True Incident: During a Jumah Khutbah in a small town, an Imam talked about the significance of saying "Insha Allah"...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this story</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 5: Mulla Nasruddin's Speech -->
+                    <div class="joke-card joke-5" data-joke-id="5">
+                        <div>
+                            <div class="joke-number">5</div>
+                            <div class="joke-title">Mulla Nasruddin's Speech</div>
+                            <div class="joke-preview">Once, the people of the city invited Mulla Nasruddin to deliver a speech. When he got on the minbar (pulpit), he found the audience was not very enthusiastic...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this joke</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 6: Allah has Control of Everything -->
+                    <div class="joke-card joke-6" data-joke-id="6">
+                        <div>
+                            <div class="joke-number">6</div>
+                            <div class="joke-title">Allah has Control of Everything</div>
+                            <div class="joke-preview">True Incident: A young man in a village refused to believe that Allah has total control of everything. He claimed that Allah cannot make him eat food if he didn't want to eat...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this story</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 7: Old Woman in Paradise -->
+                    <div class="joke-card joke-7" data-joke-id="7">
+                        <div>
+                            <div class="joke-number">7</div>
+                            <div class="joke-title">Old Woman in Paradise</div>
+                            <div class="joke-preview">An old woman came to the Prophet (sallallahu `alayhi wa sallam) and said: "O Messenger of Allah, pray to Allah (subhanahu wa ta`ala) that I will enter Paradise."</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this story</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 8: The Old Lady and the Atheist -->
+                    <div class="joke-card joke-8" data-joke-id="8">
+                        <div>
+                            <div class="joke-number">8</div>
+                            <div class="joke-title">The Old Lady and the Atheist</div>
+                            <div class="joke-preview">An elderly lady was well-known for her Iman and for her confidence in talking about it. She would stand in front of her house and say Alhamdulilah "Allah be praised" to all those who passed by...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this joke</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 9: Nasruddin Running -->
+                    <div class="joke-card joke-9" data-joke-id="9">
+                        <div>
+                            <div class="joke-number">9</div>
+                            <div class="joke-title">Nasruddin Running</div>
+                            <div class="joke-preview">"When I was in the desert," said Nasruddin one day, "I caused an entire tribe of horrible and bloodthirsty bedouins to run."</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this joke</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 10: The Imam's Horse -->
+                    <div class="joke-card joke-10" data-joke-id="10">
+                        <div>
+                            <div class="joke-number">10</div>
+                            <div class="joke-title">The Imam's Horse</div>
+                            <div class="joke-preview">An Imam was selling his horse in the market. An interested buyer came to him and requested if he could get a test drive...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this joke</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Joke 11: The Secret Visitor -->
+                    <div class="joke-card joke-11" data-joke-id="11">
+                        <div>
+                            <div class="joke-number">11</div>
+                            <div class="joke-title">The Secret Visitor</div>
+                            <div class="joke-preview">True Incident: The incident took place in South Asia. A man was offering salah in his house. He was praying as fast as he could as many of us do...</div>
+                        </div>
+                        <div class="joke-readmore">
+                            <span>Read this story</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <div class="info-title">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About Islamic Humor</span>
+                    </div>
+                    <div class="info-text">
+                        Islam encourages moderation in all aspects of life, including humor. The Prophet Muhammad (peace be upon him) had a sense of humor and would joke with his companions, but never in a way that hurt anyone or spoke falsehood. These jokes contain Islamic themes and lessons while maintaining respectful humor.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Joke Detail View (hidden by default) -->
+            <div class="joke-detail-container" id="jokeDetailContainer">
+                <!-- Detail content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <script>
+        // ============================================
+        // JOKES PAGE IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+        const jokesContainer = document.getElementById('jokesContainer');
+        const jokeDetailContainer = document.getElementById('jokeDetailContainer');
+        const backToTopBtn = document.getElementById('backToTop');
+        const backBtn = document.getElementById('backBtn');
+        
+        // Joke data - FIXED: Escaped backticks or used different quotes
+        const jokesData = {
+            1: {
+                title: "Conditions of Joking in Islam",
+                content: `
+                    <p>Before you read these jokes, you might want to read a little bit about the conditions of joking in Islam.</p>
+                    
+                    <p>Some people joke too much and it becomes a habit for them. This is the opposite of the serious nature which is the characteristic of the believers. Joking is a break, a rest from ongoing seriousness and striving; it is a little relaxation for the soul. 'Umar ibn 'Abd al-'Azeez (may Allaah have mercy on him) said: "Fear joking, for it is folly and generates grudges."</p>
+                    
+                    <div class="quote">
+                        Imaam al-Nawawi (may Allaah have mercy on him) said: "The kind of joking which is forbidden is that which is excessive and persistent, for it leads to too much laughter and hardening of the heart, it distracts from remembrance of Allaah, and it often leads to hurt feelings, generates hatred and causes people to lose respect and dignity. But whoever is safe from such dangers, then that which the Messenger of Allaah (peace and blessings of Allaah be upon him) used to do is permissible for him."
+                    </div>
+                    
+                    <p>Sa'd ibn Abi Waqqaas said: "Set a limit to your jokes, for going to extremes makes you lose respect and incites the foolish against you."</p>
+                    
+                    <p>The amount of joking should be like the amount of salt in one's food.</p>
+                    
+                    <div class="hadith">
+                        The Prophet (peace and blessings of Allaah be upon him) said: "Do not laugh too much, for laughing too much deadens the heart." (Saheeh al-Jaami', 7312)
+                    </div>
+                    
+                    <p>'Umar ibn al-Khattaab (may Allaah be pleased with him) said: "Whoever laughs too much or jokes too much loses respect, and whoever persists in doing something will be known for it."</p>
+                    
+                    <p>So beware of joking, for it "causes a person to lose face after he was thought of as respectable, and it brings him humiliation after esteem."</p>
+                    
+                    <p>A man said to Sufyaan ibn 'Uyaynah (may Allaah be pleased with him), "Joking is not right, it is to be denounced." He replied, "Rather it is Sunnah, but only for those who know how to do it and do it at the appropriate time."</p>
+                    
+                    <p>Nowadays, although the ummah needs to increase the love between its individual members and to relieve itself of boredom, it has gone too far with regard to relaxation, laughter and jokes. This has become a habit which fills their gatherings and wastes their time, so their lives are wasted and their newspapers are filled with jokes and trivia.</p>
+                    
+                    <div class="hadith">
+                        The Prophet (peace and blessings of Allaah be upon him) said: "If you knew what I know, you would laugh little and weep much." In Fath al-Baari it says: "What is meant by knowledge here has to do with the might of Allaah and His vengeance upon those who disobey Him, and the terrors that occur at death, in the grave and on the Day of Resurrection).
+                    </div>
+                    
+                    <p>Muslim men and women have to be inclined to choose righteous and serious friends in their lives, who will help them to make good use of their time and strive for the sake of Allaah with seriousness and steadfastness, good and righteous people whose example they can follow. Bilaal ibn Sa'd said: "I saw them [the Sahaabah] jokingly pretending to fight over some goods, and laughing with one another, but when night came they were like monks."</p>
+                    
+                    <p>Ibn 'Umar (may Allaah be pleased with him) was asked, "Did the Companions of the Prophet (peace and blessings of Allaah be upon him) laugh?" He said, "Yes, and the faith in their hearts was like mountains."</p>
+                    
+                    <p>So you have to follow the example of such people, who were knights by day and monks (i.e., devoted worshippers) by night.</p>
+                    
+                    <p>May Allaah keep us, you and our parents safe on the Day of the Greatest Terror, those to whom the call will go out on that great Day:</p>
+                    
+                    <div class="arabic">
+                        "ادْخُلُوا الْجَنَّةَ لَا خَوْفٌ عَلَيْكُمْ وَلَا أَنْتُمْ تَحْزَنُونَ"
+                    </div>
+                    
+                    <p>"Enter Paradise, no fear shall be on you, nor shall you grieve"</p>
+                    <p>[al-A'raaf 7:49 – interpretation of the meaning]</p>
+                `
+            },
+            2: {
+                title: "The Imam's News",
+                content: `
+                    <p>Here is the story of an Imam who got up after Friday prayers and announced to the people:</p>
+                    
+                    <p>"I have good news and bad news. The good news is, we have enough money to pay for our new building program. The bad news is, it's still out there in your pockets."</p>
+                `
+            },
+            3: {
+                title: "The Imam's Departure",
+                content: `
+                    <p>An Imam shocked his community when he announced that he was resigning from that particular Masjid and moving to a drier climate. After the session, a very distraught lady came to the Imam with tears in her eyes, "Oh, Imam, we are going to miss you so much. We don't want you to leave!"</p>
+                    
+                    <p>The kind hearted Imam said "Now, now, sister, don't carry on. The Imam who takes my place might be even better than me".</p>
+                    
+                    <p>"Yeah", she said, with a tone of disappointment in her voice, "That's what they said the last time too . . . "</p>
+                `
+            },
+            4: {
+                title: "Importance of Saying Insha Allah",
+                content: `
+                    <p><strong>True Incident:</strong> During a Jumah Khutbah in a small town, an Imam talked about the significance of saying "Insha Allah" (which means if Allah wills) when planning to do something in the future.</p>
+                    
+                    <p>After a few days, a man who had also attended the Khutbah was going to buy a cow from the market. On the way, he met a friend who asked him where he was going. He told him about buying the cow but did not say Insha Allah in the end.</p>
+                    
+                    <p>His friend reminded him about the Khutbah and told him to say Insha Allah. However, this individual said that he had the money he needs and the energy to go to the market, thus, there is no point of saying Insha Allah as he will certainly buy the cow. He thought that saying Insha Allah will not make any difference.</p>
+                    
+                    <p>When he reached the market, he found a cow that met his expectations. He bargained with the seller and came to a reasonable price. Finally, he decided to pay for the cow but was dumbfounded when he discovered that his money was missing. A thief had stolen the money while he was walking through the busy market.</p>
+                    
+                    <p>The cow seller asked him whether he was going to buy the cow or not. "Insha Allah, I will buy it next week," he said.</p>
+                    
+                    <p>When he reached home, his wife inquired about the cow. He told her about how he forgot to say Insha Allah, and also added, "Insha Allah, I wanted to buy the cow. But Insha Allah, my money was stolen. Insha Allah, I will buy it next week."</p>
+                    
+                    <p>His wife clarified to him that we should say Insha Allah for things that are yet to happen, not for those things that had already happened. He never forgot his "Insha Allah" again.</p>
+                `
+            },
+            5: {
+                title: "Mulla Nasruddin's Speech",
+                content: `
+                    <p>Once, the people of the city invited Mulla Nasruddin to deliver a speech. When he got on the minbar (pulpit), he found the audience was not very enthusiastic, so he asked "Do you know what I am going to say?"</p>
+                    
+                    <p>The audience replied "NO", so he announced "I have no desire to speak to people who don't even know what I will be talking about" and he left.</p>
+                    
+                    <p>The people felt embarrassed and called him back again the next day. This time when he asked the same question, the people replied "YES"</p>
+                    
+                    <p>So Mullah Nasruddin said, "Well, since you already know what I am going to say, I won't waste any more of your time" and he left.</p>
+                    
+                    <p>Now the people were really perplexed. They decided to try one more time and once again invited the Mullah to speak the following week. Once again he asked the same question - "Do you know what I am going to say?"</p>
+                    
+                    <p>Now the people were prepared and so half of them answered "YES" while the other half replied "NO".</p>
+                    
+                    <p>So Mullah Nasruddin said "The half who know what I am going to say, tell it to the other half" and he left!</p>
+                `
+            },
+            6: {
+                title: "Allah has Control of Everything",
+                content: `
+                    <p><strong>True Incident:</strong> A young man in a village refused to believe that Allah has total control of everything. He claimed that Allah cannot make him eat food if he didn't want to eat. To prove his point, he decided to stay hungry for a day and see if Allah can make him eat.</p>
+                    
+                    <p>His mother tried her best to stop this foolishness but he paid no attention. Annoyed of his mother in the evening, he decided to climb a tree and isolate himself there.</p>
+                    
+                    <p>Being compassionate, his mother decided to leave the food under the tree incase her son finally gives up and wants to eat.</p>
+                    
+                    <p>When the night fell, a group of robbers were passing by that tree. They noticed a plate of delicious food placed under the tree. They looked at each other in amazement and thought that someone must be playing a trick on them. May be someone is trying to poison them with good food.</p>
+                    
+                    <p>They looked around to see if there was anyone nearby and noticed the young man on top of the tree. The robbers got him down and told him to eat the food to see if it is poisoned.</p>
+                    
+                    <p>But the young man refused to eat as he is still carrying on his challenge against Allah. The robbers became suspicious and started beating the young man to eat. He gave up and started eating.</p>
+                    
+                    <p>Seeing that the food was not poisoned, the robbers left him and went away. Finally, the young man admitted that yes, Allah has total control of everything!</p>
+                `
+            },
+            7: {
+                title: "Old Woman in Paradise",
+                content: `
+                    <p>An old woman came to the Prophet (sallallahu \`alayhi wa sallam) and said: "O Messenger of Allah, pray to Allah (subhanahu wa ta\`ala) that I will enter Paradise."</p>
+                    
+                    <p>He said jokingly, "O Mother of So-and-so, no old women will enter Paradise."</p>
+                    
+                    <p>The old woman went away crying, so the Prophet (sallallahu \`alayhi wa sallam) said, "Tell her that she will not enter Paradise as an old woman, for Allah (subhanahu wa ta\`ala) says:</p>
+                    
+                    <div class="arabic">
+                        إِنَّا أَنشَأْنَاهُنَّ إِنشَاءً فَجَعَلْنَاهُنَّ أَبْكَارًا
+                    </div>
+                    
+                    <p>(We have created [their Companions] of special creation, and made them virgin-pure [and undefiled]) (Qur'an 56:35-36)."</p>
+                    
+                    <p><em>Reported by al-Tirmidhi, it is hasan because of the existence of corroborating reports.</em></p>
+                `
+            },
+            8: {
+                title: "The Old Lady and the Atheist",
+                content: `
+                    <p>An elderly lady was well-known for her Iman and for her confidence in talking about it. She would stand in front of her house and say Alhamdulilah "Allah be praised" to all those who passed by.</p>
+                    
+                    <p>Next door to her lived an atheist who would get so angry at her proclamations he would shout, "There ain't no Lord!!"</p>
+                    
+                    <p>Hard times came upon the elderly lady, and she prayed for Allah to send her some assistance. She would pray out loud in her night prayer" Oh Allah! I need food!! I am having a hard time, please Lord, PLEASE LORD, SEND ME SOME GROCERIES!!"</p>
+                    
+                    <p>The atheist happened to hear her as she was praying, and decided to play a prank on her. The next morning the lady went out on her porch and noted a large bag of groceries and shouted, "Alhamdulilah, Allah be praised!."</p>
+                    
+                    <p>The neighbor jumped from behind a bush and said, "Aha! I told you there was no Lord. I bought those groceries, God didn't."</p>
+                    
+                    <p>The lady started jumping up and down and clapping her hands and said, "ALHAMDULILAH WA SHUKRILLAH. He not only sent me groceries, but he made the devil pay for them!"</p>
+                `
+            },
+            9: {
+                title: "Nasruddin Running",
+                content: `
+                    <p>"When I was in the desert," said Nasruddin one day, "I caused an entire tribe of horrible and bloodthirsty bedouins to run."</p>
+                    
+                    <p>"How did you do it?" asked a person.</p>
+                    
+                    <p>"Easy. I just ran, and they ran after me."</p>
+                `
+            },
+            10: {
+                title: "The Imam's Horse",
+                content: `
+                    <p>An Imam was selling his horse in the market. An interested buyer came to him and requested if he could get a test drive.</p>
+                    
+                    <p>The Imam told the man that this horse is unique. In order to make it walk, you have to say Subhanallah. To make it run, you have to say Alhamdulillah and to make it stop, you have to say Allahu Akbar.</p>
+                    
+                    <p>The man sat on the horse and said Subhanallah. The horse started to walk. Then he said Alhamdulillah and it started to run. He kept saying Alhamdulillah and the horse started running faster and faster.</p>
+                    
+                    <p>All of a sudden the man noticed that the horse is running towards the edge of the hill that he was riding on. Being overly fearful, he forgot how to stop the horse. He kept saying all these words out of confusion.</p>
+                    
+                    <p>When the horse was just near the edge, he remembered Allahu Akbar and said it out loud. The horse stopped just one step away from the edge.</p>
+                    
+                    <p>The man took a deep breath, looked up towards the sky and said Alhamdulillah!</p>
+                `
+            },
+            11: {
+                title: "The Secret Visitor",
+                content: `
+                    <p><strong>True Incident:</strong> The incident took place in South Asia. A man was offering salah in his house. He was praying as fast as he could as many of us do.</p>
+                    
+                    <p>All of a sudden, he heard the door behind him open. Since, someone entered the room, he started making his ruku and sujud longer.</p>
+                    
+                    <p>Upon completion of the salah, he looked back to see who it was. To his amazement, it was a dog!</p>
+                `
+            }
+        };
+
+        // Function to show joke detail
+        function showJokeDetail(jokeId) {
+            // Check if joke data exists
+            if (!jokesData[jokeId]) return;
+            
+            // Get joke data
+            const joke = jokesData[jokeId];
+            
+            // Build the detail HTML
+            const detailHTML = `
+                <div class="joke-detail">
+                    <div class="joke-detail-header">
+                        <div class="joke-detail-title">${joke.title}</div>
+                        <button class="joke-detail-back" id="jokeDetailBack">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                    <div class="joke-detail-content">
+                        ${joke.content}
+                    </div>
+                </div>
+            `;
+            
+            // Insert the detail HTML
+            jokeDetailContainer.innerHTML = detailHTML;
+            
+            // Switch to detail view
+            document.body.classList.add('jokes-view-active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Add event listener to back button
+            document.getElementById('jokeDetailBack').addEventListener('click', hideJokeDetail);
+        }
+
+        // Function to hide joke detail
+        function hideJokeDetail() {
+            document.body.classList.remove('jokes-view-active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Show/hide back to top button based on scroll position
+        function toggleBackToTop() {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
+
+        // Initialize the page
+        function initPage() {
+            // Add click event listeners to all joke cards
+            const jokeCards = document.querySelectorAll('.joke-card');
+            jokeCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const jokeId = this.getAttribute('data-joke-id');
+                    showJokeDetail(jokeId);
+                });
+            });
+
+            // Back button functionality
+            backBtn.addEventListener('click', function() {
+                // If we're in detail view, go back to list
+                if (document.body.classList.contains('jokes-view-active')) {
+                    hideJokeDetail();
+                } else {
+                    // Otherwise, go back to previous page
+                    showPageLoader();
+                    setTimeout(() => {
+                        window.history.back();
+                    }, 300);
+                }
+            });
+
+            // Back to top button functionality
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Listen for scroll events to show/hide back to top button
+            window.addEventListener('scroll', toggleBackToTop);
+
+            // Intercept all link clicks for smooth page transitions
+            document.addEventListener('click', function(e) {
+                // Find the closest anchor element
+                const anchor = e.target.closest('a');
+                
+                if (!anchor) return;
+                
+                const href = anchor.getAttribute('href');
+                
+                // Skip if no href, mailto, tel, javascript, or external links
+                if (!href || 
+                    href.startsWith('javascript:') || 
+                    href.startsWith('mailto:') || 
+                    href.startsWith('tel:') ||
+                    href.startsWith('#') ||
+                    anchor.getAttribute('target') === '_blank') {
+                    return;
+                }
+                
+                // Skip if it's an external link (starts with http and not same origin)
+                if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                    return;
+                }
+                
+                // Check if we're clicking on the current page
+                if (isSamePage(href, window.location.href)) {
+                    // Don't show loader for same page
+                    return;
+                }
+                
+                // Prevent default navigation
+                e.preventDefault();
+                
+                // Show page loader
+                showPageLoader();
+                
+                // Fade out current content
+                if (pageContent) {
+                    pageContent.style.opacity = '0';
+                    pageContent.style.transition = 'opacity 0.3s ease';
+                }
+                
+                // Navigate after 1 second delay to allow loader to show properly
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 1000);
+            });
+
+            // Hide loader when page is fully loaded
+            window.addEventListener('load', function() {
+                // Wait 100ms before hiding loader (smooth transition)
+                setTimeout(hidePageLoader, 100);
+                
+                // Ensure content is visible
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+                
+                // Animate joke cards on load
+                const jokeCards = document.querySelectorAll('.joke-card');
+                jokeCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 100));
+                });
+            });
+
+            // Also hide loader if page finishes loading after our transition
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    hidePageLoader();
+                    if (pageContent) {
+                        pageContent.style.opacity = '1';
+                    }
+                }
+            });
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function() {
+                // If we're in detail view and user presses back button
+                if (document.body.classList.contains('jokes-view-active')) {
+                    hideJokeDetail();
+                    // Prevent the actual back navigation
+                    window.history.pushState(null, null, window.location.pathname);
+                } else {
+                    showPageLoader();
+                }
+            });
+
+            // Push initial state to history
+            window.history.pushState(null, null, window.location.pathname);
+
+            // Handle back button with history
+            window.addEventListener('popstate', function() {
+                if (document.body.classList.contains('jokes-view-active')) {
+                    hideJokeDetail();
+                }
+            });
+
+            // Initial hide of loader (in case page loads fast)
+            setTimeout(() => {
+                if (document.readyState === 'complete') {
+                    hidePageLoader();
+                }
+            }, 100);
+
+            // Add some interactive effects to joke cards
+            const cards = document.querySelectorAll('.joke-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.01)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

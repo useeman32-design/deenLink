@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Articles | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --article-red: #C62828;
+            --dark-green: #0d4d2a;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --article-red: #e74c3c;
+            --dark-green: #1abc9c;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, var(--primary-green) 0%, #1abc9c 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.3;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 20;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Articles Container */
+        .articles-container {
+            padding: 20px 16px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .articles-container {
+                padding: 25px 30px 60px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Categories Filter */
+        .categories-filter {
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+            display: flex;
+            gap: 10px;
+            padding: 5px 0 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--medium-gray) transparent;
+        }
+
+        .categories-filter::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .categories-filter::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .categories-filter::-webkit-scrollbar-thumb {
+            background-color: var(--medium-gray);
+            border-radius: 10px;
+        }
+
+        .category-btn {
+            background-color: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .category-btn:hover {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        .category-btn.active {
+            background-color: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .dark-theme .category-btn {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        .dark-theme .category-btn.active {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .dark-theme .category-btn:hover {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        /* Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .articles-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Article Card */
+        .article-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-theme .article-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .article-content {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-category {
+            display: inline-block;
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--primary-green);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-theme .article-category {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-excerpt {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--dark-gray);
+            border-top: 1px solid var(--medium-gray);
+            padding-top: 12px;
+            margin-top: auto;
+        }
+
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .article-author i {
+            font-size: 12px;
+        }
+
+        .article-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-item i {
+            font-size: 12px;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            grid-column: 1 / -1;
+            margin-bottom: 10px;
+        }
+
+        .featured-article .article-image {
+            height: 220px;
+        }
+
+        .featured-article .article-title {
+            font-size: 18px;
+        }
+
+        @media (min-width: 768px) {
+            .featured-article {
+                display: flex;
+            }
+            
+            .featured-article .article-image {
+                width: 40%;
+                height: auto;
+            }
+            
+            .featured-article .article-content {
+                width: 60%;
+            }
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .search-filter-section {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            border-radius: 30px;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box i {
+            color: var(--dark-gray);
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: var(--text-dark);
+            outline: none;
+            width: 100%;
+        }
+
+        .search-input::placeholder {
+            color: var(--dark-gray);
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .sort-label {
+            color: var(--dark-gray);
+        }
+
+        .sort-select {
+            background-color: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: var(--text-dark);
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--dark-gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            color: var(--medium-gray);
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .article-card {
+                padding: 0;
+            }
+            
+            .article-title {
+                font-size: 15px;
+            }
+            
+            .article-excerpt {
+                font-size: 12px;
+                -webkit-line-clamp: 2;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .articles-container {
+                max-width: 700px;
+            }
+            
+            .article-title {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .articles-container {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Islamic Articles</span>
+                    </div>
+                    <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Knowledge & Insights</h1>
+                    <p>Discover in-depth articles on Islamic teachings, spirituality, and contemporary issues</p>
+                </div>
+            </section>
+
+            <!-- Articles Content -->
+            <div class="articles-container">
+                <!-- Search and Filter Section -->
+                <div class="search-filter-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search articles...">
+                    </div>
+                    <div class="sort-options">
+                        <span class="sort-label">Sort by:</span>
+                        <select class="sort-select" id="sortSelect">
+                            <option value="recent">Most Recent</option>
+                            <option value="popular">Most Popular</option>
+                            <option value="reading">Reading Time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Categories Filter -->
+                <div class="categories-filter">
+                    <button class="category-btn active" data-category="all">All Articles</button>
+                    <button class="category-btn" data-category="spirituality">Spirituality</button>
+                    <button class="category-btn" data-category="fiqh">Fiqh & Rulings</button>
+                    <button class="category-btn" data-category="family">Family Life</button>
+                    <button class="category-btn" data-category="seerah">Seerah</button>
+                    <button class="category-btn" data-category="contemporary">Contemporary Issues</button>
+                    <button class="category-btn" data-category="quran">Quranic Studies</button>
+                    <button class="category-btn" data-category="health">Health & Wellness</button>
+                </div>
+
+                <!-- Articles Grid -->
+                <div class="articles-grid" id="articlesGrid">
+                    <!-- Featured Article -->
+                    <a href="#" class="article-card featured-article">
+                        <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Featured Article" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Featured</span>
+                            <h3 class="article-title">The Concept of Tawakkul: Complete Trust in Allah's Plan</h3>
+                            <p class="article-excerpt">An in-depth exploration of what true trust in Allah means, how to cultivate it in daily life, and the balance between effort and reliance on Divine Decree. Learn practical steps to strengthen your tawakkul during difficult times.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Dr. Omar Suleiman</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>10 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>2.4K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Regular Articles -->
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Spirituality</span>
+                            <h3 class="article-title">5 Daily Habits to Strengthen Your Connection with Allah</h3>
+                            <p class="article-excerpt">Practical spiritual practices that can be incorporated into your daily routine to maintain a strong connection with the Divine throughout your busy day.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Shaykh Abdul Nasir</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>7 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>1.8K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Fiqh & Rulings</span>
+                            <h3 class="article-title">Understanding Zakat in the Modern Economy</h3>
+                            <p class="article-excerpt">A contemporary look at zakat calculation in today's complex financial systems, including stocks, cryptocurrencies, and digital assets.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Mufti Menk</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>12 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>3.2K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Family Life</span>
+                            <h3 class="article-title">Islamic Parenting in the Digital Age</h3>
+                            <p class="article-excerpt">Guidance for Muslim parents on raising children with strong Islamic values while navigating the challenges of technology and social media.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Dr. Ingrid Mattson</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>9 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>1.5K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1544364631-99bbd8e23f08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Seerah</span>
+                            <h3 class="article-title">Lessons from the Treaty of Hudaybiyyah</h3>
+                            <p class="article-excerpt">How the Prophet's strategic patience and diplomacy in the Treaty of Hudaybiyyah offer timeless lessons for modern conflict resolution.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Dr. Yasir Qadhi</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>15 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>4.7K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Contemporary Issues</span>
+                            <h3 class="article-title">Islam and Environmental Stewardship</h3>
+                            <p class="article-excerpt">Exploring the Islamic perspective on environmental conservation and our responsibility as khalifah (stewards) of the Earth.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Sidi Hamza Yusuf</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>11 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>2.1K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Quranic Studies</span>
+                            <h3 class="article-title">The Miraculous Nature of Quranic Language</h3>
+                            <p class="article-excerpt">An exploration of the linguistic inimitability of the Quran and why it remains unmatched in its eloquence and depth.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Dr. Mustafa Khattab</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>14 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>3.9K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="article-card">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Article Image" class="article-image">
+                        <div class="article-content">
+                            <span class="article-category">Health & Wellness</span>
+                            <h3 class="article-title">The Prophetic Diet: Nutritional Wisdom from the Sunnah</h3>
+                            <p class="article-excerpt">How the Prophet's eating habits and recommended foods align with modern nutritional science for optimal health.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Dr. Rania Awaad</span>
+                                </div>
+                                <div class="article-stats">
+                                    <div class="stat-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>8 min</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="far fa-eye"></i>
+                                        <span>1.2K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // ============================================
+        // ARTICLES PAGE SPECIFIC FUNCTIONALITY
+        // ============================================
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.history.back();
+            }, 300);
+        });
+
+        // Articles filtering functionality
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const articlesGrid = document.getElementById('articlesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let sortBy = 'recent';
+        
+        // Category filter
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active button
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update current category
+                currentCategory = this.getAttribute('data-category');
+                
+                // Filter articles
+                filterArticles();
+            });
+        });
+        
+        // Search functionality
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchQuery = this.value.toLowerCase();
+                filterArticles();
+            }, 300);
+        });
+        
+        // Sort functionality
+        sortSelect.addEventListener('change', function() {
+            sortBy = this.value;
+            filterArticles();
+        });
+        
+        // Filter and sort articles
+        function filterArticles() {
+            const articleCards = document.querySelectorAll('.article-card');
+            let filteredCount = 0;
+            
+            articleCards.forEach(card => {
+                const title = card.querySelector('.article-title').textContent.toLowerCase();
+                const category = card.querySelector('.article-category').textContent.toLowerCase();
+                const excerpt = card.querySelector('.article-excerpt').textContent.toLowerCase();
+                
+                // Check if article matches search query
+                const matchesSearch = searchQuery === '' || 
+                    title.includes(searchQuery) || 
+                    excerpt.includes(searchQuery);
+                
+                // Check if article matches category filter
+                const matchesCategory = currentCategory === 'all' || 
+                    (currentCategory === 'featured' && category === 'featured') ||
+                    (currentCategory !== 'featured' && category.includes(currentCategory));
+                
+                // Show or hide article
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex';
+                    filteredCount++;
+                    
+                    // For featured article, ensure it spans full width
+                    if (category === 'featured') {
+                        card.classList.add('featured-article');
+                    }
+                } else {
+                    card.style.display = 'none';
+                    card.classList.remove('featured-article');
+                }
+            });
+            
+            // Show empty state if no articles found
+            let emptyState = document.querySelector('.empty-state');
+            if (filteredCount === 0) {
+                if (!emptyState) {
+                    emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>No articles found</h3>
+                        <p>Try adjusting your search or filter to find what you're looking for.</p>
+                    `;
+                    articlesGrid.appendChild(emptyState);
+                }
+            } else if (emptyState) {
+                emptyState.remove();
+            }
+            
+            // Sort articles based on selected option
+            sortArticles();
+        }
+        
+        // Sort articles
+        function sortArticles() {
+            const container = articlesGrid;
+            const articles = Array.from(container.querySelectorAll('.article-card:not([style*="display: none"])'));
+            
+            articles.sort((a, b) => {
+                if (sortBy === 'recent') {
+                    // For demo, we'll sort by view count (simulating recency)
+                    const aViews = parseInt(a.querySelector('.stat-item:nth-child(2) span').textContent) || 0;
+                    const bViews = parseInt(b.querySelector('.stat-item:nth-child(2) span').textContent) || 0;
+                    return bViews - aViews;
+                } else if (sortBy === 'popular') {
+                    const aViews = parseInt(a.querySelector('.stat-item:nth-child(2) span').textContent) || 0;
+                    const bViews = parseInt(b.querySelector('.stat-item:nth-child(2) span').textContent) || 0;
+                    return bViews - aViews;
+                } else if (sortBy === 'reading') {
+                    const aTime = parseInt(a.querySelector('.stat-item:nth-child(1) span').textContent) || 0;
+                    const bTime = parseInt(b.querySelector('.stat-item:nth-child(1) span').textContent) || 0;
+                    return aTime - bTime;
+                }
+                return 0;
+            });
+            
+            // Reorder articles in DOM
+            articles.forEach(article => {
+                container.appendChild(article);
+            });
+        }
+        
+        // Article card hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const articleCards = document.querySelectorAll('.article-card');
+            
+            articleCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const image = this.querySelector('.article-image');
+                    if (image) {
+                        image.style.transform = 'scale(1.05)';
+                        image.style.transition = 'transform 0.5s ease';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const image = this.querySelector('.article-image');
+                    if (image) {
+                        image.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // Animate article cards on load
+            setTimeout(() => {
+                const articleCards = document.querySelectorAll('.article-card');
+                articleCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 100));
+                });
+            }, 300);
+        });
+    </script>
+</body>
+</html>

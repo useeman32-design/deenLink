@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>99 Names of Allah | Islamic App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --dua-teal: #00796B;
+            --dropdown-bg: #FFFFFF;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --dua-teal: #1abc9c;
+            --dropdown-bg: #2c3e50;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.9) 0%, rgba(29, 111, 66, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(46, 204, 113, 0.8) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Language Dropdown (similar to Hadith Reader) */
+        .language-dropdown-container {
+            position: relative;
+        }
+
+        .language-content {
+            position: absolute;
+            top: 42px;
+            right: 0;
+            background: var(--dropdown-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 180px;
+            padding: 10px;
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .language-content.show {
+            display: flex;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            color: var(--text-dark);
+        }
+
+        .language-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .language-item.active {
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--primary-green);
+        }
+
+        .language-label {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-flag {
+            font-size: 16px;
+            min-width: 20px;
+        }
+
+        /* Custom scrollbar for language dropdown */
+        .language-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .language-content::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 3px;
+            margin: 2px 0;
+        }
+
+        .language-content::-webkit-scrollbar-thumb {
+            background: var(--primary-green);
+            border-radius: 3px;
+        }
+
+        .language-content::-webkit-scrollbar-thumb:hover {
+            background: var(--dua-teal);
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Names List Container */
+        .names-list-container {
+            padding: 20px 16px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .names-list-container {
+                padding: 25px 30px 50px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        .names-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .names-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        .name-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            min-height: 160px;
+        }
+
+        .name-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border-color: var(--medium-gray);
+        }
+
+        .name-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 4px 4px 0 0;
+            background-color: var(--primary-green);
+        }
+
+        .name-number {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .name-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.3;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .name-transliteration {
+            font-size: 14px;
+            color: var(--primary-green);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .name-translation {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            color: white;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .modal-name-number {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .modal-name-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .modal-name-transliteration {
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .modal-name-translation {
+            font-size: 16px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--light-gray);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .audio-player audio {
+            width: 100%;
+        }
+
+        /* Audio error message */
+        .audio-error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .audio-error i {
+            font-size: 16px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 0 16px 16px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--white);
+            color: var(--text-dark);
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+            font-size: 16px;
+        }
+
+        /* Loading State */
+        .loading-names {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            color: var(--dark-gray);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--light-gray);
+            border-top-color: var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.error {
+            background: #f44336;
+        }
+
+        .notification.warning {
+            background: #ff9800;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* Offline indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .offline-indicator i {
+            font-size: 14px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .language-content {
+                width: 160px;
+                max-height: 250px;
+            }
+            
+            .language-item {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+            
+            .language-flag {
+                font-size: 14px;
+            }
+            
+            .name-card {
+                padding: 18px 12px;
+                min-height: 150px;
+            }
+            
+            .name-arabic {
+                font-size: 22px;
+                min-height: 50px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 375px) {
+            .language-content {
+                width: 150px;
+            }
+            
+            .page-title {
+                font-size: 18px;
+            }
+            
+            .page-subtitle h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi-slash"></i>
+        <span>Offline Mode</span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="nameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-name-number" id="modalNumber">1</div>
+                <div class="modal-name-arabic" id="modalArabic"></div>
+                <div class="modal-name-transliteration" id="modalTransliteration"></div>
+                <div class="modal-name-translation" id="modalTranslation"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Meaning
+                    </div>
+                    <div class="modal-section-content" id="modalMeaning"></div>
+                </div>
+                
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-volume-up"></i>
+                        Audio Pronunciation
+                    </div>
+                    <div class="modal-section-content">
+                        <div class="audio-player">
+                            <audio controls id="modalAudio">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        <div class="audio-error" id="audioError">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Audio not available. Please check your internet connection.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-star-and-crescent"></i>
+                        <span>99 Names</span>
+                    </div>
+                    <!-- Language dropdown container similar to Hadith Reader -->
+                    <div class="language-dropdown-container">
+                        <button class="language-toggle" id="languageToggle">
+                            <i class="fas fa-language"></i>
+                        </button>
+                        <div class="language-content" id="languageDropdown">
+                            <!-- Languages will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>99 Names of Allah</h1>
+                    <p>The beautiful names and attributes of Allah Almighty</p>
+                </div>
+            </section>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search names of Allah...">
+                </div>
+            </div>
+
+            <!-- Names List -->
+            <div class="names-list-container">
+                <div class="names-list" id="namesList">
+                    <!-- Names will be loaded dynamically -->
+                </div>
+                
+                <div class="loading-names" id="loadingNames">
+                    <div class="loading-spinner"></div>
+                    <p>Loading names of Allah...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data/asma-api.js"></script>
+    <script>
+        // ============================================
+        // PAGE LOADER FUNCTIONS
+        // ============================================
+
+        function showPageLoader() {
+            const pageLoader = document.getElementById('pageLoader');
+            if (pageLoader) {
+                pageLoader.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function hidePageLoader() {
+            const pageLoader = document.getElementById('pageLoader');
+            if (pageLoader) {
+                pageLoader.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // ============================================
+        // 99 NAMES FUNCTIONALITY
+        // ============================================
+
+        // DOM Elements
+        const namesList = document.getElementById('namesList');
+        const loadingNames = document.getElementById('loadingNames');
+        const searchInput = document.getElementById('searchInput');
+        const backBtn = document.getElementById('backBtn');
+        const languageToggle = document.getElementById('languageToggle');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const offlineIndicator = document.getElementById('offlineIndicator');
+        const audioError = document.getElementById('audioError');
+
+        // Modal elements
+        const nameModal = document.getElementById('nameModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalNumber = document.getElementById('modalNumber');
+        const modalArabic = document.getElementById('modalArabic');
+        const modalTransliteration = document.getElementById('modalTransliteration');
+        const modalTranslation = document.getElementById('modalTranslation');
+        const modalMeaning = document.getElementById('modalMeaning');
+        const modalAudio = document.getElementById('modalAudio');
+
+        // State variables
+        let currentLanguage = 'en';
+        let namesData = [];
+        let filteredNames = [];
+        let currentAudio = null;
+        let isOffline = false;
+
+        // Check internet connection
+        function checkConnection() {
+            isOffline = !navigator.onLine;
+            if (isOffline) {
+                offlineIndicator.style.display = 'flex';
+                showNotification('You are offline. Using cached data if available.', 'warning');
+            } else {
+                offlineIndicator.style.display = 'none';
+            }
+            return !isOffline;
+        }
+
+        // Display names in the grid
+        function displayNames(names) {
+            namesList.innerHTML = '';
+            
+            if (names.length === 0) {
+                namesList.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--dark-gray); grid-column: 1 / -1;">
+                        <i class="fas fa-search" style="font-size: 40px; margin-bottom: 16px;"></i>
+                        <p>No names found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            names.forEach(name => {
+                const nameElement = createNameElement(name);
+                namesList.appendChild(nameElement);
+            });
+        }
+
+        // Create a name card element
+        function createNameElement(name) {
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'name-card';
+            nameDiv.dataset.number = name.number;
+            
+            nameDiv.innerHTML = `
+                <div class="name-number">${name.number}</div>
+                <div class="name-arabic">${name.name}</div>
+                <div class="name-transliteration">${name.transliteration || ''}</div>
+                <div class="name-translation">${name.translation}</div>
+            `;
+            
+            nameDiv.addEventListener('click', function() {
+                openNameModal(name);
+            });
+            
+            return nameDiv;
+        }
+
+        // Setup language dropdown - FIXED VERSION
+        function setupLanguageDropdown() {
+            try {
+                if (typeof ASMA_API === 'undefined') {
+                    console.error('ASMA_API not loaded!');
+                    createFallbackDropdown();
+                    return;
+                }
+                
+                const languages = ASMA_API.getSupportedLanguages();
+                
+                if (!languages || Object.keys(languages).length === 0) {
+                    createFallbackDropdown();
+                    return;
+                }
+                
+                // Clear dropdown
+                languageDropdown.innerHTML = '';
+                
+                // Create language items
+                Object.entries(languages).forEach(([code, info]) => {
+                    const item = document.createElement('div');
+                    item.className = `language-item ${code === currentLanguage ? 'active' : ''}`;
+                    item.dataset.lang = code;
+                    
+                    // Always include checkmark icon, but hide it if not active
+                    const isActive = code === currentLanguage;
+                    item.innerHTML = `
+                        <span class="language-label">
+                            <span class="language-flag">${info.flag || '🌐'}</span>
+                            ${info.name}
+                        </span>
+                        <i class="fas fa-check" style="${isActive ? '' : 'display: none;'}"></i>
+                    `;
+                    
+                    languageDropdown.appendChild(item);
+                    
+                    // Add click event
+                    item.addEventListener('click', async function(e) {
+                        e.stopPropagation();
+                        const lang = this.dataset.lang;
+                        if (lang !== currentLanguage) {
+                            await switchLanguage(lang);
+                        }
+                        languageDropdown.classList.remove('show');
+                    });
+                });
+                
+                console.log('Language dropdown populated with', Object.keys(languages).length, 'languages');
+                
+            } catch (error) {
+                console.error('Error setting up language dropdown:', error);
+                createFallbackDropdown();
+            }
+        }
+
+        // Create fallback dropdown - FIXED VERSION
+        function createFallbackDropdown() {
+            languageDropdown.innerHTML = '';
+            
+            const fallbackLanguages = {
+                'en': { name: 'English', flag: '🇺🇸', rtl: false },
+                'ar': { name: 'Arabic', flag: '🇸🇦', rtl: true },
+                'ur': { name: 'Urdu', flag: '🇵🇰', rtl: true },
+                'ha': { name: 'Hausa', flag: '🇳🇬', rtl: false }
+            };
+            
+            Object.entries(fallbackLanguages).forEach(([code, info]) => {
+                const isActive = code === currentLanguage;
+                const item = document.createElement('div');
+                item.className = `language-item ${isActive ? 'active' : ''}`;
+                item.dataset.lang = code;
+                
+                item.innerHTML = `
+                    <span class="language-label">
+                        <span class="language-flag">${info.flag}</span>
+                        ${info.name}
+                    </span>
+                    <i class="fas fa-check" style="${isActive ? '' : 'display: none;'}"></i>
+                `;
+                
+                languageDropdown.appendChild(item);
+                
+                item.addEventListener('click', async function(e) {
+                    e.stopPropagation();
+                    const lang = this.dataset.lang;
+                    if (lang !== currentLanguage) {
+                        await switchLanguage(lang);
+                    }
+                    languageDropdown.classList.remove('show');
+                });
+            });
+        }
+
+        // Switch language with fixed error handling - FIXED VERSION
+        async function switchLanguage(lang) {
+            console.log('Switching to language:', lang);
+            showPageLoader();
+            
+            try {
+                // Check internet connection
+                checkConnection();
+                
+                // Update current language
+                currentLanguage = lang;
+                
+                // Update active language in dropdown - SIMPLIFIED FIXED VERSION
+                document.querySelectorAll('.language-item').forEach(item => {
+                    // Remove active class from all
+                    item.classList.remove('active');
+                    
+                    // Hide all checkmarks safely
+                    const checkIcon = item.querySelector('.fas.fa-check');
+                    if (checkIcon) {
+                        checkIcon.style.display = 'none';
+                    }
+                    
+                    // Activate current language
+                    if (item.dataset.lang === lang) {
+                        item.classList.add('active');
+                        // Show checkmark if it exists
+                        const activeCheckIcon = item.querySelector('.fas.fa-check');
+                        if (activeCheckIcon) {
+                            activeCheckIcon.style.display = 'block';
+                        }
+                    }
+                });
+                
+                // Fetch names for new language
+                const result = await ASMA_API.fetchNames(lang);
+                
+                if (result.success) {
+                    namesData = result.data;
+                    filteredNames = [...namesData];
+                    
+                    // Display names
+                    displayNames(filteredNames);
+                    
+                    // Update search placeholder
+                    const langInfo = ASMA_API.getLanguageInfo(lang);
+                    if (langInfo) {
+                        searchInput.placeholder = `Search in ${langInfo.name}...`;
+                        
+                        // Show appropriate message
+                        if (result.fallback) {
+                            showNotification(`Showing English (${langInfo.name} may not be available)`, 'warning');
+                        } else if (result.cached) {
+                            showNotification(`Showing cached ${langInfo.name} data`);
+                        } else {
+                            showNotification(`Switched to ${langInfo.name}`);
+                        }
+                    }
+                    
+                } else {
+                    // Handle specific errors
+                    if (result.offline || result.networkError) {
+                        // Try to use cached data
+                        const cachedData = ASMA_API.getCachedData(lang);
+                        if (cachedData && cachedData.length > 0) {
+                            namesData = cachedData;
+                            filteredNames = [...namesData];
+                            displayNames(filteredNames);
+                            showNotification(`Offline: Using cached ${lang} data`, 'warning');
+                        } else {
+                            showNotification('No internet connection and no cached data available', 'error');
+                        }
+                    } else {
+                        throw new Error(result.error || 'Failed to load names');
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error switching language:', error);
+                showNotification('Failed to load language. Please check your connection.', 'error');
+                
+            } finally {
+                hidePageLoader();
+            }
+        }
+
+        // Load names (initial load)
+        async function loadNames() {
+            try {
+                namesList.innerHTML = '';
+                loadingNames.style.display = 'flex';
+                
+                // Setup language dropdown
+                setupLanguageDropdown();
+                
+                // Check connection
+                checkConnection();
+                
+                // Fetch names for current language
+                const result = await ASMA_API.fetchNames(currentLanguage);
+                
+                if (result.success) {
+                    namesData = result.data;
+                    filteredNames = [...namesData];
+                    
+                    // Hide loading
+                    loadingNames.style.display = 'none';
+                    
+                    // Display names
+                    displayNames(filteredNames);
+                    
+                    // Show appropriate message
+                    if (result.fallback) {
+                        showNotification('Some languages may not be available', 'warning');
+                    }
+                    
+                } else {
+                    // Handle offline/no connection
+                    if (result.offline || result.networkError) {
+                        // Try to use cached data
+                        const cachedData = ASMA_API.getCachedData(currentLanguage);
+                        if (cachedData && cachedData.length > 0) {
+                            namesData = cachedData;
+                            filteredNames = [...namesData];
+                            loadingNames.style.display = 'none';
+                            displayNames(filteredNames);
+                            showNotification('Offline: Using cached data', 'warning');
+                        } else {
+                            throw new Error('No cached data available');
+                        }
+                    } else {
+                        throw new Error(result.error || 'Failed to load names');
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading names:', error);
+                loadingNames.innerHTML = `
+                    <div style="text-align: center; grid-column: 1 / -1;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 40px; color: var(--dark-gray); margin-bottom: 16px;"></i>
+                        <p>Failed to load names. Please check your internet connection.</p>
+                        <button onclick="location.reload()" style="margin-top: 16px; padding: 8px 16px; background: var(--primary-green); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Open modal with name details
+        function openNameModal(name) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            
+            modalNumber.textContent = name.number;
+            modalArabic.textContent = name.name;
+            modalTransliteration.textContent = name.transliteration || 'N/A';
+            modalTranslation.textContent = name.translation;
+            modalMeaning.textContent = name.meaning;
+            
+            // Reset audio error
+            audioError.style.display = 'none';
+            
+            // Handle audio with error checking
+            if (name.audio) {
+                let audioUrl = name.audio;
+                if (!audioUrl.startsWith('http')) {
+                    audioUrl = `https://islamicapi.com${audioUrl}`;
+                }
+                
+                modalAudio.src = audioUrl;
+                modalAudio.style.display = 'block';
+                currentAudio = modalAudio;
+                
+                // Add error listener for audio
+                modalAudio.onerror = function() {
+                    audioError.style.display = 'flex';
+                    showNotification('Audio playback failed. Check your connection.', 'error');
+                };
+                
+                // Check if we have internet for audio
+                if (!navigator.onLine) {
+                    audioError.style.display = 'flex';
+                    audioError.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Audio requires internet connection.</span>
+                    `;
+                }
+            } else {
+                modalAudio.style.display = 'none';
+                modalAudio.src = '';
+                currentAudio = null;
+                audioError.style.display = 'flex';
+                audioError.innerHTML = `
+                    <i class="fas fa-info-circle"></i>
+                    <span>Audio not available for this language.</span>
+                `;
+            }
+            
+            nameModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const existingNote = document.querySelector('.notification');
+            if (existingNote) existingNote.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button class="notification-close"><i class="fas fa-times"></i></button>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#4CAF50'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+            
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                notification.remove();
+            });
+        }
+
+        // Close modal
+        function closeNameModal() {
+            nameModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+        }
+
+        // Filter names
+        function filterNames() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                filteredNames = [...namesData];
+                displayNames(filteredNames);
+                return;
+            }
+            
+            filteredNames = namesData.filter(name => {
+                if (name.name && name.name.toLowerCase().includes(searchTerm)) return true;
+                if (name.transliteration && name.transliteration.toLowerCase().includes(searchTerm)) return true;
+                if (name.translation && name.translation.toLowerCase().includes(searchTerm)) return true;
+                if (name.meaning && name.meaning.toLowerCase().includes(searchTerm)) return true;
+                return false;
+            });
+            
+            displayNames(filteredNames);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing...');
+            
+            // Load names
+            loadNames();
+            
+            // Event listeners
+            searchInput.addEventListener('input', filterNames);
+            modalClose.addEventListener('click', closeNameModal);
+            
+            // Language dropdown toggle similar to Hadith Reader
+            languageToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!languageToggle.contains(event.target) && !languageDropdown.contains(event.target)) {
+                    languageDropdown.classList.remove('show');
+                }
+            });
+            
+            // Close modal when clicking outside
+            nameModal.addEventListener('click', function(event) {
+                if (event.target === nameModal) {
+                    closeNameModal();
+                }
+            });
+            
+            // Listen for online/offline events
+            window.addEventListener('online', function() {
+                checkConnection();
+                showNotification('Back online', 'info');
+            });
+            
+            window.addEventListener('offline', function() {
+                checkConnection();
+                showNotification('You are offline', 'warning');
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (nameModal.classList.contains('active')) {
+                        closeNameModal();
+                    }
+                    if (languageDropdown.classList.contains('show')) {
+                        languageDropdown.classList.remove('show');
+                    }
+                }
+            });
+        });
+
+        // Back button
+        backBtn.addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = '../tools/index.html';
+            }, 300);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Q&A | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --deenlink-purple: #6A1B9A;
+            --ask-blue: #0D47A1;
+            --ask-light-blue: #E3F2FD;
+            --success-green: #27ae60;
+            --my-questions-orange: #FF9800;
+            --my-questions-light-orange: #FFF3E0;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --deenlink-purple: #9b59b6;
+            --ask-blue: #3498db;
+            --ask-light-blue: #1a3a5f;
+            --success-green: #2ecc71;
+            --my-questions-orange: #f39c12;
+            --my-questions-light-orange: #2c2c1a;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(106, 27, 154, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(155, 89, 182, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* DeenPoints Balance Display */
+        .deenpoints-balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .deenpoints-balance:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .deenpoints-balance img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px 16px 100px;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 25px 30px 100px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Filter Section - FIXED */
+        .filter-section {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .filter-select-container {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .filter-select {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            color: var(--text-dark);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.2);
+        }
+
+        .dark-theme .filter-select {
+            background-color: var(--medium-gray);
+            border-color: var(--dark-gray);
+        }
+
+        /* Search Box */
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border-radius: 12px;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            color: var(--text-dark);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.2);
+        }
+
+        .dark-theme .search-input {
+            background-color: var(--medium-gray);
+            border-color: var(--dark-gray);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+
+        /* Questions List */
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .dark-theme .question-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .question-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.4;
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .question-category {
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--primary-green);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        .dark-theme .question-category {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .question-preview {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .question-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            color: var(--dark-gray);
+        }
+
+        .question-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .question-date {
+            font-size: 12px;
+            color: var(--dark-gray);
+        }
+
+        .view-answer-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-answer-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 1;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-category {
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--primary-green);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .dark-theme .modal-category {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .close-modal:hover {
+            background-color: var(--light-gray);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Loading Animation */
+        .modal-loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .modal-loading.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--light-gray);
+            border-top: 4px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--dark-gray);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Question Details */
+        .question-details {
+            display: none;
+        }
+
+        .question-details.active {
+            display: block;
+        }
+
+        .question-info {
+            margin-bottom: 25px;
+        }
+
+        /* Chat-style Question and Answer */
+        .chat-message {
+            display: flex;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .message-user {
+            flex-direction: row;
+        }
+
+        .message-scholar {
+            flex-direction: row;
+        }
+
+        /* FIXED: Avatar styling - proper image display */
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-right: 15px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #ccc; /* Fallback color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            overflow: hidden;
+        }
+
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .scholar-avatar {
+            background: linear-gradient(135deg, var(--primary-green), #27ae60);
+        }
+
+        .message-content {
+            flex: 1;
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+            max-width: 85%;
+        }
+
+        .dark-theme .message-content {
+            background-color: var(--medium-gray);
+        }
+
+        .message-user .message-content {
+            border-top-left-radius: 0;
+        }
+
+        .message-scholar .message-content {
+            border-top-left-radius: 0;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .message-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .message-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+
+        .message-role {
+            font-size: 12px;
+            color: var(--dark-gray);
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .dark-theme .message-role {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .message-date {
+            font-size: 12px;
+            color: var(--dark-gray);
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            white-space: pre-line;
+        }
+
+        .message-user .message-text {
+            color: var(--text-dark);
+        }
+
+        .message-scholar .message-text {
+            color: var(--text-dark);
+            border-left: 3px solid var(--primary-green);
+            padding-left: 15px;
+        }
+
+        .view-profile-btn-small {
+            background-color: transparent;
+            color: var(--primary-green);
+            border: 1px solid var(--primary-green);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 10px;
+        }
+
+        .view-profile-btn-small:hover {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        /* Question Meta */
+        .question-meta-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 1px solid var(--medium-gray);
+            border-bottom: 1px solid var(--medium-gray);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        @media (max-width: 600px) {
+            .meta-item {
+                min-width: 80px;
+            }
+            
+            .message-content {
+                max-width: 75%;
+            }
+            
+            .message-avatar {
+                width: 45px;
+                height: 45px;
+                margin-right: 10px;
+            }
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .date-value {
+            color: var(--primary-green);
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--dark-gray);
+            display: none;
+        }
+
+        .no-results.active {
+            display: block;
+        }
+
+        .no-results-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: var(--medium-gray);
+        }
+
+        .no-results-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .no-results-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Purchase DeenPoints Modal */
+        .purchase-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 480px) {
+            .purchase-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .purchase-option {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--medium-gray);
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .purchase-option:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+        }
+
+        .purchase-option.selected {
+            border-color: var(--accent-gold);
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        .purchase-amount {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .purchase-amount img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .purchase-cost {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .custom-purchase {
+            grid-column: 1 / -1;
+        }
+
+        .custom-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        /* FIXED: Custom input field styling */
+        .custom-input-group input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            font-size: 14px;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .custom-input-group input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(29, 111, 66, 0.1);
+        }
+
+        .dark-theme .custom-input-group input {
+            background-color: var(--medium-gray);
+            border-color: var(--dark-gray);
+        }
+
+        .currency {
+            font-size: 14px;
+            color: var(--dark-gray);
+            white-space: nowrap;
+        }
+
+        /* Purchase Success Modal */
+        .purchase-success {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .purchase-success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 36px;
+            animation: successPulse 2s ease infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .purchase-success-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--success-green);
+            margin-bottom: 15px;
+        }
+
+        .purchase-success-message {
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .purchase-success-details {
+            background-color: var(--light-green);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .purchase-success-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .purchase-success-amount img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .purchase-success-cost {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .purchase-success-balance {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .close-success-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .close-success-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Important Note Box */
+        .important-note {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .important-note-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .important-note-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Info Box */
+        .info-box {
+            margin-top: 10px;
+            padding: 16px;
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .info-box {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Modal Navigation */
+        .modal-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background-color: var(--medium-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--dark-gray);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design for Filter Section - FIXED */
+        @media (max-width: 480px) {
+            .filter-select-container {
+                flex-direction: row;
+                gap: 10px;
+            }
+            
+            .filter-select {
+                flex: 1;
+                min-width: 0;
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .filter-section {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .filter-select-container {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .search-box {
+                flex: 2;
+                min-width: 200px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 767px) {
+            .filter-section {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .filter-select-container {
+                flex: 1;
+                min-width: 300px;
+            }
+            
+            .search-box {
+                flex: 1;
+                min-width: 300px;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .question-card {
+                padding: 16px;
+            }
+            
+            .question-title {
+                font-size: 16px;
+            }
+            
+            .modal-content {
+                max-height: 90vh;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .main-content {
+                max-width: 700px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                max-width: 800px;
+            }
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Question Detail Modal -->
+    <div class="modal-overlay" id="questionDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title">
+                        <i class="fas fa-question-circle"></i>
+                        Question Details
+                    </div>
+                    <div class="modal-category" id="modalCategory">Fiqh</div>
+                </div>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-loading" id="modalLoading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Loading question details...</div>
+                </div>
+                
+                <div class="question-details" id="questionDetails">
+                    <div class="question-info">
+                        <h3 class="question-title-modal" id="modalQuestionTitle">Question Title</h3>
+                        
+                        <!-- User's Question in Chat Format -->
+                        <div class="chat-message message-user">
+                            <div class="message-avatar user-avatar" id="userAvatarModal">
+                                <!-- Image will be set dynamically -->
+                            </div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-user-info">
+                                        <div class="message-name" id="userNameModal">User Name</div>
+                                        <div class="message-role" id="userRoleModal">Question Asker</div>
+                                    </div>
+                                    <div class="message-date" id="userDateModal">Jan 15, 2024</div>
+                                </div>
+                                <div class="message-text" id="questionTextModal">
+                                    This is the question text from the user...
+                                </div>
+                                <button class="view-profile-btn-small" id="viewUserProfileModal">
+                                    <i class="fas fa-user"></i>
+                                    View Profile
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Scholar's Answer in Chat Format -->
+                        <div class="chat-message message-scholar">
+                            <div class="message-avatar scholar-avatar" id="scholarAvatarModal">
+                                <!-- Image will be set dynamically -->
+                            </div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-user-info">
+                                        <div class="message-name" id="scholarNameModal">Scholar Name</div>
+                                        <div class="message-role" id="scholarRoleModal">Islamic Scholar</div>
+                                    </div>
+                                    <div class="message-date" id="scholarDateModal">Jan 18, 2024</div>
+                                </div>
+                                <div class="message-text" id="answerTextModal">
+                                    This is the answer from the scholar...
+                                </div>
+                                <button class="view-profile-btn-small" id="viewScholarProfileModal">
+                                    <i class="fas fa-user-graduate"></i>
+                                    View Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-meta-details">
+                        <div class="meta-item">
+                            <div class="meta-label">Question Date</div>
+                            <div class="meta-value date-value" id="dateAsked">Jan 15, 2024</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Answer Date</div>
+                            <div class="meta-value date-value" id="dateAnswered">Jan 18, 2024</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Response Time</div>
+                            <div class="meta-value" id="responseTime">3 days</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Category</div>
+                            <div class="meta-value" id="detailCategory">Fiqh</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase DeenPoints Modal -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-coins"></i>
+                    <span>Purchase DeenPoints</span>
+                </div>
+                <button class="close-modal" id="closePurchaseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Purchase Success Content -->
+                <div class="purchase-success" id="purchaseSuccessContent" style="display: none;">
+                    <div class="purchase-success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 class="purchase-success-title">Purchase Successful!</h2>
+                    <p class="purchase-success-message">Your DeenPoints have been added to your account.</p>
+                    
+                    <div class="purchase-success-details">
+                        <div class="purchase-success-amount" id="purchaseSuccessAmount">
+                            <img src="../img/deenPoints.png" alt="DeenPoints">
+                            <span>0</span>
+                        </div>
+                        <div class="purchase-success-cost" id="purchaseSuccessCost">₦0.00</div>
+                        <div class="purchase-success-balance">
+                            New Balance: <strong id="newBalance">750</strong> DeenPoints
+                        </div>
+                    </div>
+                    
+                    <button class="close-success-btn" id="closeSuccessBtn">
+                        <i class="fas fa-check-circle"></i>
+                        Continue
+                    </button>
+                </div>
+                
+                <!-- Purchase Form Content -->
+                <div id="purchaseFormContent">
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Current Balance</span>
+                        </div>
+                        <div class="info-text">
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600;">
+                                <img src="../img/deenPoints.png" alt="DeenPoints" style="width: 24px; height: 24px;">
+                                <span id="currentBalanceDisplay">750</span>
+                                <span>DeenPoints</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Quick Purchase Options</label>
+                        <div class="purchase-options">
+                            <div class="purchase-option" data-points="500" data-cost="750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>500</span>
+                                </div>
+                                <div class="purchase-cost">₦750</div>
+                            </div>
+                            <div class="purchase-option" data-points="1000" data-cost="1500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>1,000</span>
+                                </div>
+                                <div class="purchase-cost">₦1,500</div>
+                            </div>
+                            <div class="purchase-option" data-points="2500" data-cost="3750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>2,500</span>
+                                </div>
+                                <div class="purchase-cost">₦3,750</div>
+                            </div>
+                            <div class="purchase-option" data-points="5000" data-cost="7500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>5,000</span>
+                                </div>
+                                <div class="purchase-cost">₦7,500</div>
+                            </div>
+                            <div class="purchase-option custom-purchase">
+                                <label class="form-label">Custom Amount</label>
+                                <div class="custom-input-group">
+                                    <input type="number" class="form-input" id="customDeenPoints" min="100" max="10000" placeholder="Enter amount">
+                                    <span class="currency">DeenPoints</span>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 14px; color: var(--dark-gray);">
+                                    Cost: <span id="customCostDisplay">₦0.00</span> (₦1.5 per DeenPoint)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="important-note">
+                        <div class="important-note-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Important Note</span>
+                        </div>
+                        <div class="important-note-text">
+                            ⚠️ DeenPoints do NOT buy fatwas or opinions. Scholars answer only according to Islamic evidence and knowledge. DeenLink just helps in setting the priority and urgency of your questions.
+                        </div>
+                    </div>
+                    
+                    <div class="modal-navigation">
+                        <button class="modal-btn btn-secondary" id="cancelPurchaseBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button class="modal-btn btn-primary" id="confirmPurchaseBtn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-comments"></i>
+                        <span>Public Q&A</span>
+                    </div>
+                    <div class="deenpoints-balance" id="deenpointsBalanceBtn">
+                        <img src="../img/deenPoints.png" alt="DeenPoints">
+                        <span id="userDeenPoints">750</span>
+                    </div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Browse Answered Questions</h1>
+                    <p>Learn from previously answered questions by our community and scholars</p>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Filter Section - FIXED -->
+                <div class="filter-section">
+                    <div class="filter-select-container">
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="fiqh">Fiqh (Jurisprudence)</option>
+                            <option value="aqeedah">Aqeedah (Creed)</option>
+                            <option value="salah">Salah (Prayer)</option>
+                            <option value="family">Family Matters</option>
+                            <option value="zakat">Zakat & Charity</option>
+                            <option value="fasting">Fasting & Ramadan</option>
+                            <option value="hajj">Hajj & Umrah</option>
+                            <option value="ethics">Islamic Ethics</option>
+                        </select>
+                        
+                        <select class="filter-select" id="dateFilter">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search questions...">
+                    </div>
+                </div>
+                
+                <!-- Questions List -->
+                <div class="questions-list" id="questionsList">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+                
+                <!-- No Results Message -->
+                <div class="no-results" id="noResults">
+                    <div class="no-results-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="no-results-title">No Questions Found</div>
+                    <div class="no-results-text">
+                        Try adjusting your search or filter to find what you're looking for.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
+        
+        let userDeenPoints = 750;
+        let questions = [];
+        let filteredQuestions = [];
+        
+        // ============================================
+        // PAGE LOADER
+        // ============================================
+        
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+        
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // ============================================
+        // INITIALIZE PAGE
+        // ============================================
+        
+        function initializePage() {
+            setupEventListeners();
+            loadQuestions();
+            updateDeenPointsDisplay();
+            checkDarkTheme();
+            setupPurchaseModalEvents();
+            setupPurchaseOptions();
+            setupCustomDeenPointsInput();
+        }
+        
+        // ============================================
+        // SAMPLE QUESTIONS DATA WITH PROFILE PICTURES
+        // ============================================
+        
+        function loadQuestions() {
+            showPageLoader();
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Sample questions data with profile pictures
+                questions = [
+                    {
+                        id: 1,
+                        title: "Is it permissible to use mobile apps for prayer times?",
+                        preview: "I live in a city where the prayer times vary slightly between different mosques. Is it acceptable to use a mobile application to determine accurate prayer times, or should I stick to the local mosque timing?",
+                        category: "fiqh",
+                        dateAsked: "2024-01-15",
+                        dateAnswered: "2024-01-18",
+                        user: {
+                            id: "user_ahmed_hassan",
+                            name: "Ahmed Hassan",
+                            role: "Student",
+                            type: "user", // Added type field
+                            initials: "AH",
+                            profilePic: "https://randomuser.me/api/portraits/men/32.jpg"
+                        },
+                        scholar: {
+                            id: "scholar_omar_suleiman",
+                            name: "Dr. Omar Suleiman",
+                            role: "Islamic Scholar & Lecturer",
+                            type: "scholar", // Added type field
+                            initials: "OS",
+                            profilePic: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                        },
+                        question: "I live in a city where the prayer times vary slightly between different mosques. Is it acceptable to use a mobile application to determine accurate prayer times, or should I stick to the local mosque timing? I've noticed that some apps use calculations based on geographical coordinates while mosques might follow different methods. What is the most reliable approach according to Islamic principles?",
+                        answer: "In the name of Allah, the Most Gracious, the Most Merciful.\n\nUsing mobile applications for prayer times is generally permissible and even encouraged in today's digital age, as long as the calculations are based on reliable Islamic astronomical methods. The primary principle in Islam is to establish prayer at its proper time, and using accurate technology helps achieve this.\n\nMost reputable prayer time apps use established calculation methods approved by Islamic scholars, such as the Umm al-Qura, Egyptian General Authority, or Muslim World League methods. These are often more precise than manual calculations.\n\nHowever, for congregational prayers (Jama'ah), it's recommended to follow the local mosque timing to maintain unity within the Muslim community. For individual prayers, you may follow the app if you're confident in its accuracy.\n\nMay Allah accept our prayers and make us among those who establish prayer properly."
+                    },
+                    {
+                        id: 2,
+                        title: "How to deal with waswas (whispering) during salah?",
+                        preview: "I often experience distracting thoughts and doubts during my prayers. What are practical ways to overcome this spiritual challenge according to Islamic teachings?",
+                        category: "salah",
+                        dateAsked: "2024-01-10",
+                        dateAnswered: "2024-01-14",
+                        user: {
+                            id: "user_fatima_ali",
+                            name: "Fatima Ali",
+                            role: "Teacher",
+                            type: "user",
+                            initials: "FA",
+                            profilePic: "https://randomuser.me/api/portraits/women/44.jpg"
+                        },
+                        scholar: {
+                            id: "scholar_abdul_rahman",
+                            name: "Shaykh Abdul Rahman",
+                            role: "Spiritual Guide",
+                            type: "scholar",
+                            initials: "AR",
+                            profilePic: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                        },
+                        question: "I often experience distracting thoughts and doubts during my prayers. What are practical ways to overcome this spiritual challenge according to Islamic teachings? Sometimes I even doubt whether I performed certain parts of the prayer correctly, which makes me repeat prayers unnecessarily.",
+                        answer: "Assalamu alaikum,\n\nWaswas (whispering) during salah is a common challenge faced by many believers, and it's important to know that struggling against it brings reward from Allah. The Prophet Muhammad (peace be upon him) said: 'When the call to prayer is made, Shaytan runs away passing wind so that he does not hear the call. When the call is finished, he comes back. When the iqamah is pronounced, he again runs away, and after it is finished, he returns again to interfere between the person and his heart.' (Bukhari)\n\nPractical steps:\n1. Seek refuge in Allah from Shaytan\n2. Focus on understanding what you're reciting\n3. Prepare mentally before starting prayer\n4. Pray in a quiet place when possible\n5. Don't repeat prayers unnecessarily due to doubt\n\nRemember, perfection is only for Allah. Your effort to concentrate is what matters most."
+                    },
+                    {
+                        id: 3,
+                        title: "What is the ruling on cryptocurrency from an Islamic perspective?",
+                        preview: "With the rise of digital currencies, I'm confused about their permissibility in Islam. Could you clarify the Islamic position on buying, selling, and investing in cryptocurrencies?",
+                        category: "fiqh",
+                        dateAsked: "2024-01-05",
+                        dateAnswered: "2024-01-12",
+                        user: {
+                            id: "user_mohammed_khan",
+                            name: "Mohammed Khan",
+                            role: "Business Owner",
+                            type: "user",
+                            initials: "MK",
+                            profilePic: "https://randomuser.me/api/portraits/men/67.jpg"
+                        },
+                        scholar: {
+                            id: "institute_qaradawi",
+                            name: "Dr. Yusuf Al-Qaradawi Institute",
+                            role: "Islamic Economics Expert",
+                            type: "scholar",
+                            initials: "YQ",
+                            profilePic: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                        },
+                        question: "With the rise of digital currencies, I'm confused about their permissibility in Islam. Could you clarify the Islamic position on buying, selling, and investing in cryptocurrencies? I'm particularly concerned about the elements of gharar (uncertainty) and maysir (gambling) that some scholars mention.",
+                        answer: "Bismillah,\n\nThe issue of cryptocurrency is one of contemporary fiqh that requires careful examination. There are differing opinions among scholars:\n\n1. Some scholars consider it impermissible due to:\n   - High volatility (gharar)\n   - Lack of intrinsic value\n   - Potential for illegal activities\n   - Speculative nature resembling gambling\n\n2. Other scholars permit it with conditions:\n   - If used as actual currency (not just speculation)\n   - If backed by tangible assets\n   - If regulated properly\n   - If not used for haram transactions\n\nOur institute generally advises caution. If you must engage, ensure:\n- It's not your primary investment\n- You understand the risks\n- You avoid excessive speculation\n- The platform is Shariah-compliant\n\nWe recommend traditional Islamic finance options as safer alternatives."
+                    },
+                    {
+                        id: 4,
+                        title: "How to balance religious obligations with modern education?",
+                        preview: "As a university student, I struggle to maintain my Islamic practices while keeping up with academic demands. Any advice on finding balance?",
+                        category: "ethics",
+                        dateAsked: "2024-01-02",
+                        dateAnswered: "2024-01-08",
+                        user: {
+                            id: "user_sara_johnson",
+                            name: "Sara Johnson",
+                            role: "University Student",
+                            type: "user",
+                            initials: "SJ",
+                            profilePic: "https://randomuser.me/api/portraits/women/65.jpg"
+                        },
+                        scholar: {
+                            id: "prof_ingrid_mattson",
+                            name: "Dr. Ingrid Mattson",
+                            role: "Professor of Islamic Studies",
+                            type: "scholar",
+                            initials: "IM",
+                            profilePic: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                        },
+                        question: "As a university student, I struggle to maintain my Islamic practices while keeping up with academic demands. Any advice on finding balance between religious obligations and modern education?",
+                        answer: "This is an excellent question that many Muslim students face. Remember that seeking knowledge is itself an Islamic obligation. The Prophet (pbuh) said: 'Seeking knowledge is obligatory upon every Muslim.'\n\nPractical tips:\n1. Schedule your prayers - treat them as important appointments\n2. Utilize breaks between classes for dhikr or short prayers\n3. Form study groups with Muslim peers\n4. Choose halal food options on campus\n5. Attend Friday prayers - many universities have prayer facilities\n6. Balance is key - don't neglect studies or faith\n\nYour education, when pursued with the right intention, becomes worship. May Allah make your studies beneficial for you and the Muslim community."
+                    },
+                    {
+                        id: 5,
+                        title: "What are the rights of neighbors in Islam?",
+                        preview: "I recently moved to a new neighborhood and want to understand my Islamic responsibilities towards my neighbors.",
+                        category: "ethics",
+                        dateAsked: "2023-12-28",
+                        dateAnswered: "2024-01-03",
+                        user: {
+                            id: "user_ali_raza",
+                            name: "Ali Raza",
+                            role: "New Resident",
+                            type: "user",
+                            initials: "AR",
+                            profilePic: "https://randomuser.me/api/portraits/men/75.jpg"
+                        },
+                        scholar: {
+                            id: "mufti_ismail_menk",
+                            name: "Mufti Ismail Menk",
+                            role: "Islamic Scholar",
+                            type: "scholar",
+                            initials: "IM",
+                            profilePic: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                        },
+                        question: "I recently moved to a new neighborhood and want to understand my Islamic responsibilities towards my neighbors, regardless of their faith.",
+                        answer: "Neighborly rights in Islam are extensive and emphasized repeatedly in the Quran and Sunnah. The Prophet (pbuh) said: 'Jibril kept recommending treating neighbors with kindness until I thought he would assign a share of inheritance.' (Bukhari & Muslim)\n\nBasic rights include:\n1. Offering greetings and being friendly\n2. Helping in times of need\n3. Sharing food occasionally\n4. Not causing harm or inconvenience\n5. Visiting when sick\n6. Offering condolences in grief\n7. Being patient with their faults\n\nThese rights apply regardless of the neighbor's religion. Being a good neighbor is a form of da'wah (invitation to Islam). Start with a simple introduction and small gifts - it goes a long way in building relationships."
+                    }
+                ];
+                
+                // Initialize filtered questions
+                filteredQuestions = [...questions];
+                
+                // Display questions
+                displayQuestions();
+                
+                hidePageLoader();
+            }, 800);
+        }
+        
+        // ============================================
+        // DISPLAY QUESTIONS
+        // ============================================
+        
+        function displayQuestions() {
+            const questionsList = document.getElementById('questionsList');
+            const noResults = document.getElementById('noResults');
+            
+            // Clear current list
+            questionsList.innerHTML = '';
+            
+            if (filteredQuestions.length === 0) {
+                noResults.classList.add('active');
+                return;
+            }
+            
+            noResults.classList.remove('active');
+            
+            // Create question cards
+            filteredQuestions.forEach(question => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.dataset.id = question.id;
+                
+                // Format date
+                const askedDate = new Date(question.dateAsked);
+                const answeredDate = new Date(question.dateAnswered);
+                const formattedAskedDate = askedDate.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                
+                // Calculate response time in days
+                const responseTimeMs = answeredDate - askedDate;
+                const responseTimeDays = Math.ceil(responseTimeMs / (1000 * 60 * 60 * 24));
+                
+                // Get category display name
+                const categoryNames = {
+                    'fiqh': 'Fiqh',
+                    'aqeedah': 'Aqeedah',
+                    'salah': 'Salah',
+                    'family': 'Family',
+                    'zakat': 'Zakat',
+                    'fasting': 'Fasting',
+                    'hajj': 'Hajj',
+                    'ethics': 'Ethics'
+                };
+                
+                questionCard.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-title">${question.title}</div>
+                        <div class="question-category">${categoryNames[question.category] || question.category}</div>
+                    </div>
+                    <div class="question-preview">${question.preview}</div>
+                    <div class="question-footer">
+                        <div class="question-meta">
+                            <div class="question-meta-item">
+                                <i class="far fa-calendar"></i>
+                                <span>${formattedAskedDate}</span>
+                            </div>
+                            <div class="question-meta-item">
+                                <i class="far fa-clock"></i>
+                                <span>${responseTimeDays} day${responseTimeDays !== 1 ? 's' : ''}</span>
+                            </div>
+                        </div>
+                        <button class="view-answer-btn" data-id="${question.id}">
+                            <i class="fas fa-eye"></i>
+                            View Answer
+                        </button>
+                    </div>
+                `;
+                
+                questionsList.appendChild(questionCard);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-answer-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const questionId = parseInt(this.dataset.id);
+                    openQuestionModal(questionId);
+                });
+            });
+            
+            // Add event listeners to question cards
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const questionId = parseInt(this.dataset.id);
+                    openQuestionModal(questionId);
+                });
+            });
+        }
+        
+        // ============================================
+        // FILTER AND SEARCH FUNCTIONS
+        // ============================================
+        
+        function filterQuestions() {
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredQuestions = questions.filter(question => {
+                // Category filter
+                if (categoryFilter !== 'all' && question.category !== categoryFilter) {
+                    return false;
+                }
+                
+                // Search filter
+                if (searchTerm) {
+                    const searchInTitle = question.title.toLowerCase().includes(searchTerm);
+                    const searchInPreview = question.preview.toLowerCase().includes(searchTerm);
+                    const searchInQuestion = question.question.toLowerCase().includes(searchTerm);
+                    if (!searchInTitle && !searchInPreview && !searchInQuestion) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            // Sort questions
+            if (dateFilter === 'newest') {
+                filteredQuestions.sort((a, b) => new Date(b.dateAsked) - new Date(a.dateAsked));
+            } else if (dateFilter === 'oldest') {
+                filteredQuestions.sort((a, b) => new Date(a.dateAsked) - new Date(b.dateAsked));
+            }
+            
+            displayQuestions();
+        }
+        
+        // ============================================
+        // QUESTION DETAIL MODAL
+        // ============================================
+        
+        const questionDetailModal = document.getElementById('questionDetailModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalLoading = document.getElementById('modalLoading');
+        const questionDetails = document.getElementById('questionDetails');
+        
+        function openQuestionModal(questionId) {
+            const question = questions.find(q => q.id === questionId);
+            if (!question) return;
+            
+            // Show modal with loading state
+            questionDetailModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            modalLoading.classList.add('active');
+            questionDetails.classList.remove('active');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                // Update modal content
+                updateModalContent(question);
+                
+                // Hide loading, show content
+                modalLoading.classList.remove('active');
+                questionDetails.classList.add('active');
+            }, 800);
+        }
+        
+        // FIXED: Update modal content function
+        function updateModalContent(question) {
+            // Format dates
+            const askedDate = new Date(question.dateAsked);
+            const answeredDate = new Date(question.dateAnswered);
+            const formattedAskedDate = askedDate.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const formattedAnsweredDate = answeredDate.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Calculate response time
+            const responseTimeMs = answeredDate - askedDate;
+            const responseTimeDays = Math.ceil(responseTimeMs / (1000 * 60 * 60 * 24));
+            
+            // Get category display name
+            const categoryNames = {
+                'fiqh': 'Fiqh (Jurisprudence)',
+                'aqeedah': 'Aqeedah (Creed)',
+                'salah': 'Salah (Prayer)',
+                'family': 'Family Matters',
+                'zakat': 'Zakat & Charity',
+                'fasting': 'Fasting & Ramadan',
+                'hajj': 'Hajj & Umrah',
+                'ethics': 'Islamic Ethics'
+            };
+            
+            // Update modal elements
+            document.getElementById('modalCategory').textContent = categoryNames[question.category] || question.category;
+            document.getElementById('modalQuestionTitle').textContent = question.title;
+            
+            // Update user info in chat format
+            document.getElementById('userNameModal').textContent = question.user.name;
+            document.getElementById('userRoleModal').textContent = question.user.role;
+            document.getElementById('userDateModal').textContent = formattedAskedDate;
+            document.getElementById('questionTextModal').textContent = question.question;
+            
+            // Update scholar info in chat format
+            document.getElementById('scholarNameModal').textContent = question.scholar.name;
+            document.getElementById('scholarRoleModal').textContent = question.scholar.role;
+            document.getElementById('scholarDateModal').textContent = formattedAnsweredDate;
+            document.getElementById('answerTextModal').textContent = question.answer;
+            
+            // FIXED: Set profile pictures properly - no image tags, just background image
+            const userAvatarModal = document.getElementById('userAvatarModal');
+            const scholarAvatarModal = document.getElementById('scholarAvatarModal');
+            
+            // Clear any existing content
+            userAvatarModal.innerHTML = '';
+            scholarAvatarModal.innerHTML = '';
+            
+            // Set user avatar with background image and fallback text
+            if (question.user.profilePic) {
+                userAvatarModal.style.backgroundImage = `url('${question.user.profilePic}')`;
+                userAvatarModal.style.backgroundSize = 'cover';
+                userAvatarModal.style.backgroundPosition = 'center';
+                userAvatarModal.textContent = '';
+            } else {
+                userAvatarModal.style.backgroundImage = 'none';
+                userAvatarModal.style.backgroundColor = '#3498db';
+                userAvatarModal.textContent = question.user.initials || 'U';
+                userAvatarModal.style.display = 'flex';
+                userAvatarModal.style.alignItems = 'center';
+                userAvatarModal.style.justifyContent = 'center';
+            }
+            
+            // Set scholar avatar with background image and fallback text
+            if (question.scholar.profilePic) {
+                scholarAvatarModal.style.backgroundImage = `url('${question.scholar.profilePic}')`;
+                scholarAvatarModal.style.backgroundSize = 'cover';
+                scholarAvatarModal.style.backgroundPosition = 'center';
+                scholarAvatarModal.textContent = '';
+            } else {
+                scholarAvatarModal.style.backgroundImage = 'none';
+                scholarAvatarModal.style.backgroundColor = 'var(--primary-green)';
+                scholarAvatarModal.textContent = question.scholar.initials || 'S';
+                scholarAvatarModal.style.display = 'flex';
+                scholarAvatarModal.style.alignItems = 'center';
+                scholarAvatarModal.style.justifyContent = 'center';
+            }
+            
+            // Update meta info
+            document.getElementById('dateAsked').textContent = formattedAskedDate;
+            document.getElementById('dateAnswered').textContent = formattedAnsweredDate;
+            document.getElementById('responseTime').textContent = `${responseTimeDays} day${responseTimeDays !== 1 ? 's' : ''}`;
+            document.getElementById('detailCategory').textContent = categoryNames[question.category] || question.category;
+            
+            // ============================================
+            // FIXED: PROFILE NAVIGATION - SCHOLAR vs USER
+            // ============================================
+            
+            // Set up profile button for USER (navigate to public profile page)
+            const viewUserProfileBtn = document.getElementById('viewUserProfileModal');
+            viewUserProfileBtn.onclick = function() {
+                // For regular users, navigate to public profile page
+                showPageLoader();
+                setTimeout(() => {
+                    // You could also pass the user ID as a query parameter
+                    // Example: window.location.href = '../profile/public.html?id=' + question.user.id;
+                    window.location.href = '../profile/public.html';
+                }, 300);
+            };
+            
+            // Set up profile button for SCHOLAR (navigate to main profile page)
+            const viewScholarProfileBtn = document.getElementById('viewScholarProfileModal');
+            viewScholarProfileBtn.onclick = function() {
+                // For scholars, navigate to main profile page
+                showPageLoader();
+                setTimeout(() => {
+                    // You could also pass the scholar ID as a query parameter
+                    // Example: window.location.href = '../profile/index.html?id=' + question.scholar.id;
+                    window.location.href = '../profile/index.html';
+                }, 300);
+            };
+            
+            // Update button text based on user type
+            if (question.user.type === 'scholar') {
+                viewUserProfileBtn.innerHTML = '<i class="fas fa-user-graduate"></i> View Profile';
+            } else {
+                viewUserProfileBtn.innerHTML = '<i class="fas fa-user"></i> View Profile';
+            }
+            
+            viewScholarProfileBtn.innerHTML = '<i class="fas fa-user-graduate"></i> View Profile';
+        }
+        
+        // ============================================
+        // PURCHASE MODAL FUNCTIONALITY
+        // ============================================
+        
+        const purchaseModal = document.getElementById('purchaseModal');
+        const closePurchaseModal = document.getElementById('closePurchaseModal');
+        const cancelPurchaseBtn = document.getElementById('cancelPurchaseBtn');
+        const confirmPurchaseBtn = document.getElementById('confirmPurchaseBtn');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        const deenpointsBalanceBtn = document.getElementById('deenpointsBalanceBtn');
+        const purchaseFormContent = document.getElementById('purchaseFormContent');
+        const purchaseSuccessContent = document.getElementById('purchaseSuccessContent');
+        const currentBalanceDisplay = document.getElementById('currentBalanceDisplay');
+        const userDeenPointsDisplay = document.getElementById('userDeenPoints');
+        const customDeenPointsInput = document.getElementById('customDeenPoints');
+        const customCostDisplay = document.getElementById('customCostDisplay');
+        const purchaseSuccessAmount = document.getElementById('purchaseSuccessAmount');
+        const purchaseSuccessCost = document.getElementById('purchaseSuccessCost');
+        const newBalance = document.getElementById('newBalance');
+        
+        function setupPurchaseModalEvents() {
+            // Open purchase modal when DeenPoints balance is clicked
+            deenpointsBalanceBtn.addEventListener('click', openPurchaseModal);
+            
+            // Close purchase modal
+            closePurchaseModal.addEventListener('click', closePurchaseModalFunc);
+            cancelPurchaseBtn.addEventListener('click', closePurchaseModalFunc);
+            confirmPurchaseBtn.addEventListener('click', confirmPurchase);
+            closeSuccessBtn.addEventListener('click', closePurchaseModalFunc);
+            
+            // Close modal when clicking outside
+            purchaseModal.addEventListener('click', function(event) {
+                if (event.target === purchaseModal) {
+                    closePurchaseModalFunc();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && purchaseModal.classList.contains('active')) {
+                    closePurchaseModalFunc();
+                }
+            });
+        }
+        
+        function setupPurchaseOptions() {
+            const purchaseOptions = document.querySelectorAll('.purchase-option:not(.custom-purchase)');
+            
+            purchaseOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    purchaseOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Clear custom input
+                    customDeenPointsInput.value = '';
+                    customCostDisplay.textContent = '₦0.00';
+                });
+            });
+        }
+        
+        function setupCustomDeenPointsInput() {
+            customDeenPointsInput.addEventListener('input', function() {
+                const points = parseInt(this.value) || 0;
+                const cost = points * 1.5;
+                
+                if (points > 0) {
+                    // Remove selection from other options
+                    document.querySelectorAll('.purchase-option:not(.custom-purchase)').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                }
+                
+                customCostDisplay.textContent = `₦${cost.toFixed(2)}`;
+            });
+        }
+        
+        // Open purchase modal
+        function openPurchaseModal() {
+            // Update current balance display
+            currentBalanceDisplay.textContent = userDeenPoints;
+            
+            // Show purchase form (hide success)
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+            
+            // Show modal
+            purchaseModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Show purchase success
+        function showPurchaseSuccess(pointsAdded, cost) {
+            // Update success content
+            purchaseSuccessAmount.innerHTML = `<img src="../img/deenPoints.png" alt="DeenPoints"> <span>${pointsAdded}</span>`;
+            purchaseSuccessCost.textContent = `₦${cost.toFixed(2)}`;
+            newBalance.textContent = userDeenPoints;
+            
+            // Show success, hide form
+            purchaseFormContent.style.display = 'none';
+            purchaseSuccessContent.style.display = 'block';
+        }
+        
+        // Confirm purchase
+        function confirmPurchase() {
+            let pointsToAdd = 0;
+            let cost = 0;
+            
+            // Check if a quick purchase option is selected
+            const selectedOption = document.querySelector('.purchase-option:not(.custom-purchase).selected');
+            if (selectedOption) {
+                pointsToAdd = parseInt(selectedOption.dataset.points);
+                cost = parseInt(selectedOption.dataset.cost);
+            } 
+            // Check custom input
+            else if (customDeenPointsInput.value) {
+                pointsToAdd = parseInt(customDeenPointsInput.value);
+                cost = pointsToAdd * 1.5;
+            }
+            
+            if (pointsToAdd <= 0) {
+                alert("Please select a purchase option or enter a custom amount.");
+                return;
+            }
+            
+            // In a real app, you would process payment here
+            // For now, just add the points
+            userDeenPoints += pointsToAdd;
+            updateDeenPointsDisplays();
+            
+            // Show loading state
+            confirmPurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            confirmPurchaseBtn.disabled = true;
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Reset button
+                confirmPurchaseBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Purchase';
+                confirmPurchaseBtn.disabled = false;
+                
+                // Show success message
+                showPurchaseSuccess(pointsToAdd, cost);
+            }, 1000); // 1 second delay to simulate processing
+        }
+        
+        // Close purchase modal
+        function closePurchaseModalFunc() {
+            purchaseModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset purchase options
+            document.querySelectorAll('.purchase-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            customDeenPointsInput.value = '';
+            customCostDisplay.textContent = '₦0.00';
+            
+            // Reset to purchase form
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+        }
+        
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        
+        function setupEventListeners() {
+            // Back button
+            document.getElementById('backBtn').addEventListener('click', function() {
+                showPageLoader();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            });
+            
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                questionDetailModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close modal when clicking outside
+            questionDetailModal.addEventListener('click', function(event) {
+                if (event.target === questionDetailModal) {
+                    questionDetailModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && questionDetailModal.classList.contains('active')) {
+                    questionDetailModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Filter and search events
+            document.getElementById('categoryFilter').addEventListener('change', filterQuestions);
+            document.getElementById('dateFilter').addEventListener('change', filterQuestions);
+            document.getElementById('searchInput').addEventListener('input', filterQuestions);
+        }
+        
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        
+        function updateDeenPointsDisplays() {
+            userDeenPointsDisplay.textContent = userDeenPoints;
+            currentBalanceDisplay.textContent = userDeenPoints;
+        }
+        
+        function updateDeenPointsDisplay() {
+            document.getElementById('userDeenPoints').textContent = userDeenPoints;
+        }
+        
+        function checkDarkTheme() {
+            const savedTheme = localStorage.getItem('isDarkMode');
+            const body = document.body;
+            
+            if (savedTheme === 'true') {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+        
+        // ============================================
+        // INITIALIZE ON LOAD
+        // ============================================
+        
+        window.addEventListener('load', function() {
+            // Hide loader
+            setTimeout(() => {
+                hidePageLoader();
+                
+                // Animate question cards on load
+                const questionCards = document.querySelectorAll('.question-card');
+                questionCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 100));
+                });
+            }, 300);
+            
+            // Initialize the page
+            initializePage();
+        });
+        
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+        
+        // Handle page transitions
+        document.addEventListener('click', function(e) {
+            const anchor = e.target.closest('a');
+            if (anchor && anchor.getAttribute('href') && !anchor.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                showPageLoader();
+                setTimeout(() => {
+                    window.location.href = anchor.getAttribute('href');
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Scholar | DeenLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --deenlink-purple: #6A1B9A;
+            --ask-blue: #0D47A1;
+            --ask-light-blue: #E3F2FD;
+            --success-green: #27ae60;
+            --my-questions-orange: #FF9800;
+            --my-questions-light-orange: #FFF3E0;
+        }
+
+        /* Dark Theme Variables */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --deenlink-purple: #9b59b6;
+            --ask-blue: #3498db;
+            --ask-light-blue: #1a3a5f;
+            --success-green: #2ecc71;
+            --my-questions-orange: #f39c12;
+            --my-questions-light-orange: #2c2c1a;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-transition-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top Section - Ask a Scholar Theme */
+        .top-section {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .top-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 111, 66, 0.95) 0%, rgba(106, 27, 154, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .dark-theme .top-section::before {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(155, 89, 182, 0.9) 100%);
+        }
+
+        .top-section-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 20px 30px;
+            }
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            font-size: 22px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* DeenPoints Balance Display */
+        .deenpoints-balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .deenpoints-balance:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .deenpoints-balance img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .page-subtitle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .page-subtitle h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Ask a Scholar Cards Container */
+        .ask-container {
+            padding: 20px 16px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .ask-container {
+                padding: 25px 30px 50px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .ask-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .ask-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            min-height: 140px;
+        }
+
+        .ask-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .dark-theme .ask-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .ask-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .ask-card.browse::before {
+            background-color: var(--primary-green);
+        }
+
+        .ask-card.my-questions::before {
+            background-color: var(--my-questions-orange);
+        }
+
+        .ask-card.qa::before {
+            background-color: var(--ask-blue);
+        }
+
+        .ask-card.how::before {
+            background-color: var(--deenlink-purple);
+        }
+
+        .ask-card.priority::before {
+            background-color: var(--accent-gold);
+        }
+
+        .ask-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .ask-card:hover .ask-icon {
+            transform: scale(1.05);
+        }
+
+        .ask-icon.browse {
+            background: linear-gradient(135deg, var(--primary-green), #2E7D32);
+        }
+
+        .ask-icon.my-questions {
+            background: linear-gradient(135deg, var(--my-questions-orange), #FF5722);
+        }
+
+        .ask-icon.qa {
+            background: linear-gradient(135deg, var(--ask-blue), #2196F3);
+        }
+
+        .ask-icon.how {
+            background: linear-gradient(135deg, var(--deenlink-purple), #9C27B0);
+        }
+
+        .ask-icon.priority {
+            background: linear-gradient(135deg, var(--accent-gold), #FF9800);
+        }
+
+        .ask-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ask-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+
+        .ask-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .ask-badge {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .dark-theme .ask-badge {
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .ask-badge.browse {
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--primary-green);
+        }
+
+        .ask-badge.my-questions {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: var(--my-questions-orange);
+        }
+
+        .ask-badge.qa {
+            background-color: rgba(13, 71, 161, 0.1);
+            color: var(--ask-blue);
+        }
+
+        .ask-badge.how {
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--deenlink-purple);
+        }
+
+        .ask-badge.priority {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+        }
+
+        .dark-theme .ask-badge.my-questions {
+            background-color: rgba(243, 156, 18, 0.2);
+        }
+
+        .ask-description {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .ask-arrow {
+            color: var(--dark-gray);
+            font-size: 16px;
+            opacity: 0.7;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        .ask-card:hover .ask-arrow {
+            opacity: 1;
+            transform: translateX(3px);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .close-modal:hover {
+            background-color: var(--light-gray);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        .modal-text h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--primary-green);
+            font-size: 16px;
+        }
+
+        .modal-text ul, .modal-text ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-text li {
+            margin-bottom: 8px;
+        }
+
+        .modal-text .priority-levels {
+            background-color: var(--ask-light-blue);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .modal-text .important-note {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        /* Important Note Box */
+        .important-note {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .important-note-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .important-note-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Purchase DeenPoints Modal */
+        .purchase-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 480px) {
+            .purchase-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .purchase-option {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--medium-gray);
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .purchase-option:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+        }
+
+        .purchase-option.selected {
+            border-color: var(--accent-gold);
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        .purchase-amount {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .purchase-amount img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .purchase-cost {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .custom-purchase {
+            grid-column: 1 / -1;
+        }
+
+        .custom-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .custom-input-group input {
+            flex: 1;
+        }
+
+        .currency {
+            font-size: 14px;
+            color: var(--dark-gray);
+            white-space: nowrap;
+        }
+
+        /* Purchase Success Modal */
+        .purchase-success {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .purchase-success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 36px;
+            animation: successPulse 2s ease infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .purchase-success-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--success-green);
+            margin-bottom: 15px;
+        }
+
+        .purchase-success-message {
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .purchase-success-details {
+            background-color: var(--light-green);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .purchase-success-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .purchase-success-amount img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .purchase-success-cost {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .purchase-success-balance {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .close-success-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .close-success-btn:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Navigation */
+        .modal-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background-color: var(--medium-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--dark-gray);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #155c35;
+            transform: translateY(-2px);
+        }
+
+        /* Info Box */
+        .info-box {
+            margin-top: 10px;
+            padding: 16px;
+            background-color: rgba(29, 111, 66, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .dark-theme .info-box {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Page fade-in animation */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            animation: pageFadeIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .ask-card {
+                padding: 16px;
+                min-height: 130px;
+            }
+            
+            .ask-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .ask-name {
+                font-size: 16px;
+            }
+            
+            .ask-description {
+                font-size: 13px;
+            }
+            
+            .modal-content {
+                max-height: 85vh;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .ask-container {
+                max-width: 700px;
+            }
+            
+            .ask-card {
+                padding: 22px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .ask-container {
+                max-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay with Islamic Loader -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- How it Works Modal -->
+    <div class="modal-overlay" id="howItWorksModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">📌 How It Works</div>
+                <button class="close-modal" id="closeHowItWorksModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-text">
+                    <p>DeenLink allows you to ask scholars questions about your Deen in an organized and respectful way.</p>
+                    
+                    <h3>1️⃣ Ask Your Question</h3>
+                    <p>Choose a category (Fiqh, Aqeedah, Salah, Family, etc.) and clearly write your question.</p>
+                    
+                    <h3>2️⃣ Choose a Scholar</h3>
+                    <p>Select one scholar to answer your question.<br>
+                    Each question is handled by only one scholar to ensure clarity and responsibility.</p>
+                    
+                    <h3>3️⃣ Choose Privacy</h3>
+                    <ul>
+                        <li><strong>Public</strong> – Your question and answer may be shared to benefit others.</li>
+                        <li><strong>Private</strong> – Only you and the selected scholar can see it.</li>
+                    </ul>
+                    
+                    <h3>4️⃣ Set Priority Using DeenPoints</h3>
+                    <p>Use DeenPoints to set the priority level of your question:</p>
+                    <ul>
+                        <li><strong>Normal (Free)</strong></li>
+                        <li><strong>Priority ⭐</strong></li>
+                        <li><strong>Urgent ⭐⭐⭐</strong></li>
+                    </ul>
+                    
+                    <h3>5️⃣ Submit & Wait for Review</h3>
+                    <p>Your question enters the scholar's queue based on priority.</p>
+                    
+                    <h3>6️⃣ Receive Your Answer</h3>
+                    <p>You'll be notified once your question is answered.<br>
+                    Public answers may appear in DeenLink's knowledge base.</p>
+                    
+                    <p><strong>🕌 All answers are given sincerely and, where possible, supported by Qur'an, Sunnah, and scholarly sources.</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Priority & DeenPoints Modal -->
+    <div class="modal-overlay" id="priorityModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">⭐ Priority & DeenPoints</div>
+                <button class="close-modal" id="closePriorityModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-text">
+                    <p>DeenPoints help organize questions — they do not affect Islamic rulings.</p>
+                    
+                    <h3>What are DeenPoints?</h3>
+                    <p>DeenPoints are used to:</p>
+                    <ul>
+                        <li>Manage question order fairly</li>
+                        <li>Reduce waiting time during high demand</li>
+                        <li>Support the sustainability of DeenLink</li>
+                    </ul>
+                    
+                    <div class="priority-levels">
+                        <h3>Priority Levels</h3>
+                        <ul>
+                            <li><strong>Normal (Free)</strong><br>Standard response time.</li>
+                            <li><strong>Priority ⭐</strong><br>Your question is reviewed earlier.</li>
+                            <li><strong>Urgent ⭐⭐⭐</strong><br>For time-sensitive matters requiring quicker attention.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="important-note">
+                        <h3>Important Clarification</h3>
+                        <p>⚠️ <strong>DeenPoints do NOT buy fatwas or opinions.</strong><br>
+                        Scholars answer only according to Islamic evidence and knowledge.</p>
+                    </div>
+                    
+                    <h3>Earn DeenPoints by:</h3>
+                    <ul>
+                        <li>Participation in app activities like reading Quran, prayer times etc.</li>
+                        <li>Contributing to the community</li>
+                        <li>Supporting the DeenLink project</li>
+                    </ul>
+                    
+                    <p>🤍 <strong>This system ensures fairness, respect, and sustainability.</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase DeenPoints Modal -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-coins"></i>
+                    <span>Purchase DeenPoints</span>
+                </div>
+                <button class="close-modal" id="closePurchaseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Purchase Success Content -->
+                <div class="purchase-success" id="purchaseSuccessContent" style="display: none;">
+                    <div class="purchase-success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 class="purchase-success-title">Purchase Successful!</h2>
+                    <p class="purchase-success-message">Your DeenPoints have been added to your account.</p>
+                    
+                    <div class="purchase-success-details">
+                        <div class="purchase-success-amount" id="purchaseSuccessAmount">
+                            <img src="../img/deenPoints.png" alt="DeenPoints">
+                            <span>0</span>
+                        </div>
+                        <div class="purchase-success-cost" id="purchaseSuccessCost">₦0.00</div>
+                        <div class="purchase-success-balance">
+                            New Balance: <strong id="newBalance">750</strong> DeenPoints
+                        </div>
+                    </div>
+                    
+                    <button class="close-success-btn" id="closeSuccessBtn">
+                        <i class="fas fa-check-circle"></i>
+                        Continue
+                    </button>
+                </div>
+                
+                <!-- Purchase Form Content -->
+                <div id="purchaseFormContent">
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Current Balance</span>
+                        </div>
+                        <div class="info-text">
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600;">
+                                <img src="../img/deenPoints.png" alt="DeenPoints" style="width: 24px; height: 24px;">
+                                <span id="currentBalanceDisplay">750</span>
+                                <span>DeenPoints</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Quick Purchase Options</label>
+                        <div class="purchase-options">
+                            <div class="purchase-option" data-points="500" data-cost="750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>500</span>
+                                </div>
+                                <div class="purchase-cost">₦750</div>
+                            </div>
+                            <div class="purchase-option" data-points="1000" data-cost="1500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>1,000</span>
+                                </div>
+                                <div class="purchase-cost">₦1,500</div>
+                            </div>
+                            <div class="purchase-option" data-points="2500" data-cost="3750">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>2,500</span>
+                                </div>
+                                <div class="purchase-cost">₦3,750</div>
+                            </div>
+                            <div class="purchase-option" data-points="5000" data-cost="7500">
+                                <div class="purchase-amount">
+                                    <img src="../img/deenPoints.png" alt="DeenPoints">
+                                    <span>5,000</span>
+                                </div>
+                                <div class="purchase-cost">₦7,500</div>
+                            </div>
+                            <div class="purchase-option custom-purchase">
+                                <label class="form-label">Custom Amount</label>
+                                <div class="custom-input-group">
+                                    <input type="number" class="form-input" id="customDeenPoints" min="100" max="10000" placeholder="Enter amount">
+                                    <span class="currency">DeenPoints</span>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 14px; color: var(--dark-gray);">
+                                    Cost: <span id="customCostDisplay">₦0.00</span> (₦1.5 per DeenPoint)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="important-note">
+                        <div class="important-note-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Important Note</span>
+                        </div>
+                        <div class="important-note-text">
+                            ⚠️ DeenPoints do NOT buy fatwas or opinions. Scholars answer only according to Islamic evidence and knowledge. DeenLink just helps in setting the priority and urgency of your questions.
+                        </div>
+                    </div>
+                    
+                    <div class="modal-navigation">
+                        <button class="modal-btn btn-secondary" id="cancelPurchaseBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button class="modal-btn btn-primary" id="confirmPurchaseBtn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Top Section -->
+            <section class="top-section">
+                <div class="top-section-background"></div>
+                
+                <div class="top-bar">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Ask a Scholar</span>
+                    </div>
+                    <div class="deenpoints-balance" id="deenpointsBalanceBtn">
+                        <img src="../img/deenPoints.png" alt="DeenPoints">
+                        <span id="userDeenPoints">750</span>
+                    </div>
+                </div>
+                
+                <div class="page-subtitle">
+                    <h1>Get Islamic Guidance</h1>
+                    <p>Ask qualified scholars questions about your Deen and receive authentic answers</p>
+                </div>
+            </section>
+
+            <!-- Ask a Scholar Cards -->
+            <div class="ask-container">
+                <div class="ask-cards" id="askCards">
+                    <!-- Browse Scholars Card -->
+                    <a href="scholars.html" class="ask-card browse">
+                        <div class="ask-icon browse">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="ask-content">
+                            <div class="ask-header">
+                                <div class="ask-name">Browse Scholars</div>
+                                <div class="ask-badge browse">Select</div>
+                            </div>
+                            <div class="ask-description">
+                                Browse through our list of qualified scholars and select the one you'd like to ask your question.
+                            </div>
+                        </div>
+                        <div class="ask-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- My Questions Card -->
+                    <a href="my-questions.html" class="ask-card my-questions">
+                        <div class="ask-icon my-questions">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="ask-content">
+                            <div class="ask-header">
+                                <div class="ask-name">My Questions</div>
+                                <div class="ask-badge my-questions">Track</div>
+                            </div>
+                            <div class="ask-description">
+                                View and track all your submitted questions. Check status, responses, and manage your conversations with scholars.
+                            </div>
+                        </div>
+                        <div class="ask-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Public Q&A Card -->
+                    <a href="questions.html" class="ask-card qa">
+                        <div class="ask-icon qa">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="ask-content">
+                            <div class="ask-header">
+                                <div class="ask-name">Public Q&A</div>
+                                <div class="ask-badge qa">Browse</div>
+                            </div>
+                            <div class="ask-description">
+                                Browse through previously answered questions from our community. Benefit from public answers.
+                            </div>
+                        </div>
+                        <div class="ask-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- How it Works Card -->
+                    <div class="ask-card how" id="howItWorksCard">
+                        <div class="ask-icon how">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="ask-content">
+                            <div class="ask-header">
+                                <div class="ask-name">How it works</div>
+                                <div class="ask-badge how">Guide</div>
+                            </div>
+                            <div class="ask-description">
+                                Learn how to ask questions, choose scholars, set privacy, and use DeenPoints for priority.
+                            </div>
+                        </div>
+                        <div class="ask-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Priority / DeenPoints info Card -->
+                    <div class="ask-card priority" id="priorityCard">
+                        <div class="ask-icon priority">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="ask-content">
+                            <div class="ask-header">
+                                <div class="ask-name">Priority / DeenPoints info</div>
+                                <div class="ask-badge priority">Learn</div>
+                            </div>
+                            <div class="ask-description">
+                                Understand how DeenPoints work, priority levels, and how to earn more DeenPoints.
+                            </div>
+                        </div>
+                        <div class="ask-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <div class="info-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Tips for Asking Questions</span>
+                    </div>
+                    <div class="info-text">
+                        Be clear and specific in your question. Choose the appropriate category (Fiqh, Aqeedah, etc.) to help scholars provide accurate answers. Remember to be respectful and patient while waiting for responses. Your DeenPoints help prioritize urgent questions.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to check if two URLs are the same page
+        function isSamePage(href, currentUrl) {
+            // Get current page path without domain
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Handle different href formats
+            if (href === '' || href === '#' || href === './' || href === '/') {
+                // Home page links
+                return currentPath.endsWith('/') || 
+                       currentPath.endsWith('index.html') || 
+                       currentPath === '/';
+            }
+            
+            // Remove query strings and hashes for comparison
+            const cleanHref = href.split('?')[0].split('#')[0];
+            const cleanCurrentPath = currentPath.split('?')[0].split('#')[0];
+            
+            // Normalize paths
+            const normalizePath = (path) => {
+                // Remove leading/trailing slashes and index.html
+                path = path.replace(/^\/|\/$/g, '');
+                path = path.replace(/index\.html$/i, '');
+                return path;
+            };
+            
+            const normalizedHref = normalizePath(cleanHref);
+            const normalizedCurrent = normalizePath(cleanCurrentPath);
+            
+            // Compare normalized paths
+            return normalizedHref === normalizedCurrent;
+        }
+
+        // Intercept all link clicks for smooth page transitions
+        document.addEventListener('click', function(e) {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a');
+            
+            if (!anchor) return;
+            
+            const href = anchor.getAttribute('href');
+            
+            // Skip if no href, mailto, tel, javascript, or external links
+            if (!href || 
+                href.startsWith('javascript:') || 
+                href.startsWith('mailto:') || 
+                href.startsWith('tel:') ||
+                href.startsWith('#') ||
+                anchor.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            // Skip if it's an external link (starts with http and not same origin)
+            if (href.startsWith('http') && !href.includes(window.location.origin)) {
+                return;
+            }
+            
+            // Check if we're clicking on the current page
+            if (isSamePage(href, window.location.href)) {
+                // Don't show loader for same page
+                return;
+            }
+            
+            // Prevent default navigation
+            e.preventDefault();
+            
+            // Show page loader
+            showPageLoader();
+            
+            // Fade out current content
+            if (pageContent) {
+                pageContent.style.opacity = '0';
+                pageContent.style.transition = 'opacity 0.3s ease';
+            }
+            
+            // Navigate after 1 second delay to allow loader to show properly
+            setTimeout(() => {
+                window.location.href = href;
+            }, 1000);
+        });
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait 100ms before hiding loader (smooth transition)
+            setTimeout(hidePageLoader, 100);
+            
+            // Ensure content is visible
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+            
+            // Animate ask cards on load
+            const askCards = document.querySelectorAll('.ask-card');
+            askCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+            
+            // Check for dark theme from settings
+            checkDarkTheme();
+            
+            // Initialize the page
+            initializePage();
+        });
+
+        // Also hide loader if page finishes loading after our transition
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageLoader();
+                if (pageContent) {
+                    pageContent.style.opacity = '1';
+                }
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function() {
+            showPageLoader();
+        });
+
+        // Initial hide of loader (in case page loads fast)
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', function() {
+            showPageLoader();
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 300);
+        });
+
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
+        
+        let userDeenPoints = 750; // Starting balance
+        
+        // ============================================
+        // MODAL FUNCTIONALITY
+        // ============================================
+        
+        const howItWorksModal = document.getElementById('howItWorksModal');
+        const priorityModal = document.getElementById('priorityModal');
+        const purchaseModal = document.getElementById('purchaseModal');
+        const howItWorksCard = document.getElementById('howItWorksCard');
+        const priorityCard = document.getElementById('priorityCard');
+        const closeHowItWorksModal = document.getElementById('closeHowItWorksModal');
+        const closePriorityModal = document.getElementById('closePriorityModal');
+        const closePurchaseModal = document.getElementById('closePurchaseModal');
+        const cancelPurchaseBtn = document.getElementById('cancelPurchaseBtn');
+        const confirmPurchaseBtn = document.getElementById('confirmPurchaseBtn');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        const deenpointsBalanceBtn = document.getElementById('deenpointsBalanceBtn');
+        
+        // Purchase form elements
+        const purchaseFormContent = document.getElementById('purchaseFormContent');
+        const purchaseSuccessContent = document.getElementById('purchaseSuccessContent');
+        const currentBalanceDisplay = document.getElementById('currentBalanceDisplay');
+        const userDeenPointsDisplay = document.getElementById('userDeenPoints');
+        const customDeenPointsInput = document.getElementById('customDeenPoints');
+        const customCostDisplay = document.getElementById('customCostDisplay');
+        
+        // Purchase success elements
+        const purchaseSuccessAmount = document.getElementById('purchaseSuccessAmount');
+        const purchaseSuccessCost = document.getElementById('purchaseSuccessCost');
+        const newBalance = document.getElementById('newBalance');
+        
+        // Initialize the page
+        function initializePage() {
+            setupModalEvents();
+            setupPurchaseModalEvents();
+            setupPurchaseOptions();
+            updateDeenPointsDisplays();
+            setupCustomDeenPointsInput();
+        }
+        
+        // Update DeenPoints displays
+        function updateDeenPointsDisplays() {
+            userDeenPointsDisplay.textContent = userDeenPoints;
+            currentBalanceDisplay.textContent = userDeenPoints;
+        }
+        
+        // Setup modal events
+        function setupModalEvents() {
+            // Open How It Works modal
+            howItWorksCard.addEventListener('click', function() {
+                howItWorksModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Open Priority modal
+            priorityCard.addEventListener('click', function() {
+                priorityModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Open Purchase modal when DeenPoints balance is clicked
+            deenpointsBalanceBtn.addEventListener('click', openPurchaseModal);
+            
+            // Close How It Works modal
+            closeHowItWorksModal.addEventListener('click', function() {
+                howItWorksModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close Priority modal
+            closePriorityModal.addEventListener('click', function() {
+                priorityModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close modals when clicking outside
+            [howItWorksModal, priorityModal, purchaseModal].forEach(modal => {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            });
+            
+            // Close modals with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    howItWorksModal.classList.remove('active');
+                    priorityModal.classList.remove('active');
+                    purchaseModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+        
+        // Setup purchase modal events
+        function setupPurchaseModalEvents() {
+            closePurchaseModal.addEventListener('click', closePurchaseModalFunc);
+            cancelPurchaseBtn.addEventListener('click', closePurchaseModalFunc);
+            confirmPurchaseBtn.addEventListener('click', confirmPurchase);
+            closeSuccessBtn.addEventListener('click', closePurchaseModalFunc);
+            
+            // Close modal when clicking outside
+            purchaseModal.addEventListener('click', function(event) {
+                if (event.target === purchaseModal) {
+                    closePurchaseModalFunc();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && purchaseModal.classList.contains('active')) {
+                    closePurchaseModalFunc();
+                }
+            });
+        }
+        
+        // Setup purchase options
+        function setupPurchaseOptions() {
+            const purchaseOptions = document.querySelectorAll('.purchase-option:not(.custom-purchase)');
+            
+            purchaseOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    purchaseOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Clear custom input
+                    customDeenPointsInput.value = '';
+                    customCostDisplay.textContent = '₦0.00';
+                });
+            });
+        }
+        
+        // Setup custom DeenPoints input
+        function setupCustomDeenPointsInput() {
+            customDeenPointsInput.addEventListener('input', function() {
+                const points = parseInt(this.value) || 0;
+                const cost = points * 1.5;
+                
+                if (points > 0) {
+                    // Remove selection from other options
+                    document.querySelectorAll('.purchase-option:not(.custom-purchase)').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                }
+                
+                customCostDisplay.textContent = `₦${cost.toFixed(2)}`;
+            });
+        }
+        
+        // Open purchase modal
+        function openPurchaseModal() {
+            // Update current balance display
+            currentBalanceDisplay.textContent = userDeenPoints;
+            
+            // Show purchase form (hide success)
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+            
+            // Show modal
+            purchaseModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Show purchase success
+        function showPurchaseSuccess(pointsAdded, cost) {
+            // Update success content
+            purchaseSuccessAmount.innerHTML = `<img src="../img/deenPoints.png" alt="DeenPoints"> <span>${pointsAdded}</span>`;
+            purchaseSuccessCost.textContent = `₦${cost.toFixed(2)}`;
+            newBalance.textContent = userDeenPoints;
+            
+            // Show success, hide form
+            purchaseFormContent.style.display = 'none';
+            purchaseSuccessContent.style.display = 'block';
+        }
+        
+        // Confirm purchase
+        function confirmPurchase() {
+            let pointsToAdd = 0;
+            let cost = 0;
+            
+            // Check if a quick purchase option is selected
+            const selectedOption = document.querySelector('.purchase-option:not(.custom-purchase).selected');
+            if (selectedOption) {
+                pointsToAdd = parseInt(selectedOption.dataset.points);
+                cost = parseInt(selectedOption.dataset.cost);
+            } 
+            // Check custom input
+            else if (customDeenPointsInput.value) {
+                pointsToAdd = parseInt(customDeenPointsInput.value);
+                cost = pointsToAdd * 1.5;
+            }
+            
+            if (pointsToAdd <= 0) {
+                alert("Please select a purchase option or enter a custom amount.");
+                return;
+            }
+            
+            // In a real app, you would process payment here
+            // For now, just add the points
+            userDeenPoints += pointsToAdd;
+            updateDeenPointsDisplays();
+            
+            // Show loading state
+            confirmPurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            confirmPurchaseBtn.disabled = true;
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Reset button
+                confirmPurchaseBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Purchase';
+                confirmPurchaseBtn.disabled = false;
+                
+                // Show success message
+                showPurchaseSuccess(pointsToAdd, cost);
+            }, 1000); // 1 second delay to simulate processing
+        }
+        
+        // Close purchase modal
+        function closePurchaseModalFunc() {
+            purchaseModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset purchase options
+            document.querySelectorAll('.purchase-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            customDeenPointsInput.value = '';
+            customCostDisplay.textContent = '₦0.00';
+            
+            // Reset to purchase form
+            purchaseFormContent.style.display = 'block';
+            purchaseSuccessContent.style.display = 'none';
+        }
+        
+        // ============================================
+        // DARK THEME CHECK FROM SETTINGS
+        // ============================================
+        
+        function checkDarkTheme() {
+            // Check localStorage for theme preference (like the home page does)
+            const savedTheme = localStorage.getItem('isDarkMode');
+            const body = document.body;
+            
+            if (savedTheme === 'true') {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+        
+        // Add some interactive effects to ask cards
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effect to ask cards
+            const cards = document.querySelectorAll('.ask-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.ask-icon');
+                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.ask-icon');
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

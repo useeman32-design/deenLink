@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dua Reader | Islamic App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="../theme/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-green: #1D6F42;
+            --light-green: #E8F5E9;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #757575;
+            --text-dark: #333333;
+            --dua-teal: #00796B;
+            --card-bg: #FFFFFF;
+            --player-bg: #2c3e50;
+            --notification-bg: #1D6F42;
+            --dropdown-bg: #FFFFFF;
+        }
+
+        /* Dark Theme Variables - Matching Quran Reader */
+        .dark-theme {
+            --primary-green: #2ecc71;
+            --light-green: #1a2526;
+            --accent-gold: #f39c12;
+            --white: #2c3e50;
+            --light-gray: #34495e;
+            --medium-gray: #4a6572;
+            --dark-gray: #bdc3c7;
+            --text-dark: #ecf0f1;
+            --dua-teal: #1abc9c;
+            --card-bg: #34495e;
+            --player-bg: #1a2526;
+            --notification-bg: #2ecc71;
+            --dropdown-bg: #2c3e50;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-dark);
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Page Loader Overlay */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #pageLoader.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Islamic Loader */
+        .islamic-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .loader-crescent {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .crescent {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-gold));
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: crescentFloat 3s ease-in-out infinite;
+        }
+
+        .crescent::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-radius: 50%;
+        }
+
+        .loader-star {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--accent-gold);
+            font-size: 24px;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crescentFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            background-color: var(--white);
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Fade in animation for page content */
+        .page-content {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sticky Header - Matching Quran Reader */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, var(--primary-green) 0%, #155d31 100%);
+            color: white;
+            padding: 12px 16px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 70px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Chapter title - Only Arabic in header */
+        .chapter-title {
+            font-family: 'Amiri', serif;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        /* Language Button */
+        .language-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            flex-shrink: 0;
+        }
+
+        .language-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 20px 16px 80px;
+            min-height: calc(100vh - 120px);
+        }
+
+        @media (min-width: 768px) {
+            .content-area {
+                padding: 30px 30px 100px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Golden Container - Matching Quran Reader */
+        .golden-container {
+            background: linear-gradient(135deg, var(--accent-gold), #e6c158);
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+
+        .arabic-chapter-name {
+            font-family: 'Amiri', serif;
+            font-size: 26px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        .english-chapter-name {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        /* Duas List */
+        .duas-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .dua-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--medium-gray);
+            transition: all 0.3s;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .dua-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .dua-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .dua-number-badge {
+            background: var(--primary-green);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(29, 111, 66, 0.3);
+        }
+
+        /* Arabic text styling */
+        .dua-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 22px;
+            color: var(--text-dark);
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin-bottom: 15px;
+        }
+
+        .dark-theme .dua-arabic {
+            color: var(--text-dark);
+        }
+
+        /* Arabic transliteration styling */
+        .dua-transliteration {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            font-style: italic;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        .dark-theme .dua-transliteration {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        /* Translation text styling */
+        .dua-translation {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            padding-top: 15px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        /* Dua actions */
+        .dua-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--medium-gray);
+            color: var(--dark-gray);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .action-btn:hover {
+            background-color: var(--light-gray);
+            color: var(--primary-green);
+        }
+
+        .action-btn.bookmark.active {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .action-btn.play.active {
+            background-color: rgba(29, 111, 66, 0.1);
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        /* Loading spinner for play button */
+        .play-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .play-btn.loading i {
+            display: none;
+        }
+
+        .play-btn.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* Loading spinner for dua play buttons */
+        .action-btn.play.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .action-btn.play.loading i {
+            display: none;
+        }
+
+        .action-btn.play.loading::after {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--primary-green);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* Audio Player - FIXED SIMPLE LAYOUT */
+        .mini-audio-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--player-bg) 0%, #1a2526 100%);
+            color: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 12px 12px 0 0;
+        }
+
+        @media (min-width: 768px) {
+            .mini-audio-player {
+                max-width: 768px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 12px 12px 0 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        .player-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .play-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .play-btn:hover {
+            background: #155d31;
+            transform: scale(1.05);
+        }
+
+        .current-dua-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .current-dua {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .play-mode-indicator {
+            font-size: 11px;
+            opacity: 0.8;
+            color: #4CAF50;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        .player-center {
+            flex: 2;
+            padding: 0 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary-green);
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.1s;
+        }
+
+        .player-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .player-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 11px;
+        }
+
+        .player-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .speed-btn {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Loading State */
+        .loading-duas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            color: var(--dark-gray);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--light-gray);
+            border-top-color: var(--dua-teal);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* No Duas Message */
+        .no-duas {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--dark-gray);
+        }
+
+        .no-duas i {
+            font-size: 50px;
+            color: var(--dua-teal);
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .no-duas h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .no-duas p {
+            font-size: 14px;
+            max-width: 300px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Error Message */
+        .error-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--dark-gray);
+        }
+
+        .error-message i {
+            font-size: 48px;
+            color: #e74c3c;
+            margin-bottom: 16px;
+        }
+
+        .error-message h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .error-message p {
+            font-size: 14px;
+            max-width: 300px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .retry-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+
+        .retry-btn:hover {
+            background-color: #155d31;
+        }
+
+        /* Language Dropdown - FIXED POSITION */
+        .language-dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 42px; /* Changed from bottom: 40px to top: 42px */
+            right: 0;
+            background: var(--dropdown-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            padding: 10px;
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .dropdown-content.show {
+            display: flex;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            color: var(--text-dark);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .dropdown-item.active {
+            background-color: rgba(29, 111, 66, 0.1);
+            color: var(--primary-green);
+        }
+
+        .dropdown-label {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .coming-soon-badge {
+            font-size: 10px;
+            background-color: var(--accent-gold);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+            opacity: 0.8;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--notification-bg);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            justify-content: center;
+            max-width: 300px;
+            margin: 0;
+        }
+
+        /* Responsive improvements for iPhone 11 (414px width) */
+        @media (max-width: 480px) {
+            .sticky-header {
+                padding: 10px 14px;
+                min-height: 65px;
+            }
+            
+            .chapter-title {
+                font-size: 20px;
+            }
+            
+            .golden-container {
+                padding: 15px;
+            }
+            
+            .arabic-chapter-name {
+                font-size: 22px;
+            }
+            
+            .english-chapter-name {
+                font-size: 14px;
+            }
+            
+            .dua-arabic {
+                font-size: 20px;
+            }
+            
+            .dua-transliteration {
+                font-size: 13px;
+            }
+            
+            .dua-translation {
+                font-size: 14px;
+            }
+            
+            .action-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            
+            .player-center {
+                padding: 0 8px;
+            }
+            
+            .player-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+            
+            .notification {
+                right: 10px;
+                left: 10px;
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+            
+            .mini-audio-player {
+                height: 70px;
+                border-radius: 12px 12px 0 0 !important;
+            }
+            
+            .dropdown-content {
+                width: 180px;
+            }
+            
+            .current-dua {
+                font-size: 12px;
+            }
+            
+            .play-mode-indicator {
+                font-size: 10px;
+            }
+        }
+
+        /* Extra small screens (iPhone SE, etc.) */
+        @media (max-width: 375px) {
+            .sticky-header {
+                padding: 8px 12px;
+                min-height: 60px;
+            }
+            
+            .back-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .chapter-title {
+                font-size: 18px;
+            }
+            
+            .language-button {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            
+            .header-right {
+                gap: 6px;
+            }
+            
+            .golden-container {
+                padding: 12px;
+            }
+            
+            .arabic-chapter-name {
+                font-size: 20px;
+            }
+            
+            .english-chapter-name {
+                font-size: 13px;
+            }
+            
+            .dua-card {
+                padding: 15px;
+            }
+            
+            .dua-arabic {
+                font-size: 18px;
+            }
+            
+            .dua-transliteration {
+                font-size: 12px;
+                padding: 8px;
+            }
+            
+            .mini-audio-player {
+                height: 65px;
+                padding: 0 12px;
+                border-radius: 12px 12px 0 0 !important;
+            }
+            
+            .play-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 13px;
+            }
+            
+            .current-dua {
+                font-size: 11px;
+            }
+            
+            .play-mode-indicator {
+                font-size: 9px;
+            }
+            
+            .dropdown-content {
+                width: 160px;
+            }
+        }
+
+        /* Audio Element (hidden) */
+        #audioElement {
+            display: none;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Page Loader Overlay -->
+    <div id="pageLoader">
+        <div class="islamic-loader">
+            <div class="loader-crescent">
+                <div class="crescent"></div>
+                <div class="loader-star">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-content" id="pageContent">
+            <!-- Sticky Header - Only Arabic title -->
+            <header class="sticky-header">
+                <div class="header-left">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="chapter-title" id="chapterTitle">دعاء وأذكار</div>
+                </div>
+                <div class="header-right">
+                    <div class="language-dropdown">
+                        <button class="language-button" id="languageButton">
+                            <i class="fas fa-language"></i>
+                        </button>
+                        <div class="dropdown-content" id="languageDropdown">
+                            <div class="dropdown-item active">
+                                <span class="dropdown-label">English</span>
+                                <span class="coming-soon-badge">Available</span>
+                            </div>
+                            <div class="dropdown-item" style="opacity: 0.6; cursor: not-allowed;">
+                                <span class="dropdown-label">Hausa</span>
+                                <span class="coming-soon-badge">Coming Soon</span>
+                            </div>
+                            <div class="dropdown-item" style="opacity: 0.6; cursor: not-allowed;">
+                                <span class="dropdown-label">Arabic</span>
+                                <span class="coming-soon-badge">Coming Soon</span>
+                            </div>
+                            <div class="dropdown-item" style="opacity: 0.6; cursor: not-allowed;">
+                                <span class="dropdown-label">Urdu</span>
+                                <span class="coming-soon-badge">Coming Soon</span>
+                            </div>
+                            <div class="dropdown-item" style="opacity: 0.6; cursor: not-allowed;">
+                                <span class="dropdown-label">French</span>
+                                <span class="coming-soon-badge">Coming Soon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Golden Container with Chapter Names -->
+                <div class="golden-container" id="goldenContainer">
+                    <div class="arabic-chapter-name" id="arabicChapterName">أذكار الصباح والمساء</div>
+                    <div class="english-chapter-name" id="englishChapterName">Morning and Evening Adhkar</div>
+                </div>
+
+                <!-- Dua List -->
+                <div class="duas-list" id="duasList">
+                    <!-- Duas will be loaded dynamically -->
+                    <div class="loading-duas" id="loadingDuas">
+                        <div class="loading-spinner"></div>
+                        <p>Loading duas...</p>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Hidden Audio Element -->
+            <audio id="audioElement" preload="metadata"></audio>
+        </div>
+    </div>
+
+    <!-- Audio Player - Fixed Simple Layout -->
+    <div class="mini-audio-player" id="audioPlayer">
+        <div class="player-left">
+            <button class="play-btn" id="playBtn">
+                <i class="fas fa-play"></i>
+            </button>
+            <div class="current-dua-info">
+                <div class="current-dua">Dua: <span id="currentDuaNumber">1</span></div>
+                <div class="play-mode-indicator" id="playModeIndicator">Chapter Mode</div>
+            </div>
+        </div>
+        <div class="player-center">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+        <div class="player-right">
+            <button class="player-btn speed-btn" id="speedBtn">1x</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PAGE TRANSITION LOADER IMPLEMENTATION
+        // ============================================
+
+        // DOM Elements
+        const pageLoader = document.getElementById('pageLoader');
+        const pageContent = document.getElementById('pageContent');
+        const backBtn = document.getElementById('backBtn');
+
+        // Function to show page loader
+        function showPageLoader() {
+            pageLoader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to hide page loader
+        function hidePageLoader() {
+            pageLoader.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(hidePageLoader, 100);
+            if (pageContent) {
+                pageContent.style.opacity = '1';
+            }
+        });
+
+        // Initial hide of loader
+        setTimeout(() => {
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            }
+        }, 100);
+
+        // ============================================
+        // DUA READER FUNCTIONALITY WITH AUDIO
+        // ============================================
+
+        // Application State
+        const state = {
+            currentChapterId: 1,
+            currentLanguage: 'en',
+            isDarkMode: localStorage.getItem('isDarkMode') === 'true',
+            currentDua: 1,
+            isPlaying: false,
+            isLoadingAudio: false,
+            bookmarkedDuas: new Set([1, 3, 5]),
+            isLoading: false,
+            duas: [],
+            chapterInfo: null,
+            playMode: 'chapter', // 'chapter' or 'single'
+            audioQueue: [],
+            preloadedAudios: new Map(),
+            isPreloading: false,
+            chapterAudioUrl: '',
+            currentSpeed: 1,
+            repeatCount: 1,
+            currentRepeat: 0,
+            isChapterAudioPlaying: false
+        };
+        
+        // Speed options
+        const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+        
+        // Arabic chapter titles mapping
+        const arabicTitles = {
+            27: "أذكار الصباح والمساء",
+            28: "أذكار النوم",
+            1: "أذكار الاستيقاظ من النوم",
+            6: "دعاء دخول الخلاء",
+            7: "دعاء الخروج من الخلاء",
+            8: "دعاء قبل الوضوء",
+            9: "أذكار بعد الوضوء",
+            10: "دعاء الخروج من المنزل",
+            11: "دعاء دخول المنزل",
+            12: "دعاء الذهاب إلى المسجد",
+            13: "دعاء دخول المسجد",
+            14: "دعاء الخروج من المسجد",
+            15: "أذكار الأذان",
+            2: "دعاء عند اللباس",
+            3: "دعاء عند لبس الجديد",
+            4: "تهنئة من لبس جديداً",
+            5: "دعاء عند خلع الثياب",
+            16: "دعاء استفتاح الصلاة",
+            17: "دعاء الركوع",
+            18: "دعاء الرفع من الركوع",
+            19: "دعاء السجود",
+            20: "دعاء الجلوس بين السجدتين",
+            21: "دعاء سجود التلاوة",
+            22: "التشهد في الصلاة",
+            23: "الصلاة على النبي بعد التشهد",
+            24: "أذكار بعد التشهد الأخير",
+            25: "أذكار بعد السلام من الصلاة",
+            26: "دعاء الاستخارة",
+            29: "دعاء عند القلق في الليل",
+            30: "دعاء عند الخوف من النوم",
+            31: "دعاء عند رؤية المنام السيئ",
+            32: "دعاء القنوت في الوتر",
+            33: "دعاء بعد صلاة الوتر",
+            34: "دعاء الهم والغم",
+            35: "دعاء الكرب",
+            36: "دعاء عند لقاء العدو",
+            37: "دعاء عند ظلم الحكام",
+            38: "دعاء على العدو",
+            39: "دعاء عند الخوف من الناس",
+            40: "دعاء عند الشك في الإيمان",
+            41: "دعاء قضاء الدين",
+            42: "دعاء عند وسوسة الشيطان في الصلاة",
+            43: "دعاء عند الصعوبة",
+            44: "دعاء عند ارتكاب الذنب",
+            45: "دعاء للتحصن من الشيطان",
+            46: "دعاء عند حدوث ما لا يرضى",
+            47: "تهنئة المولود",
+            48: "دعاء التحصين للأطفال",
+            49: "دعاء زيارة المريض",
+            50: "ثواب زيارة المريض",
+            51: "دعاء المريض الموعود",
+            52: "تلقين المحتضر",
+            53: "دعاء عند المصيبة",
+            54: "دعاء تغميض الميت",
+            55: "دعاء صلاة الجنازة",
+            56: "دعاء صلاة الجنازة على الطفل",
+            57: "دعاء تعزية المصاب",
+            58: "دعاء عند وضع الميت في القبر",
+            59: "دعاء بعد الدفن",
+            60: "دعاء زيارة القبور",
+            61: "دعاء عند هبوب الرياح",
+            62: "دعاء عند سماع الرعد",
+            63: "دعاء الاستسقاء",
+            64: "دعاء عند نزول المطر",
+            65: "دعاء بعد نزول المطر",
+            66: "دعاء صرف المطر",
+            67: "دعاء رؤية الهلال",
+            68: "دعاء الإفطار",
+            69: "دعاء قبل الأكل",
+            70: "دعاء بعد الأكل",
+            71: "دعاء الضيف لصاحب الطعام",
+            72: "دعاء لمن سقاك",
+            73: "دعاء لإفطار الصائمين",
+            74: "دعاء للصائم المدعو",
+            75: "رد الصائم على من شتمه",
+            76: "دعاء عند رؤية الثمار",
+            77: "دعاء العطاس",
+            78: "رد على الكافر إذا عطس",
+            79: "تهنئة العريس",
+            80: "دعاء العريس ليلة الزفاف",
+            81: "دعاء قبل الجماع",
+            82: "دعاء الغضب",
+            83: "دعاء عند رؤية المصاب",
+            84: "دعاء الجلوس في المجلس",
+            85: "كفارة المجلس",
+            86: "رد على من قال: غفر الله لك",
+            87: "دعاء لمن أحسن إليك",
+            88: "التحصن من المسيح الدجال",
+            89: "رد على من قال: أحبك في الله",
+            90: "دعاء لمن أعطاك من ماله",
+            91: "دعاء لمن أقرضك مالاً",
+            92: "دعاء الخوف من الشرك",
+            93: "رد على من قال: بارك الله لك",
+            94: "دعاء رد الطيرة",
+            95: "دعاء الركوب",
+            96: "دعاء السفر",
+            97: "دعاء دخول القرية",
+            98: "دعاء دخول السوق",
+            99: "دعاء عند عطل المركوب",
+            100: "دعاء المسافر لمن يخلفه",
+            101: "دعاء المقيم للمسافر",
+            102: "التكبير والتسبيح في السفر",
+            103: "دعاء المسافر عند الصباح",
+            104: "دعاء النزول في السفر",
+            105: "دعاء العودة من السفر",
+            106: "دعاء عند سرور أو كرب",
+            107: "فضل الصلاة على النبي",
+            108: "إفشاء السلام",
+            109: "رد السلام على الكافر",
+            110: "دعاء عند سماع صياح الديك",
+            111: "دعاء عند سماع نباح الكلب",
+            112: "دعاء لمن سببته",
+            113: "كيف تمدح المسلم",
+            114: "دعاء عند مدحك",
+            115: "التلبية للحج والعمرة",
+            116: "التكبير عند الحجر الأسود",
+            117: "الدعاء بين الركنين",
+            118: "دعاء الصفا والمروة",
+            119: "دعاء يوم عرفة",
+            120: "دعاء المزدلفة",
+            121: "التكبير عند رمي الجمرات",
+            122: "دعاء الدهشة",
+            123: "سجود الشكر",
+            124: "دعاء عند وجع الجسد",
+            125: "دعاء عند إعجابك بشيء",
+            126: "dعاء عند الخوف",
+            127: "دعاء الذبح",
+            128: "دعاء لرد كيد الشيطان",
+            129: "التوبة والاستغفار",
+            130: "فضل الذكر",
+            131: "كيف كان النبي يسبح",
+            132: "آداب المعاشرة"
+        };
+
+        // English chapter titles mapping
+        const englishTitles = {
+            27: "Morning and Evening Adhkar",
+            28: "Adhkar for Sleeping",
+            1: "Adhkar upon Waking Up",
+            6: "Dua for Entering the Bathroom",
+            7: "Dua for Leaving the Bathroom",
+            8: "Dua Before Ablution",
+            9: "Adhkar After Ablution",
+            10: "Dua for Leaving Home",
+            11: "Dua for Entering Home",
+            12: "Dua for Going to the Mosque",
+            13: "Dua for Entering the Mosque",
+            14: "Dua for Leaving the Mosque",
+            15: "Adhkar for Adhan",
+            49: "Invocations for Visiting the Sick"
+            // Add more as needed
+        };
+        
+        // DOM Elements
+        const chapterTitle = document.getElementById('chapterTitle');
+        const arabicChapterName = document.getElementById('arabicChapterName');
+        const englishChapterName = document.getElementById('englishChapterName');
+        const goldenContainer = document.getElementById('goldenContainer');
+        const duasList = document.getElementById('duasList');
+        const loadingDuas = document.getElementById('loadingDuas');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const audioElement = document.getElementById('audioElement');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+        const currentDuaNumber = document.getElementById('currentDuaNumber');
+        const playModeIndicator = document.getElementById('playModeIndicator');
+        const languageButton = document.getElementById('languageButton');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const speedBtn = document.getElementById('speedBtn');
+        const body = document.body;
+
+        // Function to get chapter ID from URL
+        function getChapterIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get('chapter')) || 27; // Default to morning/evening duas
+        }
+
+        // Apply dark mode
+        function applyDarkMode() {
+            if (state.isDarkMode) {
+                body.classList.add('dark-theme');
+                body.classList.remove('light-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+
+        // Update play mode indicator
+        function updatePlayModeIndicator() {
+            if (state.playMode === 'chapter') {
+                playModeIndicator.textContent = 'Chapter Mode';
+                playModeIndicator.style.color = '#4CAF50';
+            } else {
+                playModeIndicator.textContent = 'Single Mode';
+                playModeIndicator.style.color = '#FF9800';
+            }
+        }
+
+        // Load duas data for the specific chapter
+        async function loadDuasForChapter() {
+            const chapterId = getChapterIdFromURL();
+            state.currentChapterId = chapterId;
+            
+            try {
+                // Show loading state
+                duasList.innerHTML = '';
+                loadingDuas.style.display = 'flex';
+                
+                // Load the JSON data
+                const response = await fetch('data/dua.json');
+                const data = await response.json();
+                
+                // Extract English chapters
+                const chaptersData = data.English || [];
+                
+                // Find the specific chapter
+                const chapter = chaptersData.find(ch => ch.ID === chapterId);
+                
+                // Hide loading
+                loadingDuas.style.display = 'none';
+                
+                if (chapter && chapter.TEXT && chapter.TEXT.length > 0) {
+                    // Store chapter audio URL if available
+                    state.chapterAudioUrl = chapter.AUDIO_URL || '';
+                    
+                    // Update chapter info
+                    updateChapterInfo(chapter);
+                    
+                    // Store duas
+                    state.duas = chapter.TEXT.map(dua => ({
+                        id: dua.ID,
+                        arabic: dua.ARABIC_TEXT || "اللَّهُمَّ بِاسْمِكَ أَحْيَا وَأَمُوتُ",
+                        transliteration: dua.LANGUAGE_ARABIC_TRANSLATED_TEXT || "",
+                        english: dua.TRANSLATED_TEXT || "O Allah, with Your name I live and die.",
+                        audio: dua.AUDIO || '',
+                        repeat: dua.REPEAT || 1
+                    }));
+                    
+                    // Display duas
+                    displayDuas();
+                    
+                    // Reset audio queue
+                    resetAudioQueue();
+                    
+                } else {
+                    // No duas found
+                    updateChapterInfo({ TITLE: "Chapter " + chapterId });
+                    showNoDuasMessage();
+                }
+                
+            } catch (error) {
+                console.error('Error loading duas:', error);
+                loadingDuas.style.display = 'none';
+                showNoDuasMessage();
+                
+                // For demo purposes, show sample data if JSON fails
+                if (chapterId === 49) {
+                    updateChapterInfo({ TITLE: "Invocations for visiting the sick" });
+                    state.duas = getSampleDuas();
+                    displayDuas();
+                } else {
+                    updateChapterInfo({ TITLE: "Chapter " + chapterId });
+                }
+            }
+        }
+
+        // Get sample duas for demo
+        function getSampleDuas() {
+            return [
+                {
+                    id: 1,
+                    arabic: "اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَأْسَ، اشْفِ أَنْتَ الشَّافِي، لاَ شِفَاءَ إِلاَّ شِفَاؤُكَ، شِفَاءً لاَ يُغَادِرُ سَقَمًا",
+                    transliteration: "Allahumma rabban-nas adh-hibil-ba's, ishfi antash-shafi, la shifa'a illa shifa'uk, shifa'an la yughadiru saqama.",
+                    english: "O Allah, Lord of mankind, do away with my suffering. Heal (me) as You are the only Healer and there is no cure except that of Yours, it is that which leaves no ailment behind.",
+                    audio: "https://www.hisnmuslim.com/audio/ar/75.mp3",
+                    repeat: 1
+                },
+                {
+                    id: 2,
+                    arabic: "أَسْأَلُ اللَّهَ الْعَظِيمَ رَبَّ الْعَرْشِ الْعَظِيمِ أَنْ يَشْفِيَكَ",
+                    transliteration: "As'alullahal-'Adheema rabbal-'arshil-'adheemi an yashfiyak.",
+                    english: "I ask Allah the Great, the Lord of the Mighty Throne, to cure you.",
+                    audio: "https://www.hisnmuslim.com/audio/ar/76.mp3",
+                    repeat: 1
+                },
+                {
+                    id: 3,
+                    arabic: "لَا بَأْسَ طَهُورٌ إِنْ شَاءَ اللَّهُ",
+                    transliteration: "La ba'sa tahurun in sha'Allah.",
+                    english: "Do not worry, it is a purification (from sins) if Allah wills.",
+                    audio: "https://www.hisnmuslim.com/audio/ar/77.mp3",
+                    repeat: 1
+                }
+            ];
+        }
+
+        // Update chapter information
+        function updateChapterInfo(chapter) {
+            const chapterId = getChapterIdFromURL();
+            const arabicTitleText = arabicTitles[chapterId] || "دعاء وأذكار";
+            const englishTitleText = englishTitles[chapterId] || chapter.TITLE || "Dua & Adhkar";
+            
+            // Update page title
+            document.title = `${englishTitleText} | Islamic App`;
+            
+            // Update header (only Arabic)
+            chapterTitle.textContent = arabicTitleText;
+            
+            // Update golden container
+            arabicChapterName.textContent = arabicTitleText;
+            englishChapterName.textContent = englishTitleText;
+            
+            // Show/hide golden container based on content
+            if (arabicTitleText && englishTitleText) {
+                goldenContainer.style.display = 'block';
+            } else {
+                goldenContainer.style.display = 'none';
+            }
+        }
+
+        // Display duas in the list
+        function displayDuas() {
+            duasList.innerHTML = '';
+            
+            state.duas.forEach((dua, index) => {
+                const duaNumber = index + 1;
+                const isBookmarked = state.bookmarkedDuas.has(duaNumber);
+                
+                const duaElement = document.createElement('div');
+                duaElement.className = 'dua-card';
+                
+                // Build HTML content
+                let htmlContent = `
+                    <div class="dua-header">
+                        <div class="dua-number-badge">${duaNumber}</div>
+                    </div>
+                    <div class="dua-arabic">${dua.arabic}</div>`;
+                
+                // Add transliteration if available
+                if (dua.transliteration && dua.transliteration.trim() !== '') {
+                    htmlContent += `<div class="dua-transliteration">${dua.transliteration}</div>`;
+                }
+                
+                // Add translation
+                htmlContent += `
+                    <div class="dua-translation">${dua.english}</div>
+                    
+                    <div class="dua-actions">
+                        <button class="action-btn play" data-dua="${duaNumber}" title="Play This Dua">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="action-btn bookmark ${isBookmarked ? 'active' : ''}" data-dua="${duaNumber}" title="Bookmark">
+                            <i class="${isBookmarked ? 'fas' : 'far'} fa-bookmark"></i>
+                        </button>
+                        <button class="action-btn copy" data-dua="${duaNumber}" title="Copy">
+                            <i class="far fa-copy"></i>
+                        </button>
+                        <button class="action-btn share" data-dua="${duaNumber}" title="Share">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                `;
+                
+                duaElement.innerHTML = htmlContent;
+                duasList.appendChild(duaElement);
+            });
+            
+            attachDuaEventListeners();
+            
+            // Animate dua cards
+            setTimeout(() => {
+                const duaCards = document.querySelectorAll('.dua-card');
+                duaCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 150));
+                });
+            }, 100);
+        }
+
+        // Reset audio queue based on current play mode
+        function resetAudioQueue() {
+            state.audioQueue = [];
+            state.isChapterAudioPlaying = false;
+            
+            if (state.playMode === 'chapter' && state.chapterAudioUrl) {
+                // For chapter mode, we'll play the full chapter audio
+                state.isChapterAudioPlaying = true;
+                state.audioQueue.push({
+                    type: 'chapter',
+                    url: state.chapterAudioUrl,
+                    duaNumber: 0
+                });
+            } else {
+                // For single mode, build queue from individual dua audio
+                state.duas.forEach((dua, index) => {
+                    if (dua.audio) {
+                        state.audioQueue.push({
+                            type: 'dua',
+                            url: dua.audio,
+                            duaNumber: index + 1,
+                            repeat: dua.repeat || 1
+                        });
+                    }
+                });
+            }
+        }
+
+        // Play single dua
+        async function playSingleDua(duaNumber) {
+            if (state.isLoadingAudio) return;
+            
+            state.playMode = 'single';
+            state.currentDua = duaNumber;
+            updatePlayModeIndicator();
+            resetAudioQueue();
+            
+            // Find the audio in queue
+            const audioItem = state.audioQueue.find(item => item.duaNumber === duaNumber);
+            if (!audioItem || !audioItem.url) {
+                showNotification('No audio available for this dua');
+                return;
+            }
+            
+            showDuaPlayButtonLoading(duaNumber, true);
+            state.isLoadingAudio = true;
+            
+            await playAudioItem(audioItem, true);
+            
+            state.isLoadingAudio = false;
+            showDuaPlayButtonLoading(duaNumber, false);
+        }
+
+        // Play full chapter
+        async function playFullChapter() {
+            if (state.isLoadingAudio) return;
+            
+            state.playMode = 'chapter';
+            state.currentDua = 1;
+            updatePlayModeIndicator();
+            resetAudioQueue();
+            
+            if (state.audioQueue.length > 0) {
+                showPlayButtonLoading(true);
+                state.isLoadingAudio = true;
+                
+                await playAudioItem(state.audioQueue[0], false);
+                
+                state.isLoadingAudio = false;
+                showPlayButtonLoading(false);
+            } else {
+                showNotification('No audio available for this chapter');
+            }
+        }
+
+        // Play audio item
+        async function playAudioItem(audioItem, isSingleMode = false) {
+            const { url, duaNumber, repeat = 1 } = audioItem;
+            
+            if (!url) {
+                showNotification('Audio URL not found');
+                return;
+            }
+            
+            state.currentDua = duaNumber || 0;
+            state.repeatCount = repeat;
+            state.currentRepeat = 0;
+            
+            // Update display
+            if (duaNumber > 0) {
+                currentDuaNumber.textContent = duaNumber;
+            } else {
+                currentDuaNumber.textContent = 'All';
+            }
+            
+            audioElement.src = url;
+            audioElement.playbackRate = state.currentSpeed;
+            
+            if (isSingleMode) {
+                showNotification(`Playing Dua ${state.currentDua}`);
+            } else {
+                showNotification('Playing Chapter');
+            }
+            
+            // Play the audio
+            try {
+                await audioElement.play();
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                state.isPlaying = true;
+                highlightPlayingDua(state.currentDua);
+                
+            } catch (error) {
+                console.error('Error playing audio:', error);
+                handleAudioError(isSingleMode);
+            }
+        }
+
+        function handleAudioError(isSingleMode) {
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            state.isPlaying = false;
+            showNotification('Failed to play audio. Please check your connection.');
+        }
+
+        // Toggle play/pause
+        async function togglePlayPause() {
+            if (state.isLoadingAudio) return;
+            
+            if (!audioElement.src || audioElement.paused) {
+                await playFullChapter();
+            } else {
+                audioElement.pause();
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                state.isPlaying = false;
+            }
+        }
+
+        // Highlight playing dua
+        function highlightPlayingDua(duaNumber) {
+            document.querySelectorAll('.action-btn.play').forEach(btn => {
+                btn.classList.remove('active', 'loading');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+            
+            if (duaNumber > 0) {
+                const currentDuaBtn = document.querySelector(`.dua-card:nth-child(${duaNumber}) .action-btn.play`);
+                if (currentDuaBtn) {
+                    currentDuaBtn.classList.add('active');
+                    currentDuaBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            if (audioElement.duration && !isNaN(audioElement.duration)) {
+                const percentage = (audioElement.currentTime / audioElement.duration) * 100;
+                progress.style.width = `${percentage}%`;
+            }
+        }
+
+        // Seek audio
+        function seekAudio(event) {
+            if (!audioElement.duration || state.isLoadingAudio) return;
+            
+            const rect = progressBar.getBoundingClientRect();
+            const pos = (event.clientX - rect.left) / rect.width;
+            audioElement.currentTime = pos * audioElement.duration;
+            updateProgressBar();
+        }
+
+        // Cycle through speed options
+        function cycleSpeed() {
+            const currentIndex = speedOptions.indexOf(state.currentSpeed);
+            const nextIndex = (currentIndex + 1) % speedOptions.length;
+            const nextSpeed = speedOptions[nextIndex];
+            
+            state.currentSpeed = nextSpeed;
+            audioElement.playbackRate = state.currentSpeed;
+            speedBtn.textContent = `${nextSpeed}x`;
+            showNotification(`Speed: ${nextSpeed}x`);
+        }
+
+        // Toggle bookmark
+        function toggleBookmark(duaNumber) {
+            if (state.bookmarkedDuas.has(duaNumber)) {
+                state.bookmarkedDuas.delete(duaNumber);
+                showNotification('Bookmark removed');
+            } else {
+                state.bookmarkedDuas.add(duaNumber);
+                showNotification('Dua bookmarked');
+            }
+            
+            const btn = document.querySelector(`.dua-card:nth-child(${duaNumber}) .action-btn.bookmark`);
+            if (btn) {
+                if (state.bookmarkedDuas.has(duaNumber)) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-bookmark"></i>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="far fa-bookmark"></i>';
+                }
+            }
+        }
+
+        // Copy dua text
+        function copyDuaText(duaNumber) {
+            const dua = state.duas[duaNumber - 1];
+            let textToCopy = `${dua.arabic}\n\n`;
+            
+            if (dua.transliteration && dua.transliteration.trim() !== '') {
+                textToCopy += `${dua.transliteration}\n\n`;
+            }
+            
+            textToCopy += `${dua.english}`;
+            
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => showNotification('Dua copied to clipboard'))
+                .catch(err => showNotification('Failed to copy dua'));
+        }
+
+        // Share dua
+        function shareDua(duaNumber) {
+            const dua = state.duas[duaNumber - 1];
+            let shareText = `Dua ${duaNumber}:\n\n${dua.arabic}\n\n`;
+            
+            if (dua.transliteration && dua.transliteration.trim() !== '') {
+                shareText += `${dua.transliteration}\n\n`;
+            }
+            
+            shareText += `${dua.english}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `Dua ${duaNumber}`,
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText)
+                    .then(() => showNotification('Dua text copied to clipboard'))
+                    .catch(err => console.error('Failed to share:', err));
+            }
+        }
+
+        // Show loading state on play button
+        function showPlayButtonLoading(isLoading) {
+            if (isLoading) {
+                playBtn.classList.add('loading');
+                playBtn.disabled = true;
+            } else {
+                playBtn.classList.remove('loading');
+                playBtn.disabled = false;
+            }
+        }
+
+        // Show loading state on dua play button
+        function showDuaPlayButtonLoading(duaNumber, isLoading) {
+            const duaBtn = document.querySelector(`.action-btn.play[data-dua="${duaNumber}"]`);
+            if (duaBtn) {
+                if (isLoading) {
+                    duaBtn.classList.add('loading');
+                    duaBtn.disabled = true;
+                } else {
+                    duaBtn.classList.remove('loading');
+                    duaBtn.disabled = false;
+                }
+            }
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        // Show message when no duas are found
+        function showNoDuasMessage() {
+            duasList.innerHTML = `
+                <div class="no-duas">
+                    <i class="fas fa-book"></i>
+                    <h3>No Duas Available</h3>
+                    <p>This chapter doesn't have any duas yet or there was an error loading them.</p>
+                </div>
+            `;
+        }
+
+        // Attach event listeners to dua action buttons
+        function attachDuaEventListeners() {
+            document.querySelectorAll('.action-btn.play').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if (state.isLoadingAudio) return;
+                    
+                    e.stopPropagation();
+                    const duaNumber = parseInt(btn.dataset.dua);
+                    playSingleDua(duaNumber);
+                });
+            });
+            
+            document.querySelectorAll('.action-btn.bookmark').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const duaNumber = parseInt(btn.dataset.dua);
+                    toggleBookmark(duaNumber);
+                });
+            });
+            
+            document.querySelectorAll('.action-btn.copy').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const duaNumber = parseInt(btn.dataset.dua);
+                    copyDuaText(duaNumber);
+                });
+            });
+            
+            document.querySelectorAll('.action-btn.share').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const duaNumber = parseInt(btn.dataset.dua);
+                    shareDua(duaNumber);
+                });
+            });
+        }
+
+        // Setup audio event listeners
+        function setupAudioEvents() {
+            audioElement.addEventListener('timeupdate', updateProgressBar);
+            
+            // Handle audio end with different behavior for chapter vs single
+            audioElement.addEventListener('ended', async () => {
+                if (state.isChapterAudioPlaying) {
+                    // Chapter mode - stop playing
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    state.isPlaying = false;
+                    showNotification('End of Chapter');
+                    state.isChapterAudioPlaying = false;
+                } else {
+                    // Single mode - check if there are more duas to play
+                    if (state.playMode === 'chapter') {
+                        const currentIndex = state.audioQueue.findIndex(item => 
+                            item.duaNumber === state.currentDua
+                        );
+                        
+                        if (currentIndex !== -1 && currentIndex < state.audioQueue.length - 1) {
+                            const nextItem = state.audioQueue[currentIndex + 1];
+                            
+                            showPlayButtonLoading(true);
+                            state.isLoadingAudio = true;
+                            
+                            setTimeout(async () => {
+                                await playAudioItem(nextItem, false);
+                                state.isLoadingAudio = false;
+                                showPlayButtonLoading(false);
+                            }, 500);
+                        } else {
+                            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                            state.isPlaying = false;
+                            showNotification('End of Duas');
+                        }
+                    } else {
+                        // Single dua mode - just stop
+                        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        state.isPlaying = false;
+                        showNotification('Dua completed');
+                    }
+                }
+            });
+            
+            audioElement.addEventListener('error', (e) => {
+                console.error('Audio error:', e);
+                state.isLoadingAudio = false;
+                showPlayButtonLoading(false);
+                showNotification('Audio error. Please try again.');
+            });
+            
+            audioElement.addEventListener('waiting', () => {
+                showPlayButtonLoading(true);
+            });
+            
+            audioElement.addEventListener('canplay', () => {
+                showPlayButtonLoading(false);
+            });
+        }
+
+        // Initialize the page
+        function initPage() {
+            applyDarkMode();
+            updatePlayModeIndicator();
+            setupAudioEvents();
+            loadDuasForChapter();
+            setupEventListeners();
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            playBtn.addEventListener('click', () => {
+                if (state.isLoadingAudio) return;
+                
+                if (!audioElement.src || audioElement.paused) {
+                    playFullChapter();
+                } else {
+                    togglePlayPause();
+                }
+            });
+            
+            progressBar.addEventListener('click', seekAudio);
+            
+            languageButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('show');
+            });
+            
+            speedBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cycleSpeed();
+                if (languageDropdown.classList.contains('show')) {
+                    languageDropdown.classList.remove('show');
+                }
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!languageButton.contains(e.target) && !languageDropdown.contains(e.target)) {
+                    languageDropdown.classList.remove('show');
+                }
+            });
+            
+            // Back button functionality
+            backBtn.addEventListener('click', function() {
+                showPageLoader();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initPage();
+        });
+    </script>
+</body>
+</html>
